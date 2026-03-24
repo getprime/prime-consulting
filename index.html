@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prime Consulting – Przemysław Piotrowski | Doradztwo Inwestycyjne PSI</title>
+  <meta name="description" content="Doradztwo inwestycyjne oparte na autentycznym doświadczeniu w ocenie wniosków PSI. Ulgi podatkowe, dotacje, Polska Strefa Inwestycji. Przemysław Piotrowski – były ekspert PSI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* =============================================
+       CSS VARIABLES & RESET
+    ============================================= */
+    :root {
+      --navy:       #234165;
+      --navy-deep:  #182d48;
+      --navy-mid:   #2d5280;
+      --gold:       #C7A000;
+      --gold-light: #e0b800;
+      --gold-pale:  #f5e9a0;
+      --cream:      #faf8f3;
+      --white:      #ffffff;
+      --gray-100:   #f4f6f9;
+      --gray-200:   #e8ecf2;
+      --gray-400:   #94a3b8;
+      --gray-600:   #4a5568;
+      --gray-800:   #1e2835;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Outfit', system-ui, sans-serif;
+      --shadow-sm:  0 2px 8px rgba(35,65,101,0.08);
+      --shadow-md:  0 8px 32px rgba(35,65,101,0.14);
+      --shadow-lg:  0 20px 60px rgba(35,65,101,0.18);
+      --radius:     12px;
+      --radius-lg:  20px;
+      --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 17px; transition: font-size 0.2s ease-in-out; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--gray-800);
+      background: var(--white);
+      line-height: 1.7;
+      overflow-x: hidden;
+      transition: font-size 0.2s ease-in-out;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .section-tag::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.18;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-600);
+      max-width: 600px;
+      margin-top: 12px;
+      line-height: 1.75;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 30px;
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy-deep);
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(199,160,0,0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.5);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--white);
+    }
+
+    .btn-outline-navy {
+      background: transparent;
+      color: var(--navy);
+      border: 1.5px solid var(--navy);
+    }
+    .btn-outline-navy:hover {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* =============================================
+       HEADER / NAV
+    ============================================= */
+    #header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-200);
+      transition: var(--transition);
+    }
+
+    #header.scrolled {
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo svg {
+      height: 66px;
+      width: auto;
+      transition: transform 0.3s ease;
+    }
+    .nav-logo:hover svg {
+      transform: scale(1.06);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-menu a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--gray-600);
+      letter-spacing: 0.03em;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 100%;
+      height: 1.5px;
+      background: var(--gold);
+      transition: right 0.25s ease;
+    }
+    .nav-menu a:hover { color: var(--navy); }
+    .nav-menu a:hover::after { right: 0; }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      border: none;
+      background: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--navy);
+      transition: var(--transition);
+      border-radius: 2px;
+    }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 80px; left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      z-index: 999;
+      padding: 24px;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: var(--shadow-md);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--navy);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    #hero {
+      min-height: 100vh;
+      background: var(--navy-deep);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+
+    /* Geometric background pattern */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(199,160,0,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 10% 80%, rgba(45,82,128,0.5) 0%, transparent 55%);
+    }
+
+    .hero-grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Gold diagonal accent */
+    .hero-accent-line {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 45%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .hero-accent-line::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -5%;
+      width: 1px;
+      height: 130%;
+      background: linear-gradient(to bottom, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+      opacity: 0.18;
+      transform: rotate(-8deg);
+      transform-origin: top right;
+    }
+    .hero-accent-line::after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: 8%;
+      width: 1px;
+      height: 130%;
+      background: linear-gradient(to bottom, transparent, rgba(199,160,0,0.4) 40%, transparent);
+      opacity: 0.3;
+      transform: rotate(-8deg);
+      transform-origin: top right;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      padding: 80px 0;
+    }
+
+    /* Hero logo wrapper with Light-Source Halo */
+    .hero-logo-box {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    /* Backlight glow – positioned behind the logo, wider than the logo itself */
+    .hero-logo-box::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(50px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-logo-box svg {
+      height: 180px;
+      width: auto;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 12px rgba(255,255,255,0.25));
+    }
+    @media (max-width: 768px) {
+      .hero-logo-box svg { height: 110px; }
+      .hero-logo-box { margin-bottom: 36px; }
+    }
+
+    /* Authority Markers bar */
+    .authority-markers {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 36px;
+    }
+    .authority-marker {
+      flex: 1 1 200px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(199,160,0,0.4);
+      border-radius: 10px;
+      padding: 14px 16px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .authority-marker:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(199,160,0,0.7);
+    }
+    .authority-marker-icon {
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .authority-marker-icon i[data-lucide] {
+      width: 20px;
+      height: 20px;
+      stroke: var(--gold);
+    }
+    .authority-marker-body {}
+    .authority-marker-title {
+      font-family: 'Montserrat', var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+    .authority-marker-desc {
+      font-family: 'Montserrat', var(--font-body);
+      font-size: 0.74rem;
+      color: rgba(255,255,255,0.58);
+      line-height: 1.45;
+    }
+    @media (max-width: 768px) {
+      .authority-markers { gap: 10px; }
+      .authority-marker { flex: 1 1 100%; }
+    }
+
+    .hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.8;
+      margin-bottom: 40px;
+      max-width: 520px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Hero right – visual element */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-card-glass {
+      position: relative;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      backdrop-filter: blur(8px);
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .hero-card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .hero-card-icon {
+      width: 48px; height: 48px;
+      background: rgba(199,160,0,0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .hero-card-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .hero-card-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .hero-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .hero-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.5;
+    }
+    .hero-checklist li i {
+      color: var(--gold);
+      font-size: 0.85rem;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .hero-card-badge {
+      margin-top: 28px;
+      background: rgba(199,160,0,0.1);
+      border: 1px solid rgba(199,160,0,0.25);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-card-badge i {
+      color: var(--gold);
+      font-size: 1.3rem;
+    }
+    .hero-card-badge-text {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.4;
+    }
+    .hero-card-badge-text strong {
+      color: var(--gold);
+      display: block;
+      font-size: 0.88rem;
+    }
+
+    /* floating decoration */
+    .hero-deco-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.15;
+    }
+    .hero-deco-dot.d1 { width: 120px; height: 120px; top: -40px; right: -30px; }
+    .hero-deco-dot.d2 { width: 60px; height: 60px; bottom: -20px; left: -20px; opacity: 0.1; }
+
+    /* =============================================
+       SERVICES
+    ============================================= */
+    #services {
+      background: var(--cream);
+      padding: 100px 0;
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .services-header .section-tag { justify-content: center; }
+    .services-header .section-subtitle { margin: 12px auto 0; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* Expandable Service Card */
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      transition: box-shadow var(--transition), border-color var(--transition);
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .service-card:hover,
+    .service-card:focus-within {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(199,160,0,0.4);
+    }
+
+    .service-card-head {
+      padding: 28px 24px 20px;
+      flex-shrink: 0;
+    }
+
+    .service-icon-wrap {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, rgba(35,65,101,0.08), rgba(35,65,101,0.04));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      color: var(--navy);
+      font-size: 1.25rem;
+      transition: background var(--transition), color var(--transition);
+    }
+    .service-card:hover .service-icon-wrap,
+    .service-card:focus-within .service-icon-wrap {
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      color: var(--gold);
+    }
+
+    .service-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .service-intro {
+      font-size: 0.88rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* Expandable area */
+    .service-expand {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+      padding: 0 24px;
+    }
+    .service-card:hover .service-expand,
+    .service-card:focus-within .service-expand,
+    .service-card.expanded .service-expand {
+      max-height: 700px;
+      opacity: 1;
+      padding: 0 24px 8px;
+    }
+
+    .service-scope-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+
+    .service-scope-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+    .service-scope-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+    .service-scope-list li::before {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .service-benefit {
+      background: linear-gradient(135deg, rgba(35,65,101,0.04), rgba(199,160,0,0.06));
+      border-left: 3px solid var(--gold);
+      border-radius: 0 6px 6px 0;
+      padding: 12px 14px;
+      font-size: 0.83rem;
+      color: var(--gray-800);
+      line-height: 1.55;
+      margin-bottom: 4px;
+    }
+    .service-benefit strong {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    /* Card footer */
+    .service-card-footer {
+      padding: 14px 24px 22px;
+      flex-shrink: 0;
+      margin-top: auto;
+    }
+    .read-more-hint {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap var(--transition);
+    }
+    .service-card:hover .read-more-hint,
+    .service-card:focus-within .read-more-hint,
+    .service-card.expanded .read-more-hint { gap: 10px; }
+
+    .read-more-hint i { font-size: 0.65rem; }
+
+    /* =============================================
+       FOR WHOM
+    ============================================= */
+    #for-whom {
+      background: var(--white);
+      padding: 100px 0;
+    }
+
+    .for-whom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .for-whom-visual {
+      position: relative;
+    }
+
+    .for-whom-bg-shape {
+      position: absolute;
+      inset: -20px;
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      border-radius: var(--radius-lg);
+      z-index: 0;
+    }
+
+    .for-whom-cards-wrap {
+      position: relative;
+      z-index: 1;
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .target-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 20px 18px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      transition: background var(--transition);
+    }
+    .target-card:hover {
+      background: rgba(255,255,255,0.13);
+    }
+    .target-card i {
+      font-size: 1.6rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .target-card-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.3;
+    }
+    .target-card-desc {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .for-whom-content { padding-left: 8px; }
+
+    .needs-list {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .need-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px 20px;
+      background: var(--gray-100);
+      border-radius: var(--radius);
+      border-left: 3px solid transparent;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .need-item:hover {
+      border-left-color: var(--gold);
+      background: rgba(199,160,0,0.06);
+    }
+    .need-item i {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .need-item-text {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+    .need-item-text strong { color: var(--navy); }
+
+    /* =============================================
+       ABOUT / EXPERT
+    ============================================= */
+    #about {
+      background: var(--navy-deep);
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #about::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 60%;
+      height: 100%;
+      background: radial-gradient(ellipse at top right, rgba(199,160,0,0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    #about::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 40%;
+      height: 60%;
+      background: radial-gradient(ellipse at bottom left, rgba(45,82,128,0.5) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .about-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "header header"
+        "quote  creds";
+      column-gap: 72px;
+      row-gap: 36px;
+    }
+
+    .about-header {
+      grid-area: header;
+    }
+
+    .about-quote-col {
+      grid-area: quote;
+    }
+
+    .about-credentials {
+      grid-area: creds;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0;
+    }
+
+    .about-header .section-tag {
+      color: var(--gold-light);
+    }
+    .about-header .section-title {
+      color: var(--white);
+    }
+    .about-header .section-subtitle {
+      color: rgba(255,255,255,0.65);
+    }
+
+    .about-quote-block {
+      margin-top: 0;
+      position: relative;
+      border: 1px solid rgba(199,160,0,0.25);
+      border-radius: var(--radius-lg);
+      padding: 36px 36px 36px 44px;
+      background: rgba(255,255,255,0.03);
+    }
+    .about-quote-block::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--gold), rgba(199,160,0,0.3));
+      border-radius: 4px 0 0 4px;
+    }
+
+    .quote-icon {
+      font-size: 2.5rem;
+      color: var(--gold);
+      opacity: 0.25;
+      font-family: Georgia, serif;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .about-quote-text {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.8;
+    }
+
+    .about-quote-text p + p { margin-top: 16px; }
+
+    .about-signature {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .about-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid #C7A000;
+      object-fit: cover;
+      display: block;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 4px rgba(199,160,0,0.15);
+    }
+    .about-sig-name {
+      font-weight: 600;
+      color: var(--white);
+      font-size: 0.95rem;
+    }
+    .about-sig-title {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    /* Right side – credential cards */
+    .cred-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .cred-card:hover {
+      border-color: rgba(199,160,0,0.3);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .cred-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .cred-num {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .cred-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+    }
+    .cred-desc {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+    }
+
+    .usp-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .usp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(199,160,0,0.1);
+      border: 1px solid rgba(199,160,0,0.2);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.78rem;
+      color: var(--gold-light);
+      letter-spacing: 0.02em;
+    }
+    .usp-badge i { font-size: 0.72rem; }
+
+    /* =============================================
+       PROCESS
+    ============================================= */
+    #process {
+      background: var(--gray-100);
+      padding: 100px 0;
+    }
+
+    .process-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .process-header .section-tag { justify-content: center; }
+    .process-header .section-subtitle { margin: 12px auto 0; }
+
+    .process-timeline {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    /* Connecting line */
+    .process-timeline::before {
+      content: '';
+      position: absolute;
+      top: 44px;
+      left: calc(8.33% + 20px);
+      right: calc(8.33% + 20px);
+      height: 1px;
+      background: linear-gradient(to right, var(--navy), var(--gold), var(--navy));
+      opacity: 0.25;
+      z-index: 0;
+    }
+
+    /* For whom – bottom cards layout */
+    .for-whom-single {
+      max-width: 760px;
+    }
+    .for-whom-bottom {
+      margin-top: 48px;
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .for-whom-bottom-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      border-radius: var(--radius-lg);
+    }
+    .for-whom-bottom-cards {
+      position: relative;
+      z-index: 1;
+      padding: 28px 28px 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 768px) {
+      .for-whom-bottom-cards { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .for-whom-bottom-cards { grid-template-columns: 1fr; }
+    }
+
+    .process-step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 16px;
+    }
+
+    .step-circle {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      position: relative;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    .step-circle:hover,
+    .process-step:hover .step-circle {
+      border-color: var(--gold);
+      background: var(--navy);
+      box-shadow: 0 0 0 6px rgba(199,160,0,0.12);
+    }
+    .step-circle i {
+      font-size: 1.1rem;
+      color: var(--navy);
+      transition: color var(--transition);
+    }
+    .process-step:hover .step-circle i { color: var(--gold); }
+
+    .step-num {
+      position: absolute;
+      top: -6px; right: -6px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: var(--navy-deep);
+      font-size: 0.65rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .step-desc {
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      line-height: 1.55;
+    }
+
+    /* =============================================
+       CONTACT
+    ============================================= */
+    #contact {
+      background: var(--white);
+      padding: 100px 0;
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .contact-info .section-title { margin-bottom: 8px; }
+
+    .contact-details {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .contact-detail-icon {
+      width: 44px; height: 44px;
+      background: rgba(35,65,101,0.07);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: background var(--transition), color var(--transition);
+    }
+    .contact-detail-item:hover .contact-detail-icon {
+      background: var(--navy);
+      color: var(--gold);
+    }
+    .contact-detail-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-400);
+      margin-bottom: 4px;
+    }
+    .contact-detail-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--navy);
+    }
+    .contact-detail-value a:hover { color: var(--gold); }
+
+    .coverage-badge {
+      margin-top: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+      color: var(--white);
+      border-radius: 8px;
+      padding: 14px 20px;
+      font-size: 0.88rem;
+    }
+    .coverage-badge i { color: var(--gold); }
+    .coverage-badge strong { color: var(--gold-light); }
+
+    /* Contact Form */
+    .contact-form-wrap {
+      background: var(--gray-100);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .form-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .form-subtitle {
+      font-size: 0.88rem;
+      color: var(--gray-600);
+      margin-bottom: 28px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--gray-800);
+      background: var(--white);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(35,65,101,0.1);
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-consent {
+      margin: 16px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .form-consent input[type="checkbox"] {
+      width: 16px; height: 16px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: var(--navy);
+    }
+    .form-consent label {
+      font-size: 0.78rem;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+
+    .form-submit {
+      width: 100%;
+      justify-content: center;
+      padding: 16px;
+      font-size: 0.95rem;
+    }
+
+    #form-success {
+      display: none;
+      text-align: center;
+      padding: 24px;
+      background: rgba(35,65,101,0.05);
+      border-radius: var(--radius);
+      border: 1px solid rgba(35,65,101,0.15);
+      color: var(--navy);
+      font-size: 0.95rem;
+    }
+    #form-success i { color: var(--gold); font-size: 2rem; display: block; margin-bottom: 12px; }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      background: var(--navy-deep);
+      padding: 48px 0 32px;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .footer-logo svg { height: 81px; width: auto; }
+
+    .footer-company-info {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      line-height: 1.75;
+      color: #c29c00;
+      text-align: left;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 28px;
+    }
+    .footer-nav a {
+      font-size: 0.83rem;
+      color: rgba(255,255,255,0.5);
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer-motto {
+      font-family: 'Montserrat', var(--font-body);
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1.79rem;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    /* =============================================
+       SCROLL ANIMATIONS
+    ============================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-timeline { grid-template-columns: repeat(3, 1fr); gap: 32px; }
+      .process-timeline::before { display: none; }
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .hero-visual { display: none; }
+      .hero-inner { padding: 60px 0; }
+      .for-whom-grid { grid-template-columns: 1fr; }
+      .for-whom-visual { order: -1; }
+      .about-inner { grid-template-columns: 1fr; grid-template-areas: "header" "quote" "creds"; }
+      .contact-inner { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu, .nav-cta .btn { display: none; }
+      .hamburger { display: flex; }
+      .services-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .process-timeline { grid-template-columns: repeat(2, 1fr); }
+      .contact-form-wrap { padding: 28px 20px; }
+      .footer-nav { display: none; }
+      .hero-cta-group .btn-outline { display: none; }
+      .for-whom-cards-wrap { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .process-timeline { grid-template-columns: 1fr 1fr; }
+      .for-whom-cards-wrap { grid-template-columns: 1fr; }
+    }
+
+    /* =============================================
+       LUCIDE – GLOBALNE WYMUSZENIE RENDEROWANIA
+    ============================================= */
+    [data-lucide], i[data-lucide], svg.lucide {
+      width: 24px !important;
+      height: 24px !important;
+      display: inline-block !important;
+      stroke-width: 2;
+      vertical-align: middle;
+      transition: color 0.3s ease, stroke 0.3s ease;
+    }
+    /* Sekcja Hero */
+    .hero-content .btn [data-lucide]      { width: 18px !important; height: 18px !important; }
+    .hero-checklist li [data-lucide]      { width: 15px !important; height: 15px !important; flex-shrink: 0; margin-top: 2px; color: var(--gold); }
+    .hero-card-badge [data-lucide]        { width: 22px !important; height: 22px !important; color: var(--gold); flex-shrink: 0; }
+    .hero-card-icon [data-lucide]         { width: 22px !important; height: 22px !important; color: var(--gold); }
+    /* Authority markers */
+    .authority-marker-icon [data-lucide]  { width: 20px !important; height: 20px !important; color: var(--gold); }
+    /* Usługi */
+    .service-icon-wrap [data-lucide]      { width: 26px !important; height: 26px !important; color: var(--navy); }
+    .service-card:hover .service-icon-wrap [data-lucide],
+    .service-card:focus-within .service-icon-wrap [data-lucide] { color: var(--gold); }
+    .read-more-hint [data-lucide]         { width: 12px !important; height: 12px !important; }
+    /* Dla kogo */
+    .target-card [data-lucide]            { width: 28px !important; height: 28px !important; color: var(--gold); display: block; margin: 0 auto 12px; }
+    .need-item [data-lucide]              { width: 18px !important; height: 18px !important; color: var(--gold); margin-top: 2px; flex-shrink: 0; }
+    /* O nas – badges */
+    .usp-badge [data-lucide]              { width: 13px !important; height: 13px !important; }
+    /* Proces */
+    .step-circle [data-lucide]            { width: 20px !important; height: 20px !important; color: var(--navy); }
+    .process-step:hover .step-circle [data-lucide] { color: var(--gold); }
+    /* Kontakt */
+    .contact-detail-icon [data-lucide]    { width: 18px !important; height: 18px !important; color: var(--navy); }
+    .contact-detail-item:hover .contact-detail-icon [data-lucide] { color: var(--gold); }
+    .coverage-badge [data-lucide]         { width: 18px !important; height: 18px !important; color: var(--gold); }
+    .btn [data-lucide]                    { width: 18px !important; height: 18px !important; }
+    /* =============================================
+       FONT RESIZER WIDGET
+    ============================================= */
+    .font-resizer {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(24, 45, 72, 0.92);
+      border: 1px solid rgba(199, 160, 0, 0.35);
+      border-radius: 10px;
+      padding: 6px 8px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .font-resizer__label {
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(199, 160, 0, 0.6);
+      padding-right: 6px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      margin-right: 2px;
+      white-space: nowrap;
+    }
+
+    .font-resizer__btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid rgba(199, 160, 0, 0.4);
+      background: var(--navy);
+      color: var(--gold);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .font-resizer__btn:hover {
+      background: rgba(199, 160, 0, 0.15);
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(199, 160, 0, 0.25);
+      animation: resizer-pulse 0.6s ease-out;
+    }
+
+    .font-resizer__btn:active {
+      transform: scale(0.92);
+    }
+
+    .font-resizer__btn--reset {
+      font-size: 0.72rem;
+      letter-spacing: 0.03em;
+      color: rgba(255, 255, 255, 0.7);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .font-resizer__btn--reset:hover {
+      color: var(--white);
+      border-color: rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: none;
+      animation: none;
+    }
+
+    .font-resizer__btn--increase { font-size: 1rem; }
+    .font-resizer__btn--decrease { font-size: 0.7rem; }
+
+    @keyframes resizer-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(199, 160, 0, 0.5); }
+      60%  { box-shadow: 0 0 0 7px rgba(199, 160, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(199, 160, 0, 0); }
+    }
+
+    @media (max-width: 480px) {
+      .font-resizer { bottom: 16px; right: 16px; padding: 5px 7px; gap: 3px; }
+      .font-resizer__btn { width: 28px; height: 28px; }
+      .font-resizer__label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       HEADER
+  ============================================= -->
+  <header id="header">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#hero" class="nav-logo" aria-label="Prime Consulting – strona główna">
+          <!-- INLINE SVG LOGO -->
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="40 35 220 130" role="img" aria-label="Prime Consulting logo">
+            <title>Logo Prime Consulting</title>
+            <g>
+              <path fill="#234165" d="m 108.1,108.5 h 42.4 v 10.8 h -42.4 z" />
+              <path fill="#234165" d="M 120.1,82.8 88.5,56.7 107.1,104.0 z" />
+              <path fill="#234165" d="m 178.8,84.7 -24.6,20.8 37.4,0 z" />
+              <path fill="#234165" d="m 184.9,48.7 8,20.2 -13.4,11.3 -9.3,-16.3 z" />
+              <path fill="#234165" d="m 148.9,39.0 -0.02,64.5 -25.0,-21.3 z" />
+              <path fill="#c29c00" d="m 150.7,108.5 h 42.4 v 10.8 h -42.4 z" />
+              <path fill="#c29c00" d="M 181.0,82.8 212.5,56.8 194.0,104.0 z" />
+              <path fill="#c29c00" d="m 122.2,84.7 24.6,20.8 -37.4,0 z" />
+              <path fill="#c29c00" d="m 116.0,48.7 -8,20.2 13.4,11.3 9.3,-16.3 z" />
+              <path fill="#c29c00" d="m 152.1,39.0 0.02,64.5 25.0,-21.3 z" />
+              <path fill="#234165" d="m 42.8,144.2 v -14.7 h 6.3 q 1.9,0 3.4,0.6 1.4,0.6 2.2,1.8 0.7,1.1 0.7,2.8 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.5 v 5.5 z m 3.4,-5.2 -1.5,-1.6 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.5,5.2 v -14.7 h 6.2 q 3.0,0 4.7,1.4 1.7,1.4 1.7,3.9 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.4 v 5.5 z m 9.3,0 -3.6,-5.3 h 3.6 l 3.7,5.3 z m -5.9,-5.2 -1.5,-1.5 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.8,5.2 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 6.2,10.3 h -1.4 l 6.1,-10.3 h 2.7 l 0.04,14.7 h -3.1 l -0.02,-9.8 h 0.5 l -4.9,8.2 h -1.5 l -5.0,-8.2 h 0.7 v 9.8 z m 19.8,0 v -14.7 h 11.1 v 2.7 h -7.7 v 9.2 h 8.0 v 2.7 z m 3.1,-6.1 v -2.6 h 7.0 v 2.6 z m 23.6,6.3 q -1.7,0 -3.1,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.6,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.9,0 3.4,0.6 1.5,0.6 2.6,1.9 l -2.1,2.0 q -0.7,-0.8 -1.6,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 1.0,0 2.0,-0.4 0.9,-0.4 1.6,-1.3 l 2.1,2.0 q -1.0,1.2 -2.6,1.9 -1.5,0.6 -3.4,0.6 z m 14.4,0 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.7,0 3.1,0.5 1.4,0.5 2.5,1.5 1.0,1.0 1.7,2.4 0.6,1.3 0.6,3.0 0,1.6 -0.6,3.0 -0.6,1.3 -1.7,2.4 -1.0,1.0 -2.5,1.5 -1.4,0.5 -3.1,0.5 z m -0.02,-2.8 q 0.9,0 1.8,-0.3 0.8,-0.3 1.4,-0.9 0.6,-0.6 0.9,-1.4 0.3,-0.8 0.3,-1.9 0,-1.0 -0.3,-1.9 -0.3,-0.8 -0.9,-1.4 -0.6,-0.6 -1.4,-0.9 -0.8,-0.3 -1.8,-0.3 -0.9,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 z m 10.4,2.6 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 21.6,0.2 q -1.7,0 -3.3,-0.4 -1.6,-0.4 -2.6,-1.2 l 1.1,-2.5 q 0.9,0.6 2.2,1.1 1.3,0.4 2.6,0.4 1.0,0 1.6,-0.1 0.6,-0.2 0.9,-0.5 0.2,-0.3 0.2,-0.8 0,-0.5 -0.4,-0.9 -0.4,-0.3 -1.2,-0.5 -0.7,-0.2 -1.6,-0.4 -0.9,-0.2 -1.8,-0.5 -0.9,-0.2 -1.6,-0.7 -0.7,-0.4 -1.2,-1.2 -0.4,-0.7 -0.4,-1.9 0,-1.2 0.6,-2.2 0.6,-1.0 2.0,-1.6 1.3,-0.6 3.4,-0.6 1.3,0 2.7,0.3 1.3,0.3 2.3,0.9 l -1.0,2.5 q -1.0,-0.5 -2.0,-0.8 -1.0,-0.2 -2.0,-0.2 -0.9,0 -1.6,0.2 -0.6,0.2 -0.9,0.6 -0.2,0.3 -0.2,0.8 0,0.5 0.4,0.9 0.4,0.3 1.2,0.5 0.7,0.2 1.6,0.4 0.9,0.2 1.8,0.4 0.9,0.2 1.6,0.7 0.7,0.4 1.2,1.2 0.4,0.7 0.4,1.9 0,1.2 -0.6,2.2 -0.6,1.0 -2.0,1.6 -1.3,0.6 -3.4,0.6 z m 14.9,0 q -3.1,0 -4.8,-1.7 -1.7,-1.7 -1.7,-4.9 v -8.2 h 3.4 v 8.1 q 0,2.1 0.8,3.0 0.8,0.9 2.4,0.9 1.5,0 2.4,-0.9 0.8,-0.9 0.8,-3.0 v -8.1 h 3.3 v 8.2 q 0,3.2 -1.7,4.9 -1.7,1.7 -4.8,1.7 z m 9.8,-0.2 v -14.7 h 3.4 v 11.9 h 7.3 v 2.7 z m 13.9,0 v -11.9 h -4.7 v -2.7 h 12.8 v 2.7 h -4.7 v 11.9 z m 9.7,0 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 23.9,0.2 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.2,-0.5 1.9,0 3.5,0.6 1.5,0.6 2.6,1.8 l -2.1,2.0 q -0.7,-0.8 -1.7,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.9,0.3 -0.8,0.3 -1.5,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.8 0.3,0.8 0.9,1.5 0.6,0.6 1.5,0.9 0.8,0.3 1.9,0.3 1.0,0 1.9,-0.3 0.9,-0.3 1.8,-1.1 l 1.9,2.4 q -1.1,0.9 -2.7,1.3 -1.5,0.4 -3.1,0.4 z m 5.9,-1.8 -3.1,-0.4 v -5.5 h 3.1 z" />
+              <path fill="#c29c00" d="m 42.6,154.6 h 61.5 v 1.4 H 42.6 Z" />
+              <path fill="#234165" d="m 116.8,161.5 q -1.2,0 -2.3,-0.4 -1.0,-0.4 -1.8,-1.2 -0.8,-0.7 -1.2,-1.8 -0.4,-1.0 -0.4,-2.2 0,-1.2 0.4,-2.2 0.4,-1.0 1.2,-1.8 0.8,-0.7 1.9,-1.2 1.0,-0.4 2.4,-0.4 1.3,0 2.4,0.4 1.1,0.4 1.8,1.2 l -0.9,0.9 q -0.6,-0.6 -1.5,-0.9 -0.8,-0.3 -1.7,-0.3 -0.9,0 -1.7,0.3 -0.8,0.3 -1.4,0.8 -0.5,0.5 -0.9,1.3 -0.3,0.7 -0.3,1.7 0,0.9 0.3,1.7 0.3,0.7 0.9,1.3 0.6,0.5 1.4,0.8 0.8,0.3 1.7,0.3 0.8,0 1.7,-0.2 0.8,-0.2 1.5,-0.9 l 0.9,1.2 q -0.8,0.7 -1.9,1.0 -1.1,0.3 -2.2,0.3 z m 4.2,-1.4 -1.5,-0.2 v -4.1 h 1.5 z m 6.4,1.3 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z m 8.7,0 q -1.2,0 -1.9,-0.6 -0.7,-0.6 -0.7,-1.9 v -7.7 h 1.5 v 7.7 q 0,0.6 0.3,1.0 0.3,0.3 0.9,0.3 0.7,0 1.2,-0.4 l 0.4,1.1 q -0.3,0.3 -0.8,0.4 -0.4,0.1 -1.0,0.1 z m -4.1,-7.3 v -1.2 h 5.4 v 1.2 z m 12.0,7.2 v -11.2 h 4.3 q 1.4,0 2.5,0.4 1.0,0.4 1.6,1.3 0.5,0.8 0.5,2.0 0,1.2 -0.5,2.0 -0.5,0.8 -1.6,1.3 -1.0,0.4 -2.5,0.4 h -3.4 l 0.7,-0.7 v 4.1 z m 1.6,-3.9 -0.7,-0.8 h 3.4 q 1.5,0 2.3,-0.6 0.8,-0.6 0.8,-1.8 0,-1.2 -0.8,-1.8 -0.7,-0.6 -2.3,-0.6 h -3.4 l 0.7,-0.8 z m 9.2,3.9 v -8.4 h 1.4 v 2.3 l -0.1,-0.5 q 0.3,-0.8 1.1,-1.3 0.8,-0.4 2.0,-0.4 v 1.4 q -0.09,-0.01 -0.19,-0.01 -0.08,0 -0.16,0 -1.2,0 -1.9,0.7 -0.7,0.7 -0.7,2.1 v 4.2 z m 6.2,0 v -8.4 h 1.5 v 8.4 z m 0.7,-10.1 q -0.4,0 -0.7,-0.2 -0.2,-0.2 -0.2,-0.7 0,-0.4 0.2,-0.7 0.3,-0.2 0.7,-0.2 0.4,0 0.7,0.2 0.3,0.2 0.3,0.6 0,0.4 -0.2,0.7 -0.2,0.2 -0.7,0.2 z m 3.5,10.1 v -8.4 h 1.4 v 2.2 l -0.2,-0.5 q 0.4,-0.8 1.2,-1.2 0.8,-0.4 1.9,-0.4 1.2,0 2.0,0.6 0.8,0.5 1.1,1.8 l -0.6,-0.2 q 0.3,-0.9 1.3,-1.5 0.9,-0.5 2.2,-0.5 1.0,0 1.8,0.4 0.7,0.4 1.2,1.2 0.4,0.8 0.4,2.0 v 4.8 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 z m 20.5,0.09 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z" />
+              <path fill="#c29c00" d="m 196.6,154.6 h 61.6 v 1.4 h -61.6 z" />
+            </g>
+          </svg>
+        </a>
+
+        <nav class="nav-menu" aria-label="Główna nawigacja">
+          <a href="#services">Usługi</a>
+          <a href="#for-whom">Dla kogo</a>
+          <a href="#about">O nas</a>
+          <a href="#process">Proces</a>
+          <a href="#contact">Kontakt</a>
+        </nav>
+
+        <div class="nav-cta">
+          <a href="#contact" class="btn btn-primary">
+            <i data-lucide="calendar-check"></i>
+            Bezpłatna konsultacja
+          </a>
+        </div>
+
+        <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav class="mobile-nav" id="mobileNav" aria-label="Nawigacja mobilna">
+      <a href="#services" onclick="closeMenu()">Usługi</a>
+      <a href="#for-whom" onclick="closeMenu()">Dla kogo</a>
+      <a href="#about" onclick="closeMenu()">O nas</a>
+      <a href="#process" onclick="closeMenu()">Proces</a>
+      <a href="#contact" onclick="closeMenu()">Kontakt</a>
+      <a href="#contact" class="btn btn-primary" onclick="closeMenu()" style="align-self:flex-start">Bezpłatna konsultacja</a>
+    </nav>
+  </header>
+
+  <!-- =============================================
+       HERO
+  ============================================= -->
+  <section id="hero" aria-label="Sekcja główna">
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-accent-line"></div>
+    <div class="container">
+      <div class="hero-inner">
+        <!-- Left Content -->
+        <div class="hero-content">
+          <!-- Big logo with halo effect -->
+          <div class="hero-logo-box">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="40 35 220 130" role="img" aria-label="Prime Consulting logo">
+              <title>Logo Prime Consulting</title>
+              <g>
+                <path fill="#234165" d="m 108.1,108.5 h 42.4 v 10.8 h -42.4 z" />
+                <path fill="#234165" d="M 120.1,82.8 88.5,56.7 107.1,104.0 z" />
+                <path fill="#234165" d="m 178.8,84.7 -24.6,20.8 37.4,0 z" />
+                <path fill="#234165" d="m 184.9,48.7 8,20.2 -13.4,11.3 -9.3,-16.3 z" />
+                <path fill="#234165" d="m 148.9,39.0 -0.02,64.5 -25.0,-21.3 z" />
+                <path fill="#c29c00" d="m 150.7,108.5 h 42.4 v 10.8 h -42.4 z" />
+                <path fill="#c29c00" d="M 181.0,82.8 212.5,56.8 194.0,104.0 z" />
+                <path fill="#c29c00" d="m 122.2,84.7 24.6,20.8 -37.4,0 z" />
+                <path fill="#c29c00" d="m 116.0,48.7 -8,20.2 13.4,11.3 9.3,-16.3 z" />
+                <path fill="#c29c00" d="m 152.1,39.0 0.02,64.5 25.0,-21.3 z" />
+                <path fill="#ffffff" d="m 42.8,144.2 v -14.7 h 6.3 q 1.9,0 3.4,0.6 1.4,0.6 2.2,1.8 0.7,1.1 0.7,2.8 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.5 v 5.5 z m 3.4,-5.2 -1.5,-1.6 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.5,5.2 v -14.7 h 6.2 q 3.0,0 4.7,1.4 1.7,1.4 1.7,3.9 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.4 v 5.5 z m 9.3,0 -3.6,-5.3 h 3.6 l 3.7,5.3 z m -5.9,-5.2 -1.5,-1.5 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.8,5.2 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 6.2,10.3 h -1.4 l 6.1,-10.3 h 2.7 l 0.04,14.7 h -3.1 l -0.02,-9.8 h 0.5 l -4.9,8.2 h -1.5 l -5.0,-8.2 h 0.7 v 9.8 z m 19.8,0 v -14.7 h 11.1 v 2.7 h -7.7 v 9.2 h 8.0 v 2.7 z m 3.1,-6.1 v -2.6 h 7.0 v 2.6 z m 23.6,6.3 q -1.7,0 -3.1,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.6,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.9,0 3.4,0.6 1.5,0.6 2.6,1.9 l -2.1,2.0 q -0.7,-0.8 -1.6,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 1.0,0 2.0,-0.4 0.9,-0.4 1.6,-1.3 l 2.1,2.0 q -1.0,1.2 -2.6,1.9 -1.5,0.6 -3.4,0.6 z m 14.4,0 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.7,0 3.1,0.5 1.4,0.5 2.5,1.5 1.0,1.0 1.7,2.4 0.6,1.3 0.6,3.0 0,1.6 -0.6,3.0 -0.6,1.3 -1.7,2.4 -1.0,1.0 -2.5,1.5 -1.4,0.5 -3.1,0.5 z m -0.02,-2.8 q 0.9,0 1.8,-0.3 0.8,-0.3 1.4,-0.9 0.6,-0.6 0.9,-1.4 0.3,-0.8 0.3,-1.9 0,-1.0 -0.3,-1.9 -0.3,-0.8 -0.9,-1.4 -0.6,-0.6 -1.4,-0.9 -0.8,-0.3 -1.8,-0.3 -0.9,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 z m 10.4,2.6 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 21.6,0.2 q -1.7,0 -3.3,-0.4 -1.6,-0.4 -2.6,-1.2 l 1.1,-2.5 q 0.9,0.6 2.2,1.1 1.3,0.4 2.6,0.4 1.0,0 1.6,-0.1 0.6,-0.2 0.9,-0.5 0.2,-0.3 0.2,-0.8 0,-0.5 -0.4,-0.9 -0.4,-0.3 -1.2,-0.5 -0.7,-0.2 -1.6,-0.4 -0.9,-0.2 -1.8,-0.5 -0.9,-0.2 -1.6,-0.7 -0.7,-0.4 -1.2,-1.2 -0.4,-0.7 -0.4,-1.9 0,-1.2 0.6,-2.2 0.6,-1.0 2.0,-1.6 1.3,-0.6 3.4,-0.6 1.3,0 2.7,0.3 1.3,0.3 2.3,0.9 l -1.0,2.5 q -1.0,-0.5 -2.0,-0.8 -1.0,-0.2 -2.0,-0.2 -0.9,0 -1.6,0.2 -0.6,0.2 -0.9,0.6 -0.2,0.3 -0.2,0.8 0,0.5 0.4,0.9 0.4,0.3 1.2,0.5 0.7,0.2 1.6,0.4 0.9,0.2 1.8,0.4 0.9,0.2 1.6,0.7 0.7,0.4 1.2,1.2 0.4,0.7 0.4,1.9 0,1.2 -0.6,2.2 -0.6,1.0 -2.0,1.6 -1.3,0.6 -3.4,0.6 z m 14.9,0 q -3.1,0 -4.8,-1.7 -1.7,-1.7 -1.7,-4.9 v -8.2 h 3.4 v 8.1 q 0,2.1 0.8,3.0 0.8,0.9 2.4,0.9 1.5,0 2.4,-0.9 0.8,-0.9 0.8,-3.0 v -8.1 h 3.3 v 8.2 q 0,3.2 -1.7,4.9 -1.7,1.7 -4.8,1.7 z m 9.8,-0.2 v -14.7 h 3.4 v 11.9 h 7.3 v 2.7 z m 13.9,0 v -11.9 h -4.7 v -2.7 h 12.8 v 2.7 h -4.7 v 11.9 z m 9.7,0 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 23.9,0.2 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.2,-0.5 1.9,0 3.5,0.6 1.5,0.6 2.6,1.8 l -2.1,2.0 q -0.7,-0.8 -1.7,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.9,0.3 -0.8,0.3 -1.5,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.8 0.3,0.8 0.9,1.5 0.6,0.6 1.5,0.9 0.8,0.3 1.9,0.3 1.0,0 1.9,-0.3 0.9,-0.3 1.8,-1.1 l 1.9,2.4 q -1.1,0.9 -2.7,1.3 -1.5,0.4 -3.1,0.4 z m 5.9,-1.8 -3.1,-0.4 v -5.5 h 3.1 z" />
+                <path fill="#c29c00" d="m 42.6,154.6 h 61.5 v 1.4 H 42.6 Z" />
+                <path fill="#ffffff" d="m 116.8,161.5 q -1.2,0 -2.3,-0.4 -1.0,-0.4 -1.8,-1.2 -0.8,-0.7 -1.2,-1.8 -0.4,-1.0 -0.4,-2.2 0,-1.2 0.4,-2.2 0.4,-1.0 1.2,-1.8 0.8,-0.7 1.9,-1.2 1.0,-0.4 2.4,-0.4 1.3,0 2.4,0.4 1.1,0.4 1.8,1.2 l -0.9,0.9 q -0.6,-0.6 -1.5,-0.9 -0.8,-0.3 -1.7,-0.3 -0.9,0 -1.7,0.3 -0.8,0.3 -1.4,0.8 -0.5,0.5 -0.9,1.3 -0.3,0.7 -0.3,1.7 0,0.9 0.3,1.7 0.3,0.7 0.9,1.3 0.6,0.5 1.4,0.8 0.8,0.3 1.7,0.3 0.8,0 1.7,-0.2 0.8,-0.2 1.5,-0.9 l 0.9,1.2 q -0.8,0.7 -1.9,1.0 -1.1,0.3 -2.2,0.3 z m 4.2,-1.4 -1.5,-0.2 v -4.1 h 1.5 z m 6.4,1.3 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z m 8.7,0 q -1.2,0 -1.9,-0.6 -0.7,-0.6 -0.7,-1.9 v -7.7 h 1.5 v 7.7 q 0,0.6 0.3,1.0 0.3,0.3 0.9,0.3 0.7,0 1.2,-0.4 l 0.4,1.1 q -0.3,0.3 -0.8,0.4 -0.4,0.1 -1.0,0.1 z m -4.1,-7.3 v -1.2 h 5.4 v 1.2 z m 12.0,7.2 v -11.2 h 4.3 q 1.4,0 2.5,0.4 1.0,0.4 1.6,1.3 0.5,0.8 0.5,2.0 0,1.2 -0.5,2.0 -0.5,0.8 -1.6,1.3 -1.0,0.4 -2.5,0.4 h -3.4 l 0.7,-0.7 v 4.1 z m 1.6,-3.9 -0.7,-0.8 h 3.4 q 1.5,0 2.3,-0.6 0.8,-0.6 0.8,-1.8 0,-1.2 -0.8,-1.8 -0.7,-0.6 -2.3,-0.6 h -3.4 l 0.7,-0.8 z m 9.2,3.9 v -8.4 h 1.4 v 2.3 l -0.1,-0.5 q 0.3,-0.8 1.1,-1.3 0.8,-0.4 2.0,-0.4 v 1.4 q -0.09,-0.01 -0.19,-0.01 -0.08,0 -0.16,0 -1.2,0 -1.9,0.7 -0.7,0.7 -0.7,2.1 v 4.2 z m 6.2,0 v -8.4 h 1.5 v 8.4 z m 0.7,-10.1 q -0.4,0 -0.7,-0.2 -0.2,-0.2 -0.2,-0.7 0,-0.4 0.2,-0.7 0.3,-0.2 0.7,-0.2 0.4,0 0.7,0.2 0.3,0.2 0.3,0.6 0,0.4 -0.2,0.7 -0.2,0.2 -0.7,0.2 z m 3.5,10.1 v -8.4 h 1.4 v 2.2 l -0.2,-0.5 q 0.4,-0.8 1.2,-1.2 0.8,-0.4 1.9,-0.4 1.2,0 2.0,0.6 0.8,0.5 1.1,1.8 l -0.6,-0.2 q 0.3,-0.9 1.3,-1.5 0.9,-0.5 2.2,-0.5 1.0,0 1.8,0.4 0.7,0.4 1.2,1.2 0.4,0.8 0.4,2.0 v 4.8 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 z m 20.5,0.09 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z" />
+                <path fill="#c29c00" d="m 196.6,154.6 h 61.6 v 1.4 h -61.6 z" />
+              </g>
+            </svg>
+          </div>
+
+          <h1 class="hero-h1">
+            Zyskaj przewagę inwestycyjną dzięki perspektywie <em>eksperta, który decydował o wsparciu</em>
+          </h1>
+
+          <p class="hero-subtitle">
+            Doradztwo inwestycyjne oparte na autentycznym doświadczeniu w ocenie wniosków o pomoc publiczną. Pomagamy firmom produkcyjnym w pełni wykorzystać ulgi podatkowe i dotacje, eliminując błędy, które mogą być źródłem problemów i kosztów w przyszłości.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#contact" class="btn btn-primary">
+              <i data-lucide="rocket"></i>
+              Bezpłatna weryfikacja projektu
+            </a>
+            <a href="#services" class="btn btn-outline">
+              Nasze usługi
+              <i data-lucide="arrow-down"></i>
+            </a>
+          </div>
+
+          <!-- Authority Markers -->
+          <div class="authority-markers">
+            <div class="authority-marker">
+              <div class="authority-marker-icon"><i data-lucide="user-check"></i></div>
+              <div class="authority-marker-body">
+                <div class="authority-marker-title">Były Ekspert Oceniający</div>
+                <div class="authority-marker-desc">Unikalna wiedza o kryteriach weryfikacji wniosków pomocowych.</div>
+              </div>
+            </div>
+            <div class="authority-marker">
+              <div class="authority-marker-icon"><i data-lucide="shield-check"></i></div>
+              <div class="authority-marker-body">
+                <div class="authority-marker-title">Strategia „Zero Błędów"</div>
+                <div class="authority-marker-desc">Eliminacja długofalowych ryzyk już na etapie koncepcji.</div>
+              </div>
+            </div>
+            <div class="authority-marker">
+              <div class="authority-marker-icon"><i data-lucide="factory"></i></div>
+              <div class="authority-marker-body">
+                <div class="authority-marker-title">Focus na Przemysł</div>
+                <div class="authority-marker-desc">Specjalizacja w inwestycjach produkcyjnych.</div>
+              </div>
+            </div>
+            <div class="authority-marker">
+              <div class="authority-marker-icon"><i data-lucide="map"></i></div>
+              <div class="authority-marker-body">
+                <div class="authority-marker-title">Zasięg Ogólnopolski</div>
+                <div class="authority-marker-desc">Obsługa projektów w dowolnej lokalizacji w Polsce.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Visual Card -->
+        <div class="hero-visual">
+          <div class="hero-deco-dot d1"></div>
+          <div class="hero-deco-dot d2"></div>
+          <div class="hero-card-glass">
+            <div class="hero-card-top">
+              <div class="hero-card-icon">
+                <i data-lucide="shield"></i>
+              </div>
+              <div>
+                <div class="hero-card-label">Prime Consulting</div>
+                <div class="hero-card-title">Twoja przewaga inwestycyjna</div>
+              </div>
+            </div>
+
+            <ul class="hero-checklist">
+              <li>
+                <i data-lucide="check"></i>
+                <span>Weryfikacja kwalifikowalności inwestycji do programu PSI</span>
+              </li>
+              <li>
+                <i data-lucide="check"></i>
+                <span>Przygotowanie kompletnej dokumentacji wniosku o Decyzję o Wsparciu</span>
+              </li>
+              <li>
+                <i data-lucide="check"></i>
+                <span>Identyfikacja i pozyskanie dotacji ze środków krajowych i UE</span>
+              </li>
+              <li>
+                <i data-lucide="check"></i>
+                <span>Modele finansowe, biznesplany i studia wykonalności</span>
+              </li>
+              <li>
+                <i data-lucide="check"></i>
+                <span>Ochrona własności intelektualnej</span>
+              </li>
+            </ul>
+
+            <div class="hero-card-badge">
+              <i data-lucide="award"></i>
+              <div class="hero-card-badge-text">
+                <strong>Unikalny ekspert</strong>
+                Były oceniający wnioski PSI – wiedza, której nie zastąpią podręczniki
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SERVICES
+  ============================================= -->
+  <section id="services" aria-labelledby="services-title">
+    <div class="container">
+      <div class="services-header reveal">
+        <div class="section-tag">Zakres Działalności</div>
+        <h2 class="section-title" id="services-title">Kompleksowe wsparcie na każdym etapie inwestycji</h2>
+        <p class="section-subtitle">Od wstępnej oceny projektu, przez dokumentację i negocjacje, aż po realizację i rozliczenie. Najedź myszką lub dotknij kafelka, by poznać szczegóły.</p>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- Card A: PSI -->
+        <div class="service-card reveal reveal-delay-1" tabindex="0" role="button" aria-expanded="false" onclick="toggleCard(this)">
+          <div class="service-card-head">
+            <div class="service-icon-wrap">
+              <i data-lucide="landmark"></i>
+            </div>
+            <div class="service-name">Polska Strefa Inwestycji (PSI)</div>
+            <p class="service-intro">Zwolnienie z CIT/PIT nawet na 15 lat – niezależnie od lokalizacji. Najpotężniejszy instrument wsparcia dla firm produkcyjnych, logistycznych i nowoczesnych usług biznesowych.</p>
+          </div>
+          <div class="service-expand" aria-hidden="true">
+            <div class="service-scope-title">Zakres wsparcia</div>
+            <ul class="service-scope-list">
+              <li>Audyt kwalifikowalności – weryfikacja spełnienia kryteriów ilościowych i jakościowych</li>
+              <li>Optymalizacja modelu kosztów kwalifikowanych dla maksymalnego pułapu pomocy</li>
+              <li>Kompletne przygotowanie wniosku o wydanie Decyzji o Wsparciu</li>
+              <li>Profesjonalne reprezentowanie przed Zarządzającym Obszarem</li>
+              <li>Perspektywa oceniającego – eliminacja błędów interpretacyjnych prowadzących do odrzucenia</li>
+            </ul>
+            <div class="service-benefit">
+              <strong>Korzyść</strong>
+              Pewność uzyskania decyzji dzięki doświadczeniu osoby oceniającej wnioski oraz realne oszczędności podatkowe, które finansują rozwój Twojego zakładu.
+            </div>
+          </div>
+          <div class="service-card-footer">
+            <div class="read-more-hint">Czytaj więcej <i data-lucide="arrow-right"></i></div>
+          </div>
+        </div>
+
+        <!-- Card B: Dotacje -->
+        <div class="service-card reveal reveal-delay-2" tabindex="0" role="button" aria-expanded="false" onclick="toggleCard(this)">
+          <div class="service-card-head">
+            <div class="service-icon-wrap">
+              <i data-lucide="coins"></i>
+            </div>
+            <div class="service-name">Dotacje i Pomoc Publiczna</div>
+            <p class="service-intro">Krajowe i unijne źródła finansowania dopasowane do specyfiki Twojej branży. Pomagamy przejść przez gąszcz przepisów i zmieniających się naborów.</p>
+          </div>
+          <div class="service-expand" aria-hidden="true">
+            <div class="service-scope-title">Zakres wsparcia</div>
+            <ul class="service-scope-list">
+              <li>Monitoring naborów – wybór programów celowych (automatyzacja, efektywność energetyczna, cyfryzacja)</li>
+              <li>Opracowanie koncepcji projektu dopasowanej do kryteriów punktowych naboru</li>
+              <li>Pełna dokumentacja: wnioski, biznesplany i załączniki merytoryczne</li>
+              <li>Wsparcie po uzyskaniu dotacji – doradztwo w procesie podpisywania umowy i rozliczania wskaźników</li>
+            </ul>
+            <div class="service-benefit">
+              <strong>Korzyść</strong>
+              Dostęp do kapitału zwrotnego i bezzwrotnego przy minimalnym zaangażowaniu czasowym Twojego zespołu.
+            </div>
+          </div>
+          <div class="service-card-footer">
+            <div class="read-more-hint">Czytaj więcej <i data-lucide="arrow-right"></i></div>
+          </div>
+        </div>
+
+        <!-- Card C: Doradztwo Inwestycyjne -->
+        <div class="service-card reveal reveal-delay-3" tabindex="0" role="button" aria-expanded="false" onclick="toggleCard(this)">
+          <div class="service-card-head">
+            <div class="service-icon-wrap">
+              <i data-lucide="factory"></i>
+            </div>
+            <div class="service-name">Doradztwo Inwestycyjne dla Projektów Przemysłowych</div>
+            <p class="service-intro">Wsparcie od etapu greenfield/brownfield aż po uruchomienie produkcji. Zarządzanie ryzykiem, planowanie procesowe i koordynacja formalna.</p>
+          </div>
+          <div class="service-expand" aria-hidden="true">
+            <div class="service-scope-title">Zakres wsparcia</div>
+            <ul class="service-scope-list">
+              <li>Analiza lokalizacji i uwarunkowań – ocena pod kątem wymogów strefowych i infrastrukturalnych</li>
+              <li>Planowanie procesowe – harmonogramowanie etapów inwestycji w relacji do procedur administracyjnych</li>
+              <li>Koordynacja warstwy formalnej – wsparcie w kontaktach z instytucjami otoczenia biznesu</li>
+              <li>Zarządzanie ryzykiem – identyfikacja „wąskich gardeł" mogących opóźnić realizację</li>
+            </ul>
+            <div class="service-benefit">
+              <strong>Korzyść</strong>
+              Przejście przez proces budowy lub rozbudowy zakładu w sposób uporządkowany, terminowy i zoptymalizowany kosztowo.
+            </div>
+          </div>
+          <div class="service-card-footer">
+            <div class="read-more-hint">Czytaj więcej <i data-lucide="arrow-right"></i></div>
+          </div>
+        </div>
+
+        <!-- Card D: Biznesplany -->
+        <div class="service-card reveal reveal-delay-1" tabindex="0" role="button" aria-expanded="false" onclick="toggleCard(this)">
+          <div class="service-card-head">
+            <div class="service-icon-wrap">
+              <i data-lucide="trending-up"></i>
+            </div>
+            <div class="service-name">Biznesplany, Analizy i Modele Finansowe</div>
+            <p class="service-intro">Twarde dane jako fundament każdej decyzji biznesowej. Dokumenty analityczne będące wspólną płaszczyzną między przedsiębiorcą a instytucją finansującą.</p>
+          </div>
+          <div class="service-expand" aria-hidden="true">
+            <div class="service-scope-title">Zakres wsparcia</div>
+            <ul class="service-scope-list">
+              <li>Profesjonalne biznesplany pod wymogi banków, funduszy VC i programów pomocowych</li>
+              <li>Studia wykonalności (Feasibility Studies) – analityczna ocena uzasadnienia rynkowego i ekonomicznego</li>
+              <li>Modele finansowe: Cash-Flow, NPV, IRR, stress-tests</li>
+              <li>Uzasadnienia ekonomiczne dla zarządów planujących duże wydatki inwestycyjne</li>
+            </ul>
+            <div class="service-benefit">
+              <strong>Korzyść</strong>
+              Wysoka wiarygodność Twoich projektów w oczach partnerów zewnętrznych i bezpieczeństwo decyzyjne.
+            </div>
+          </div>
+          <div class="service-card-footer">
+            <div class="read-more-hint">Czytaj więcej <i data-lucide="arrow-right"></i></div>
+          </div>
+        </div>
+
+        <!-- Card E: Innowacje / IP -->
+        <div class="service-card reveal reveal-delay-2" tabindex="0" role="button" aria-expanded="false" onclick="toggleCard(this)">
+          <div class="service-card-head">
+            <div class="service-icon-wrap">
+              <i data-lucide="lightbulb"></i>
+            </div>
+            <div class="service-name">Innowacje i Własność Intelektualna (IP)</div>
+            <p class="service-intro">Chronisz to, co w firmie najcenniejsze, i przekładasz to na korzyści podatkowe. Ulga B+R, IP Box i strategia ochrony know-how.</p>
+          </div>
+          <div class="service-expand" aria-hidden="true">
+            <div class="service-scope-title">Zakres wsparcia</div>
+            <ul class="service-scope-list">
+              <li>Identyfikacja innowacji – audyt procesów w celu wyłonienia elementów B+R</li>
+              <li>Strategia ochrony IP – porządkowanie praw do know-how i własności przemysłowej</li>
+              <li>Ulgi podatkowe: ulga B+R oraz IP Box (obniżenie podatku od dochodów z IP)</li>
+              <li>Transfer technologii – komercjalizacja rozwiązań i współpraca z jednostkami naukowymi</li>
+            </ul>
+            <div class="service-benefit">
+              <strong>Korzyść</strong>
+              Zabezpieczenie unikalnych przewag rynkowych i obniżenie efektywnej stawki podatkowej dzięki innowacjom.
+            </div>
+          </div>
+          <div class="service-card-footer">
+            <div class="read-more-hint">Czytaj więcej <i data-lucide="arrow-right"></i></div>
+          </div>
+        </div>
+
+        <!-- Card F: Strategia -->
+        <div class="service-card reveal reveal-delay-3" tabindex="0" role="button" aria-expanded="false" onclick="toggleCard(this)">
+          <div class="service-card-head">
+            <div class="service-icon-wrap">
+              <i data-lucide="crown"></i>
+            </div>
+            <div class="service-name">Doradztwo Strategiczne dla Przedsiębiorstw</div>
+            <p class="service-intro">Zewnętrzny partner i doradca zarządu, patrzący na firmę holistycznie. Puzzle inwestycyjne ułożone w spójną strategię wzrostu.</p>
+          </div>
+          <div class="service-expand" aria-hidden="true">
+            <div class="service-scope-title">Zakres wsparcia</div>
+            <ul class="service-scope-list">
+              <li>Definiowanie kierunków rozwoju – analiza szans i zagrożeń rynkowych w kontekście inwestycji</li>
+              <li>Optymalizacja portfela projektów dla najwyższego zwrotu w danej sytuacji rynkowej</li>
+              <li>Budowa relacji instytucjonalnych – reprezentowanie interesów inwestora w negocjacjach</li>
+              <li>Mentoring inwestycyjny – stałe wsparcie w procesie decyzyjnym dla właścicieli MŚP</li>
+            </ul>
+            <div class="service-benefit">
+              <strong>Korzyść</strong>
+              Spokój właściciela wynikający z posiadania profesjonalnego zaplecza doradczego, które „pilnuje" logiki biznesowej całego przedsiębiorstwa.
+            </div>
+          </div>
+          <div class="service-card-footer">
+            <div class="read-more-hint">Czytaj więcej <i data-lucide="arrow-right"></i></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       FOR WHOM
+  ============================================= -->
+  <section id="for-whom" aria-labelledby="for-whom-title">
+    <div class="container">
+      <div class="for-whom-single reveal">
+        <div class="section-tag">Dla kogo pracujemy</div>
+        <h2 class="section-title" id="for-whom-title">Wsparcie dla tych, którzy grają o realną stawkę</h2>
+        <p class="section-subtitle">Nasze usługi są dedykowane firmom, które stoją przed konkretnymi pytaniami inwestycyjnymi i potrzebują rzetelnych, eksperckich odpowiedzi.</p>
+
+        <ul class="needs-list">
+          <li class="need-item">
+            <i data-lucide="circle-help"></i>
+            <div class="need-item-text"><strong>Czy moja inwestycja kwalifikuje się do ulgi podatkowej PSI?</strong> – i jak ustrukturyzować projekt, aby uzyskać decyzję o wsparciu?</div>
+          </li>
+          <li class="need-item">
+            <i data-lucide="circle-help"></i>
+            <div class="need-item-text"><strong>Jak połączyć zwolnienie podatkowe z dotacją?</strong> – i jakie są limity kumulacji pomocy publicznej?</div>
+          </li>
+          <li class="need-item">
+            <i data-lucide="circle-help"></i>
+            <div class="need-item-text"><strong>Jak przedstawić projekt inwestycyjny</strong> w sposób przekonujący dla instytucji lub partnera finansującego?</div>
+          </li>
+          <li class="need-item">
+            <i data-lucide="circle-help"></i>
+            <div class="need-item-text"><strong>Jak przejść przez proces inwestycyjny</strong> bez kosztownych błędów i z maksymalnym wsparciem finansowym?</div>
+          </li>
+        </ul>
+
+        <!-- Target cards – moved to bottom -->
+        <div class="for-whom-bottom reveal reveal-delay-2">
+          <div class="for-whom-bottom-bg"></div>
+          <div class="for-whom-bottom-cards">
+            <div class="target-card">
+              <i data-lucide="factory"></i>
+              <div class="target-card-title">MŚP</div>
+              <div class="target-card-desc">Firmy produkcyjne planujące nowy zakład lub rozbudowę/modernizację</div>
+            </div>
+            <div class="target-card">
+              <i data-lucide="landmark"></i>
+              <div class="target-card-title">Duże Podmioty</div>
+              <div class="target-card-desc">Przemysłowe projekty rozwojowe i modernizacyjne</div>
+            </div>
+            <div class="target-card">
+              <i data-lucide="globe"></i>
+              <div class="target-card-title">Inwestorzy Zagraniczni</div>
+              <div class="target-card-desc">Planujący działalność produkcyjną w Polsce</div>
+            </div>
+            <div class="target-card">
+              <i data-lucide="sprout"></i>
+              <div class="target-card-title">Innowacyjne Firmy</div>
+              <div class="target-card-desc">Wdrażające B+R i chroniące własność intelektualną</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       ABOUT / EXPERT
+  ============================================= -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="container">
+      <div class="about-inner">
+
+        <!-- Full-width header row -->
+        <div class="about-header reveal">
+          <div class="section-tag">O Przemysławie Piotrowskim</div>
+          <h2 class="section-title" id="about-title">Wiedza, której nie&nbsp;da się wyczytać z podręczników</h2>
+          <p class="section-subtitle">Founder i główny ekspert Prime Consulting. Były oceniający wnioski PSI z doświadczeniem po obu stronach instytucji.</p>
+        </div>
+
+        <!-- Left – Quote block -->
+        <div class="about-quote-col reveal reveal-delay-1">
+          <div class="about-quote-block">
+            <div class="quote-icon">"</div>
+            <div class="about-quote-text">
+              <p>Przez lata pracowałem jako ekspert oceniający wnioski o wydanie decyzji o wsparciu w programie Polska Strefa Inwestycji (PSI). Ta praca pozwoliła mi poznać system od środka – widziałem tysiące projektów, rozumiałem przyczyny odrzuceń i mechanizmy, które decydują o sukcesie.</p>
+              <p>Dziś tę unikalną wiedzę oddaję do dyspozycji moich Klientów. W Prime Consulting nie zajmuję się tylko „pisaniem wniosków". <strong style="color:rgba(255,255,255,0.92)">Buduję mosty między ambitnymi planami przedsiębiorców a rygorystycznymi wymogami administracji.</strong> Łączę twarde kompetencje analityczne z praktyczną znajomością procedur.</p>
+              <p>Moim celem jest, abyś przeszedł przez proces inwestycyjny bez kosztownych błędów, z maksymalnym możliwym wsparciem finansowym dla Twojej firmy.</p>
+            </div>
+
+            <div class="about-signature">
+              <img src="Przemyslaw_Piotrowski_kwadrat.jpg" alt="Przemysław Piotrowski" class="about-avatar">
+              <div>
+                <div class="about-sig-name">Przemysław Piotrowski</div>
+                <div class="about-sig-title">Founder &amp; Senior Advisor, Prime Consulting</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right – Credentials -->
+        <div class="about-credentials reveal reveal-delay-2">
+
+          <div class="cred-card">
+            <div class="cred-top">
+              <div class="cred-num">PSI</div>
+              <div>
+                <div class="cred-label">Ekspert oceniający wnioski</div>
+              </div>
+            </div>
+            <div class="cred-desc">Jako były ekspert instytucji wydającej Decyzje o Wsparciu, Przemysław Piotrowski zna mechanizmy oceny projektów od środka – od analizy kryteriów ilościowych po interpretację wymogów jakościowych.</div>
+            <div class="usp-badges" style="margin-top:14px">
+              <span class="usp-badge"><i data-lucide="check"></i> Polska Strefa Inwestycji</span>
+              <span class="usp-badge"><i data-lucide="check"></i> Decyzje o Wsparciu</span>
+            </div>
+          </div>
+
+          <div class="cred-card">
+            <div class="cred-top">
+              <div class="cred-num">IP</div>
+              <div>
+                <div class="cred-label">Własność intelektualna</div>
+              </div>
+            </div>
+            <div class="cred-desc">Doświadczenie związane z obszarem własności intelektualnej (EUIPO/UPRP) pozwala łączyć perspektywę inwestycyjną z ochroną wartości niematerialnych przedsiębiorstwa – ulga B+R, IP Box i strategia IP.</div>
+            <div class="usp-badges" style="margin-top:14px">
+              <span class="usp-badge"><i data-lucide="check"></i> EUIPO / UPRP</span>
+              <span class="usp-badge"><i data-lucide="check"></i> IP Box &amp; B+R</span>
+            </div>
+          </div>
+
+          <div class="cred-card">
+            <div class="cred-top">
+              <div class="cred-num">360°</div>
+              <div>
+                <div class="cred-label">Perspektywa obu stron</div>
+              </div>
+            </div>
+            <div class="cred-desc">Doświadczenie po stronie wnioskodawcy i oceniającego daje unikalną zdolność do budowania projektów, które spełniają wymagania administracji – i jednocześnie realizują cele biznesowe inwestora.</div>
+            <div class="usp-badges" style="margin-top:14px">
+              <span class="usp-badge"><i data-lucide="check"></i> Perspektywa instytucji</span>
+              <span class="usp-badge"><i data-lucide="check"></i> Logika biznesowa</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       PROCESS
+  ============================================= -->
+  <section id="process" aria-labelledby="process-title">
+    <div class="container">
+      <div class="process-header reveal">
+        <div class="section-tag">Jak współpracujemy</div>
+        <h2 class="section-title" id="process-title">6 kroków do sukcesu inwestycyjnego</h2>
+        <p class="section-subtitle">Przejrzysty, ustrukturyzowany proces, który minimalizuje ryzyko i maksymalizuje szanse na uzyskanie wsparcia.</p>
+      </div>
+
+      <div class="process-timeline">
+        <div class="process-step reveal reveal-delay-1">
+          <div class="step-circle">
+            <i data-lucide="message-circle"></i>
+            <span class="step-num">1</span>
+          </div>
+          <div class="step-title">Rozmowa</div>
+          <div class="step-desc">Bezpłatna wstępna konsultacja. Poznajemy Twój projekt i cele inwestycyjne.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-2">
+          <div class="step-circle">
+            <i data-lucide="search"></i>
+            <span class="step-num">2</span>
+          </div>
+          <div class="step-title">Audyt</div>
+          <div class="step-desc">Szczegółowa analiza kwalifikowalności projektu do programów wsparcia i identyfikacja możliwości.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-3">
+          <div class="step-circle">
+            <i data-lucide="map"></i>
+            <span class="step-num">3</span>
+          </div>
+          <div class="step-title">Rekomendacje</div>
+          <div class="step-desc">Strategiczne rekomendacje i optymalny scenariusz uzyskania wsparcia finansowego.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-4">
+          <div class="step-circle">
+            <i data-lucide="file-text"></i>
+            <span class="step-num">4</span>
+          </div>
+          <div class="step-title">Dokumentacja</div>
+          <div class="step-desc">Kompletne przygotowanie wniosków, biznesplanów i wymaganej dokumentacji formalnej.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-5">
+          <div class="step-circle">
+            <i data-lucide="flag"></i>
+            <span class="step-num">5</span>
+          </div>
+          <div class="step-title">Realizacja</div>
+          <div class="step-desc">Wsparcie w procesie decyzyjnym, negocjacjach i sprawozdawczości przed organami.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-6">
+          <div class="step-circle">
+            <i data-lucide="receipt"></i>
+            <span class="step-num">6</span>
+          </div>
+          <div class="step-title">Rozliczenie</div>
+          <div class="step-desc">Wsparcie w rozliczeniu projektu po uzyskaniu wsparcia i zakończeniu inwestycji.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       CONTACT
+  ============================================= -->
+  <section id="contact" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="contact-inner">
+
+        <!-- Info -->
+        <div class="contact-info reveal">
+          <div class="section-tag">Kontakt</div>
+          <h2 class="section-title" id="contact-title">Rozpocznijmy współpracę</h2>
+          <p class="section-subtitle">Zrób pierwszy krok – napisz lub zadzwoń. Wstępna rozmowa o Twoim projekcie jest bezpłatna.</p>
+
+          <div class="contact-details">
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">
+                <i data-lucide="phone"></i>
+              </div>
+              <div>
+                <div class="contact-detail-label">Telefon</div>
+                <div class="contact-detail-value">
+                  <a href="tel:+48517817478">+48 517 817 478</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">
+                <i data-lucide="mail"></i>
+              </div>
+              <div>
+                <div class="contact-detail-label">E-mail</div>
+                <div class="contact-detail-value">
+                  <a href="mailto:p.piotrowski@getprime.pl">p.piotrowski@getprime.pl</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon">
+                <i data-lucide="briefcase"></i>
+              </div>
+              <div>
+                <div class="contact-detail-label">Firma</div>
+                <div class="contact-detail-value">Przemysław Piotrowski Prime Consulting</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="coverage-badge">
+            <i data-lucide="map-pin"></i>
+            <div>
+              Zasięg działalności: <strong>Cała Polska</strong><br>
+              <span style="font-size:0.8rem;opacity:0.75">PSI dostępne w każdej lokalizacji na terenie kraju</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="contact-form-wrap reveal reveal-delay-2">
+          <div class="form-title">Bezpłatna weryfikacja projektu</div>
+          <p class="form-subtitle">Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 24 godzin.</p>
+
+          <!-- 
+            FORMSPREE INTEGRATION
+            Zastąp YOUR_FORM_ID swoim unikalnym ID formularza z Formspree.io
+            Np.: https://formspree.io/f/xyzabc12
+          -->
+          <form id="contactForm" action="https://formspree.io/f/xdawrjpw" method="POST">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Imię i nazwisko *</label>
+                <input type="text" id="name" name="name" placeholder="Jan Kowalski" required autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="company">Firma</label>
+                <input type="text" id="company" name="company" placeholder="Nazwa firmy" autocomplete="organization" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" placeholder="jan@firma.pl" required autocomplete="email" />
+              </div>
+              <div class="form-group">
+                <label for="phone">Telefon</label>
+                <input type="tel" id="phone" name="phone" placeholder="+48 ..." autocomplete="tel" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="service">Obszar zainteresowania</label>
+              <select id="service" name="service">
+                <option value="">-- Wybierz usługę --</option>
+                <option value="psi">Polska Strefa Inwestycji (PSI)</option>
+                <option value="dotacje">Dotacje i pomoc publiczna</option>
+                <option value="doradztwo">Doradztwo inwestycyjne</option>
+                <option value="biznesplan">Biznesplany i modele finansowe</option>
+                <option value="ip">Innowacje i własność intelektualna</option>
+                <option value="strategia">Doradztwo strategiczne</option>
+                <option value="inne">Inne / nie wiem jeszcze</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Krótki opis projektu *</label>
+              <textarea id="message" name="message" placeholder="Opisz planowaną inwestycję lub pytanie, z którym chcesz się do nas zgłosić..." required></textarea>
+            </div>
+
+            <div class="form-consent">
+              <input type="checkbox" id="consent" name="consent" required />
+              <label for="consent">Wyrażam zgodę na przetwarzanie moich danych osobowych przez Przemysław Piotrowski Prime Consulting w celu udzielenia odpowiedzi na moje zapytanie, zgodnie z RODO. *</label>
+            </div>
+
+            <!-- Honeypot anti-spam -->
+            <input type="text" name="_gotcha" style="display:none" />
+            <input type="hidden" name="_subject" value="Nowe zapytanie ze strony GetPrime.pl" />
+
+            <button type="submit" class="btn btn-primary form-submit">
+              <i data-lucide="send"></i>
+              Wyślij zapytanie
+            </button>
+          </form>
+
+          <div id="form-success">
+            <i data-lucide="circle-check"></i>
+            <strong>Dziękujemy za zapytanie!</strong><br>
+            Skontaktujemy się z Tobą w ciągu 24 godzin roboczych.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       FOOTER
+  ============================================= -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+
+        <!-- Logo + company info -->
+        <div class="footer-left">
+          <a href="#hero" class="footer-logo" aria-label="Prime Consulting – powrót na górę">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="40 35 220 130" role="img" aria-label="Prime Consulting logo">
+              <g>
+                <!-- Signet – oryginalne kolory marki -->
+                <path fill="#234165" d="m 108.1,108.5 h 42.4 v 10.8 h -42.4 z" />
+                <path fill="#234165" d="M 120.1,82.8 88.5,56.7 107.1,104.0 z" />
+                <path fill="#234165" d="m 178.8,84.7 -24.6,20.8 37.4,0 z" />
+                <path fill="#234165" d="m 184.9,48.7 8,20.2 -13.4,11.3 -9.3,-16.3 z" />
+                <path fill="#234165" d="m 148.9,39.0 -0.02,64.5 -25.0,-21.3 z" />
+                <path fill="#c29c00" d="m 150.7,108.5 h 42.4 v 10.8 h -42.4 z" />
+                <path fill="#c29c00" d="M 181.0,82.8 212.5,56.8 194.0,104.0 z" />
+                <path fill="#c29c00" d="m 122.2,84.7 24.6,20.8 -37.4,0 z" />
+                <path fill="#c29c00" d="m 116.0,48.7 -8,20.2 13.4,11.3 9.3,-16.3 z" />
+                <path fill="#c29c00" d="m 152.1,39.0 0.02,64.5 25.0,-21.3 z" />
+                <!-- Typografia – biała jak w Hero -->
+                <path fill="#ffffff" d="m 42.8,144.2 v -14.7 h 6.3 q 1.9,0 3.4,0.6 1.4,0.6 2.2,1.8 0.7,1.1 0.7,2.8 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.5 v 5.5 z m 3.4,-5.2 -1.5,-1.6 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.5,5.2 v -14.7 h 6.2 q 3.0,0 4.7,1.4 1.7,1.4 1.7,3.9 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.4 v 5.5 z m 9.3,0 -3.6,-5.3 h 3.6 l 3.7,5.3 z m -5.9,-5.2 -1.5,-1.5 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.8,5.2 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 6.2,10.3 h -1.4 l 6.1,-10.3 h 2.7 l 0.04,14.7 h -3.1 l -0.02,-9.8 h 0.5 l -4.9,8.2 h -1.5 l -5.0,-8.2 h 0.7 v 9.8 z m 19.8,0 v -14.7 h 11.1 v 2.7 h -7.7 v 9.2 h 8.0 v 2.7 z m 3.1,-6.1 v -2.6 h 7.0 v 2.6 z m 23.6,6.3 q -1.7,0 -3.1,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.6,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.9,0 3.4,0.6 1.5,0.6 2.6,1.9 l -2.1,2.0 q -0.7,-0.8 -1.6,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 1.0,0 2.0,-0.4 0.9,-0.4 1.6,-1.3 l 2.1,2.0 q -1.0,1.2 -2.6,1.9 -1.5,0.6 -3.4,0.6 z m 14.4,0 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.7,0 3.1,0.5 1.4,0.5 2.5,1.5 1.0,1.0 1.7,2.4 0.6,1.3 0.6,3.0 0,1.6 -0.6,3.0 -0.6,1.3 -1.7,2.4 -1.0,1.0 -2.5,1.5 -1.4,0.5 -3.1,0.5 z m -0.02,-2.8 q 0.9,0 1.8,-0.3 0.8,-0.3 1.4,-0.9 0.6,-0.6 0.9,-1.4 0.3,-0.8 0.3,-1.9 0,-1.0 -0.3,-1.9 -0.3,-0.8 -0.9,-1.4 -0.6,-0.6 -1.4,-0.9 -0.8,-0.3 -1.8,-0.3 -0.9,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 z m 10.4,2.6 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 21.6,0.2 q -1.7,0 -3.3,-0.4 -1.6,-0.4 -2.6,-1.2 l 1.1,-2.5 q 0.9,0.6 2.2,1.1 1.3,0.4 2.6,0.4 1.0,0 1.6,-0.1 0.6,-0.2 0.9,-0.5 0.2,-0.3 0.2,-0.8 0,-0.5 -0.4,-0.9 -0.4,-0.3 -1.2,-0.5 -0.7,-0.2 -1.6,-0.4 -0.9,-0.2 -1.8,-0.5 -0.9,-0.2 -1.6,-0.7 -0.7,-0.4 -1.2,-1.2 -0.4,-0.7 -0.4,-1.9 0,-1.2 0.6,-2.2 0.6,-1.0 2.0,-1.6 1.3,-0.6 3.4,-0.6 1.3,0 2.7,0.3 1.3,0.3 2.3,0.9 l -1.0,2.5 q -1.0,-0.5 -2.0,-0.8 -1.0,-0.2 -2.0,-0.2 -0.9,0 -1.6,0.2 -0.6,0.2 -0.9,0.6 -0.2,0.3 -0.2,0.8 0,0.5 0.4,0.9 0.4,0.3 1.2,0.5 0.7,0.2 1.6,0.4 0.9,0.2 1.8,0.4 0.9,0.2 1.6,0.7 0.7,0.4 1.2,1.2 0.4,0.7 0.4,1.9 0,1.2 -0.6,2.2 -0.6,1.0 -2.0,1.6 -1.3,0.6 -3.4,0.6 z m 14.9,0 q -3.1,0 -4.8,-1.7 -1.7,-1.7 -1.7,-4.9 v -8.2 h 3.4 v 8.1 q 0,2.1 0.8,3.0 0.8,0.9 2.4,0.9 1.5,0 2.4,-0.9 0.8,-0.9 0.8,-3.0 v -8.1 h 3.3 v 8.2 q 0,3.2 -1.7,4.9 -1.7,1.7 -4.8,1.7 z m 9.8,-0.2 v -14.7 h 3.4 v 11.9 h 7.3 v 2.7 z m 13.9,0 v -11.9 h -4.7 v -2.7 h 12.8 v 2.7 h -4.7 v 11.9 z m 9.7,0 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 23.9,0.2 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.2,-0.5 1.9,0 3.5,0.6 1.5,0.6 2.6,1.8 l -2.1,2.0 q -0.7,-0.8 -1.7,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.9,0.3 -0.8,0.3 -1.5,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.8 0.3,0.8 0.9,1.5 0.6,0.6 1.5,0.9 0.8,0.3 1.9,0.3 1.0,0 1.9,-0.3 0.9,-0.3 1.8,-1.1 l 1.9,2.4 q -1.1,0.9 -2.7,1.3 -1.5,0.4 -3.1,0.4 z m 5.9,-1.8 -3.1,-0.4 v -5.5 h 3.1 z" />
+                <path fill="#c29c00" d="m 42.6,154.6 h 61.5 v 1.4 H 42.6 Z" />
+                <path fill="#ffffff" d="m 116.8,161.5 q -1.2,0 -2.3,-0.4 -1.0,-0.4 -1.8,-1.2 -0.8,-0.7 -1.2,-1.8 -0.4,-1.0 -0.4,-2.2 0,-1.2 0.4,-2.2 0.4,-1.0 1.2,-1.8 0.8,-0.7 1.9,-1.2 1.0,-0.4 2.4,-0.4 1.3,0 2.4,0.4 1.1,0.4 1.8,1.2 l -0.9,0.9 q -0.6,-0.6 -1.5,-0.9 -0.8,-0.3 -1.7,-0.3 -0.9,0 -1.7,0.3 -0.8,0.3 -1.4,0.8 -0.5,0.5 -0.9,1.3 -0.3,0.7 -0.3,1.7 0,0.9 0.3,1.7 0.3,0.7 0.9,1.3 0.6,0.5 1.4,0.8 0.8,0.3 1.7,0.3 0.8,0 1.7,-0.2 0.8,-0.2 1.5,-0.9 l 0.9,1.2 q -0.8,0.7 -1.9,1.0 -1.1,0.3 -2.2,0.3 z m 4.2,-1.4 -1.5,-0.2 v -4.1 h 1.5 z m 6.4,1.3 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z m 8.7,0 q -1.2,0 -1.9,-0.6 -0.7,-0.6 -0.7,-1.9 v -7.7 h 1.5 v 7.7 q 0,0.6 0.3,1.0 0.3,0.3 0.9,0.3 0.7,0 1.2,-0.4 l 0.4,1.1 q -0.3,0.3 -0.8,0.4 -0.4,0.1 -1.0,0.1 z m -4.1,-7.3 v -1.2 h 5.4 v 1.2 z m 12.0,7.2 v -11.2 h 4.3 q 1.4,0 2.5,0.4 1.0,0.4 1.6,1.3 0.5,0.8 0.5,2.0 0,1.2 -0.5,2.0 -0.5,0.8 -1.6,1.3 -1.0,0.4 -2.5,0.4 h -3.4 l 0.7,-0.7 v 4.1 z m 1.6,-3.9 -0.7,-0.8 h 3.4 q 1.5,0 2.3,-0.6 0.8,-0.6 0.8,-1.8 0,-1.2 -0.8,-1.8 -0.7,-0.6 -2.3,-0.6 h -3.4 l 0.7,-0.8 z m 9.2,3.9 v -8.4 h 1.4 v 2.3 l -0.1,-0.5 q 0.3,-0.8 1.1,-1.3 0.8,-0.4 2.0,-0.4 v 1.4 q -0.09,-0.01 -0.19,-0.01 -0.08,0 -0.16,0 -1.2,0 -1.9,0.7 -0.7,0.7 -0.7,2.1 v 4.2 z m 6.2,0 v -8.4 h 1.5 v 8.4 z m 0.7,-10.1 q -0.4,0 -0.7,-0.2 -0.2,-0.2 -0.2,-0.7 0,-0.4 0.2,-0.7 0.3,-0.2 0.7,-0.2 0.4,0 0.7,0.2 0.3,0.2 0.3,0.6 0,0.4 -0.2,0.7 -0.2,0.2 -0.7,0.2 z m 3.5,10.1 v -8.4 h 1.4 v 2.2 l -0.2,-0.5 q 0.4,-0.8 1.2,-1.2 0.8,-0.4 1.9,-0.4 1.2,0 2.0,0.6 0.8,0.5 1.1,1.8 l -0.6,-0.2 q 0.3,-0.9 1.3,-1.5 0.9,-0.5 2.2,-0.5 1.0,0 1.8,0.4 0.7,0.4 1.2,1.2 0.4,0.8 0.4,2.0 v 4.8 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 z m 20.5,0.09 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z" />
+                <path fill="#c29c00" d="m 196.6,154.6 h 61.6 v 1.4 h -61.6 z" />
+              </g>
+            </svg>
+          </a>
+
+          <!-- Dane firmy -->
+          <div class="footer-company-info">
+            Przemysław Piotrowski Prime Consulting &nbsp;|&nbsp; NIP: 9820345501 &nbsp;|&nbsp; REGON: 523008956
+          </div>
+        </div>
+
+        <nav class="footer-nav" aria-label="Nawigacja stopki">
+          <a href="#services">Usługi</a>
+          <a href="#for-whom">Dla kogo</a>
+          <a href="#about">O nas</a>
+          <a href="#process">Proces</a>
+          <a href="#contact">Kontakt</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 Przemysław Piotrowski Prime Consulting. Wszelkie prawa zastrzeżone.</p>
+        <p class="footer-motto">Get Prime</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =============================================
+       JAVASCRIPT
+  ============================================= -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // --- Header scroll effect ---
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // --- Mobile menu ---
+    function toggleMenu() {
+      document.getElementById('mobileNav').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('mobileNav').classList.remove('open');
+    }
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      const nav = document.getElementById('mobileNav');
+      const btn = document.querySelector('.hamburger');
+      if (nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // --- Expandable service cards (mobile tap) ---
+    function toggleCard(card) {
+      // On touch devices toggle; on desktop hover handles it via CSS
+      if (window.matchMedia('(hover: none)').matches || window.innerWidth < 1024) {
+        const isExpanded = card.classList.contains('expanded');
+        // Close all others
+        document.querySelectorAll('.service-card.expanded').forEach(c => {
+          c.classList.remove('expanded');
+          c.setAttribute('aria-expanded', 'false');
+          const exp = c.querySelector('.service-expand');
+          if (exp) exp.setAttribute('aria-hidden', 'true');
+        });
+        if (!isExpanded) {
+          card.classList.add('expanded');
+          card.setAttribute('aria-expanded', 'true');
+          const exp = card.querySelector('.service-expand');
+          if (exp) exp.setAttribute('aria-hidden', 'false');
+        }
+      }
+    }
+
+    // Keyboard accessibility for cards
+    document.querySelectorAll('.service-card').forEach(card => {
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleCard(card);
+        }
+      });
+    });
+
+    // --- Scroll reveal animations ---
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // --- Formspree AJAX submit ---
+    const form = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('form-success');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = form.querySelector('[type="submit"]');
+        const origText = submitBtn.innerHTML;
+
+        submitBtn.innerHTML = 'Wysyłanie...';
+        submitBtn.disabled = true;
+
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if (res.ok) {
+            form.style.display = 'none';
+            formSuccess.style.display = 'block';
+          } else {
+            throw new Error('Server error');
+          }
+            } catch {
+          submitBtn.innerHTML = origText;
+          submitBtn.disabled = false;
+          alert('Wystąpił błąd podczas wysyłania. Prosimy o kontakt telefoniczny lub e-mailowy.');
+        }
+      });
+    }
+  </script>
+
+  <!-- Font Resizer Widget -->
+  <div class="font-resizer" role="group" aria-label="Zmiana rozmiaru tekstu">
+    <span class="font-resizer__label">Tekst</span>
+    <button class="font-resizer__btn font-resizer__btn--decrease" id="fontDecrease" aria-label="Zmniejsz tekst" title="Zmniejsz tekst">A-</button>
+    <button class="font-resizer__btn font-resizer__btn--reset"    id="fontReset"    aria-label="Domyślny rozmiar tekstu" title="Domyślny rozmiar">A</button>
+    <button class="font-resizer__btn font-resizer__btn--increase" id="fontIncrease" aria-label="Powiększ tekst" title="Powiększ tekst">A+</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" onload="lucide.createIcons()"></script>
+
+  <script>
+    (function () {
+      var DEFAULT  = 17;
+      var MIN_SIZE = 12;
+      var MAX_SIZE = 24;
+      var STEP     = 2;
+      var html     = document.documentElement;
+
+      function getSize()       { return parseInt(html.style.fontSize) || DEFAULT; }
+      function setSize(px)     { html.style.fontSize = Math.min(MAX_SIZE, Math.max(MIN_SIZE, px)) + 'px'; }
+
+      document.getElementById('fontIncrease').addEventListener('click', function () { setSize(getSize() + STEP); });
+      document.getElementById('fontDecrease').addEventListener('click', function () { setSize(getSize() - STEP); });
+      document.getElementById('fontReset').addEventListener('click',    function () { html.style.fontSize = DEFAULT + 'px'; });
+    })();
+  </script>
+</body>
+</html>
