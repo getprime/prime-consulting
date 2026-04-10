@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator PSI – Polska Strefa Inwestycji | Prime Consulting</title>
+  <meta name="description" content="Sprawdź ile podatku możesz zaoszczędzić w Polskiej Strefie Inwestycji. Bezpłatny kalkulator zwolnienia podatkowego CIT/PIT.">
+  <!-- Dane PSI: Obwieszczenie Prezesa GUS, maj 2025 -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --navy:       #234165;
+      --navy-deep:  #182d48;
+      --navy-mid:   #2d5280;
+      --gold:       #C7A000;
+      --gold-light: #e0b800;
+      --gold-pale:  #f5e9a0;
+      --cream:      #faf8f3;
+      --white:      #ffffff;
+      --gray-100:   #f4f6f9;
+      --gray-200:   #e8ecf2;
+      --gray-400:   #94a3b8;
+      --gray-600:   #4a5568;
+      --gray-800:   #1e2835;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'Outfit', system-ui, sans-serif;
+      --shadow-sm:  0 2px 8px rgba(35,65,101,0.08);
+      --shadow-md:  0 8px 32px rgba(35,65,101,0.14);
+      --shadow-lg:  0 20px 60px rgba(35,65,101,0.18);
+      --radius:     12px;
+      --radius-lg:  20px;
+      --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 17px; }
+    body {
+      font-family: var(--font-body);
+      color: var(--gray-800);
+      background: var(--white);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-body); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .section-tag::before { content: ''; display: block; width: 28px; height: 2px; background: var(--gold); }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600; color: var(--navy); line-height: 1.18;
+    }
+    .section-subtitle { font-size: 1.05rem; color: var(--gray-600); max-width: 720px; margin-top: 12px; line-height: 1.75; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 30px; border-radius: 6px;
+      font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+      letter-spacing: 0.04em; cursor: pointer; border: none;
+      transition: var(--transition); white-space: nowrap;
+    }
+    .btn-primary { background: var(--gold); color: var(--navy-deep); }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(199,160,0,0.35); }
+    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.5); }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: var(--white); }
+    .btn-outline-navy { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+    .btn-outline-navy:hover { background: var(--navy); color: var(--white); }
+
+    /* HEADER / NAV */
+    #header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-200);
+      transition: var(--transition);
+    }
+    #header.scrolled { box-shadow: var(--shadow-md); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 80px; }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo svg { height: 66px; width: auto; transition: transform 0.3s ease; }
+    .nav-logo:hover svg { transform: scale(1.06); }
+    .nav-menu { display: flex; align-items: center; gap: 32px; }
+    .nav-menu a {
+      font-size: 0.85rem; font-weight: 500; color: var(--gray-600);
+      letter-spacing: 0.03em; position: relative; transition: color 0.2s;
+    }
+    .nav-menu a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0; right: 100%;
+      height: 1.5px; background: var(--gold); transition: right 0.25s ease;
+    }
+    .nav-menu a:hover { color: var(--navy); }
+    .nav-menu a:hover::after { right: 0; }
+    .nav-menu a.nav-active { color: var(--navy); font-weight: 600; }
+    .nav-menu a.nav-active::after { right: 0; }
+    .nav-cta { display: flex; align-items: center; gap: 16px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; border: none; background: none; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--navy); transition: var(--transition); border-radius: 2px; }
+    .mobile-nav {
+      display: none; position: fixed; top: 80px; left: 0; right: 0;
+      background: var(--white); border-bottom: 1px solid var(--gray-200);
+      z-index: 999; padding: 24px; flex-direction: column; gap: 20px;
+      box-shadow: var(--shadow-md);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-size: 1rem; font-weight: 500; color: var(--navy);
+      padding: 8px 0; border-bottom: 1px solid var(--gray-200);
+    }
+    .mobile-nav a.nav-active { color: var(--gold); }
+
+    /* MAIN */
+    main { padding-top: 80px; }
+
+    /* INTRO SECTION */
+    .intro {
+      padding: 80px 0 40px;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--white) 100%);
+    }
+    .intro .section-title { margin-bottom: 24px; max-width: 900px; }
+    .intro p {
+      font-size: 1.02rem; color: var(--gray-600);
+      max-width: 820px; margin-bottom: 16px; line-height: 1.8;
+    }
+
+    /* CALCULATOR SECTION */
+    .calculator-section { padding: 40px 0 80px; }
+    .calc-wrapper {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .calc-form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .calc-form .full { grid-column: 1 / -1; }
+    .field { display: flex; flex-direction: column; gap: 8px; }
+    .field label {
+      font-size: 0.82rem; font-weight: 600; color: var(--navy);
+      letter-spacing: 0.02em;
+    }
+    .field select, .field input {
+      padding: 13px 16px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: var(--white);
+      color: var(--gray-800);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field select:focus, .field input:focus {
+      outline: none;
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(35,65,101,0.08);
+    }
+    .field select:disabled {
+      background: var(--gray-100); cursor: not-allowed; color: var(--gray-400);
+    }
+    .field .hint { font-size: 0.77rem; color: var(--gray-400); margin-top: 2px; }
+    .submit-row { margin-top: 12px; display: flex; justify-content: flex-start; }
+
+    /* RESULTS CARD */
+    .results-card {
+      margin-top: 32px;
+      background: var(--white);
+      border-left: 4px solid var(--navy);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+    }
+    .results-card[hidden] { display: none; }
+    .results-card h3 {
+      font-family: var(--font-display); font-size: 1.65rem;
+      color: var(--navy); margin-bottom: 20px; font-weight: 600;
+    }
+    .result-row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 16px; padding: 14px 0;
+      border-bottom: 1px dotted var(--gray-200);
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.92rem; color: var(--gray-600); flex: 1; }
+    .result-value {
+      font-size: 1.0rem; font-weight: 600; color: var(--navy);
+      text-align: right; max-width: 60%;
+    }
+    .result-value.highlight { color: var(--gold); font-size: 1.15rem; }
+    .badge-success, .badge-error {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 600;
+    }
+    .badge-success { background: #e6f4ea; color: #1e7e3a; }
+    .badge-error { background: #fdecea; color: #b3261e; }
+    .warning-box {
+      margin-top: 20px;
+      background: var(--gold-pale);
+      border-left: 3px solid var(--gold);
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      color: var(--navy-deep);
+      line-height: 1.6;
+    }
+    .info-box {
+      margin-top: 14px;
+      background: #eef4fb;
+      border-left: 3px solid var(--navy-mid);
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      color: var(--navy-deep);
+      line-height: 1.6;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: var(--navy-deep);
+      padding: 80px 0;
+      text-align: center;
+      color: var(--white);
+    }
+    .cta-section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+      font-weight: 600; margin-bottom: 16px;
+      color: var(--white);
+    }
+    .cta-section p {
+      max-width: 640px; margin: 0 auto 28px;
+      color: rgba(255,255,255,0.8); font-size: 1.0rem;
+    }
+
+    /* FOOTER */
+    footer { background: var(--navy-deep); padding: 48px 0 32px; }
+    .footer-inner {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      flex-wrap: wrap; gap: 24px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-left { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+    .footer-logo svg { height: 81px; width: auto; }
+    .footer-company-info {
+      font-family: var(--font-body); font-size: 0.82rem;
+      line-height: 1.75; color: #c29c00; text-align: left;
+    }
+    .footer-nav { display: flex; gap: 28px; }
+    .footer-nav a {
+      font-size: 0.83rem; color: rgba(255,255,255,0.5);
+      transition: color 0.2s;
+    }
+    .footer-nav a:hover { color: var(--gold); }
+    .footer-bottom {
+      padding-top: 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-motto {
+      font-family: 'Montserrat', var(--font-body);
+      font-weight: 600; font-size: 1.79rem;
+      color: var(--gold); opacity: 0.7;
+    }
+    .footer-disclaimer {
+      max-width: 880px; margin: 20px auto 0;
+      font-size: 0.74rem; text-align: center;
+      color: rgba(255,255,255,0.4); font-style: italic;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .calc-wrapper { padding: 28px; }
+    }
+    @media (max-width: 768px) {
+      .nav-menu, .nav-cta .btn { display: none; }
+      .hamburger { display: flex; }
+      .calc-form { grid-template-columns: 1fr; }
+      .calc-wrapper { padding: 22px; }
+      .intro { padding: 60px 0 30px; }
+      .calculator-section { padding: 20px 0 60px; }
+      .footer-inner { flex-direction: column; }
+      .footer-nav { flex-wrap: wrap; gap: 16px; }
+      .result-row { flex-direction: column; gap: 4px; }
+      .result-value { text-align: left; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="header">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Prime Consulting – strona główna">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="40 35 220 130" role="img" aria-label="Prime Consulting logo">
+          <title>Logo Prime Consulting</title>
+          <g>
+            <path fill="#234165" d="m 108.1,108.5 h 42.4 v 10.8 h -42.4 z" />
+            <path fill="#234165" d="M 120.1,82.8 88.5,56.7 107.1,104.0 z" />
+            <path fill="#234165" d="m 178.8,84.7 -24.6,20.8 37.4,0 z" />
+            <path fill="#234165" d="m 184.9,48.7 8,20.2 -13.4,11.3 -9.3,-16.3 z" />
+            <path fill="#234165" d="m 148.9,39.0 -0.02,64.5 -25.0,-21.3 z" />
+            <path fill="#c29c00" d="m 150.7,108.5 h 42.4 v 10.8 h -42.4 z" />
+            <path fill="#c29c00" d="M 181.0,82.8 212.5,56.8 194.0,104.0 z" />
+            <path fill="#c29c00" d="m 122.2,84.7 24.6,20.8 -37.4,0 z" />
+            <path fill="#c29c00" d="m 116.0,48.7 -8,20.2 13.4,11.3 9.3,-16.3 z" />
+            <path fill="#c29c00" d="m 152.1,39.0 0.02,64.5 25.0,-21.3 z" />
+            <path fill="#234165" d="m 42.8,144.2 v -14.7 h 6.3 q 1.9,0 3.4,0.6 1.4,0.6 2.2,1.8 0.7,1.1 0.7,2.8 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.5 v 5.5 z m 3.4,-5.2 -1.5,-1.6 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.5,5.2 v -14.7 h 6.2 q 3.0,0 4.7,1.4 1.7,1.4 1.7,3.9 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.4 v 5.5 z m 9.3,0 -3.6,-5.3 h 3.6 l 3.7,5.3 z m -5.9,-5.2 -1.5,-1.5 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.8,5.2 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 6.2,10.3 h -1.4 l 6.1,-10.3 h 2.7 l 0.04,14.7 h -3.1 l -0.02,-9.8 h 0.5 l -4.9,8.2 h -1.5 l -5.0,-8.2 h 0.7 v 9.8 z m 19.8,0 v -14.7 h 11.1 v 2.7 h -7.7 v 9.2 h 8.0 v 2.7 z m 3.1,-6.1 v -2.6 h 7.0 v 2.6 z m 23.6,6.3 q -1.7,0 -3.1,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.6,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.9,0 3.4,0.6 1.5,0.6 2.6,1.9 l -2.1,2.0 q -0.7,-0.8 -1.6,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 1.0,0 2.0,-0.4 0.9,-0.4 1.6,-1.3 l 2.1,2.0 q -1.0,1.2 -2.6,1.9 -1.5,0.6 -3.4,0.6 z m 14.4,0 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.7,0 3.1,0.5 1.4,0.5 2.5,1.5 1.0,1.0 1.7,2.4 0.6,1.3 0.6,3.0 0,1.6 -0.6,3.0 -0.6,1.3 -1.7,2.4 -1.0,1.0 -2.5,1.5 -1.4,0.5 -3.1,0.5 z m -0.02,-2.8 q 0.9,0 1.8,-0.3 0.8,-0.3 1.4,-0.9 0.6,-0.6 0.9,-1.4 0.3,-0.8 0.3,-1.9 0,-1.0 -0.3,-1.9 -0.3,-0.8 -0.9,-1.4 -0.6,-0.6 -1.4,-0.9 -0.8,-0.3 -1.8,-0.3 -0.9,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 z m 10.4,2.6 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 21.6,0.2 q -1.7,0 -3.3,-0.4 -1.6,-0.4 -2.6,-1.2 l 1.1,-2.5 q 0.9,0.6 2.2,1.1 1.3,0.4 2.6,0.4 1.0,0 1.6,-0.1 0.6,-0.2 0.9,-0.5 0.2,-0.3 0.2,-0.8 0,-0.5 -0.4,-0.9 -0.4,-0.3 -1.2,-0.5 -0.7,-0.2 -1.6,-0.4 -0.9,-0.2 -1.8,-0.5 -0.9,-0.2 -1.6,-0.7 -0.7,-0.4 -1.2,-1.2 -0.4,-0.7 -0.4,-1.9 0,-1.2 0.6,-2.2 0.6,-1.0 2.0,-1.6 1.3,-0.6 3.4,-0.6 1.3,0 2.7,0.3 1.3,0.3 2.3,0.9 l -1.0,2.5 q -1.0,-0.5 -2.0,-0.8 -1.0,-0.2 -2.0,-0.2 -0.9,0 -1.6,0.2 -0.6,0.2 -0.9,0.6 -0.2,0.3 -0.2,0.8 0,0.5 0.4,0.9 0.4,0.3 1.2,0.5 0.7,0.2 1.6,0.4 0.9,0.2 1.8,0.4 0.9,0.2 1.6,0.7 0.7,0.4 1.2,1.2 0.4,0.7 0.4,1.9 0,1.2 -0.6,2.2 -0.6,1.0 -2.0,1.6 -1.3,0.6 -3.4,0.6 z m 14.9,0 q -3.1,0 -4.8,-1.7 -1.7,-1.7 -1.7,-4.9 v -8.2 h 3.4 v 8.1 q 0,2.1 0.8,3.0 0.8,0.9 2.4,0.9 1.5,0 2.4,-0.9 0.8,-0.9 0.8,-3.0 v -8.1 h 3.3 v 8.2 q 0,3.2 -1.7,4.9 -1.7,1.7 -4.8,1.7 z m 9.8,-0.2 v -14.7 h 3.4 v 11.9 h 7.3 v 2.7 z m 13.9,0 v -11.9 h -4.7 v -2.7 h 12.8 v 2.7 h -4.7 v 11.9 z m 9.7,0 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 23.9,0.2 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.2,-0.5 1.9,0 3.5,0.6 1.5,0.6 2.6,1.8 l -2.1,2.0 q -0.7,-0.8 -1.7,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.9,0.3 -0.8,0.3 -1.5,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.8 0.3,0.8 0.9,1.5 0.6,0.6 1.5,0.9 0.8,0.3 1.9,0.3 1.0,0 1.9,-0.3 0.9,-0.3 1.8,-1.1 l 1.9,2.4 q -1.1,0.9 -2.7,1.3 -1.5,0.4 -3.1,0.4 z m 5.9,-1.8 -3.1,-0.4 v -5.5 h 3.1 z" />
+            <path fill="#c29c00" d="m 42.6,154.6 h 61.5 v 1.4 H 42.6 Z" />
+            <path fill="#234165" d="m 116.8,161.5 q -1.2,0 -2.3,-0.4 -1.0,-0.4 -1.8,-1.2 -0.8,-0.7 -1.2,-1.8 -0.4,-1.0 -0.4,-2.2 0,-1.2 0.4,-2.2 0.4,-1.0 1.2,-1.8 0.8,-0.7 1.9,-1.2 1.0,-0.4 2.4,-0.4 1.3,0 2.4,0.4 1.1,0.4 1.8,1.2 l -0.9,0.9 q -0.6,-0.6 -1.5,-0.9 -0.8,-0.3 -1.7,-0.3 -0.9,0 -1.7,0.3 -0.8,0.3 -1.4,0.8 -0.5,0.5 -0.9,1.3 -0.3,0.7 -0.3,1.7 0,0.9 0.3,1.7 0.3,0.7 0.9,1.3 0.6,0.5 1.4,0.8 0.8,0.3 1.7,0.3 0.8,0 1.7,-0.2 0.8,-0.2 1.5,-0.9 l 0.9,1.2 q -0.8,0.7 -1.9,1.0 -1.1,0.3 -2.2,0.3 z m 4.2,-1.4 -1.5,-0.2 v -4.1 h 1.5 z m 6.4,1.3 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z m 8.7,0 q -1.2,0 -1.9,-0.6 -0.7,-0.6 -0.7,-1.9 v -7.7 h 1.5 v 7.7 q 0,0.6 0.3,1.0 0.3,0.3 0.9,0.3 0.7,0 1.2,-0.4 l 0.4,1.1 q -0.3,0.3 -0.8,0.4 -0.4,0.1 -1.0,0.1 z m -4.1,-7.3 v -1.2 h 5.4 v 1.2 z m 12.0,7.2 v -11.2 h 4.3 q 1.4,0 2.5,0.4 1.0,0.4 1.6,1.3 0.5,0.8 0.5,2.0 0,1.2 -0.5,2.0 -0.5,0.8 -1.6,1.3 -1.0,0.4 -2.5,0.4 h -3.4 l 0.7,-0.7 v 4.1 z m 1.6,-3.9 -0.7,-0.8 h 3.4 q 1.5,0 2.3,-0.6 0.8,-0.6 0.8,-1.8 0,-1.2 -0.8,-1.8 -0.7,-0.6 -2.3,-0.6 h -3.4 l 0.7,-0.8 z m 9.2,3.9 v -8.4 h 1.4 v 2.3 l -0.1,-0.5 q 0.3,-0.8 1.1,-1.3 0.8,-0.4 2.0,-0.4 v 1.4 q -0.09,-0.01 -0.19,-0.01 -0.08,0 -0.16,0 -1.2,0 -1.9,0.7 -0.7,0.7 -0.7,2.1 v 4.2 z m 6.2,0 v -8.4 h 1.5 v 8.4 z m 0.7,-10.1 q -0.4,0 -0.7,-0.2 -0.2,-0.2 -0.2,-0.7 0,-0.4 0.2,-0.7 0.3,-0.2 0.7,-0.2 0.4,0 0.7,0.2 0.3,0.2 0.3,0.6 0,0.4 -0.2,0.7 -0.2,0.2 -0.7,0.2 z m 3.5,10.1 v -8.4 h 1.4 v 2.2 l -0.2,-0.5 q 0.4,-0.8 1.2,-1.2 0.8,-0.4 1.9,-0.4 1.2,0 2.0,0.6 0.8,0.5 1.1,1.8 l -0.6,-0.2 q 0.3,-0.9 1.3,-1.5 0.9,-0.5 2.2,-0.5 1.0,0 1.8,0.4 0.7,0.4 1.2,1.2 0.4,0.8 0.4,2.0 v 4.8 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 z m 20.5,0.09 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z" />
+            <path fill="#c29c00" d="m 196.6,154.6 h 61.6 v 1.4 h -61.6 z" />
+          </g>
+        </svg>
+      </a>
+
+      <nav class="nav-menu" aria-label="Główna nawigacja">
+        <a href="index.html#services">Usługi</a>
+        <a href="index.html#for-whom">Dla kogo</a>
+        <a href="index.html#about">O nas</a>
+        <a href="index.html#process">Proces</a>
+        <a href="kalkulator-psi.html" class="nav-active">Kalkulator korzyści PSI</a>
+        <a href="index.html#contact">Kontakt</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a href="index.html#contact" class="btn btn-primary">
+          <i data-lucide="calendar-check"></i>
+          Bezpłatna konsultacja
+        </a>
+      </div>
+
+      <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" id="mobileNav" aria-label="Nawigacja mobilna">
+    <a href="index.html#services" onclick="closeMenu()">Usługi</a>
+    <a href="index.html#for-whom" onclick="closeMenu()">Dla kogo</a>
+    <a href="index.html#about" onclick="closeMenu()">O nas</a>
+    <a href="index.html#process" onclick="closeMenu()">Proces</a>
+    <a href="kalkulator-psi.html" class="nav-active" onclick="closeMenu()">Kalkulator korzyści PSI</a>
+    <a href="index.html#contact" onclick="closeMenu()">Kontakt</a>
+    <a href="index.html#contact" class="btn btn-primary" onclick="closeMenu()" style="align-self:flex-start">Bezpłatna konsultacja</a>
+  </nav>
+</header>
+
+<main>
+  <section class="intro">
+    <div class="container">
+      <span class="section-tag">Kalkulator korzyści PSI</span>
+      <h1 class="section-title">Polska Strefa Inwestycji — zwolnienie z podatku dochodowego dla Twojej firmy</h1>
+      <div style="margin-top:28px">
+        <p>Polska Strefa Inwestycji to rządowy program wsparcia dla firm, które inwestują w rozwój swojej działalności produkcyjnej lub usługowej. Jego istotą jest zwolnienie z podatku dochodowego (CIT lub PIT) przez okres do 15 lat. Zwolnienie przysługuje w zamian za realizację nowej inwestycji: budowę lub rozbudowę zakładu, zakup nowoczesnych maszyn albo wdrożenie nowych technologii.</p>
+        <p>Program jest dostępny na terenie całej Polski, bez konieczności działania w specjalnej strefie ekonomicznej. Wysokość zwolnienia zależy od lokalizacji inwestycji, jej wartości oraz wielkości przedsiębiorstwa. Mniejsze firmy mogą liczyć na wyższą intensywność wsparcia.</p>
+        <p>Żeby skorzystać ze zwolnienia, firma musi spełnić minimalne wymogi inwestycyjne, zwiększyć zatrudnienie oraz zobowiązać się do spełnienia 4–6 prostych kryteriów jakościowych.</p>
+        <p>Skorzystaj z kalkulatora poniżej, żeby sprawdzić, ile podatku możesz zaoszczędzić i jakie warunki musisz spełnić.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="calculator-section">
+    <div class="container">
+      <div class="calc-wrapper">
+        <form id="psiForm" novalidate>
+          <div class="calc-form">
+            <div class="field">
+              <label for="wojewodztwo">Województwo</label>
+              <select id="wojewodztwo" name="wojewodztwo" required>
+                <option value="">— wybierz —</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="powiat">Powiat</label>
+              <select id="powiat" name="powiat" disabled required>
+                <option value="">— najpierw wybierz województwo —</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="gmina">Gmina</label>
+              <select id="gmina" name="gmina" disabled required>
+                <option value="">— najpierw wybierz powiat —</option>
+              </select>
+              <span class="hint">⭐ oznacza gminę objętą preferencyjnymi warunkami PSI</span>
+            </div>
+            <div class="field">
+              <label for="miejscowosc">Miejscowość</label>
+              <input type="text" id="miejscowosc" name="miejscowosc" placeholder="np. Jelcz-Laskowice" />
+              <span class="hint">Pole informacyjne, nie wpływa na obliczenia</span>
+            </div>
+            <div class="field">
+              <label for="wielkosc">Wielkość przedsiębiorstwa</label>
+              <select id="wielkosc" name="wielkosc" required>
+                <option value="">— wybierz —</option>
+                <option value="0">Mikro (≤10 pracowników, ≤2 mln EUR obrotu)</option>
+                <option value="1">Małe (11–49 pracowników, ≤10 mln EUR)</option>
+                <option value="2">Średnie (50–249 pracowników, ≤50 mln EUR)</option>
+                <option value="3">Duże (powyżej progów MŚP)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rodzaj">Rodzaj inwestycji</label>
+              <select id="rodzaj" name="rodzaj" required>
+                <option value="">— wybierz —</option>
+                <option value="nowy">Nowy zakład (budowa nowego zakładu)</option>
+                <option value="rein_zdolnosc">Reinwestycja: zwiększenie zdolności produkcyjnej</option>
+                <option value="rein_dywersyfikacja">Reinwestycja: dywersyfikacja produkcji (nowe kody PKWiU)</option>
+                <option value="rein_proces">Reinwestycja: zasadnicza zmiana procesu technologicznego</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="kwota">Kwota planowanej inwestycji (PLN)</label>
+              <input type="text" id="kwota" name="kwota" inputmode="numeric" placeholder="np. 5 000 000" required />
+              <span class="hint" id="kwotaHint"></span>
+            </div>
+          </div>
+          <div class="submit-row">
+            <button type="submit" class="btn btn-primary">
+              <i data-lucide="calculator"></i>
+              Oblicz
+            </button>
+          </div>
+        </form>
+
+        <div id="resultsCard" class="results-card" hidden aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Masz pytania? Porozmawiajmy o Twojej inwestycji.</h2>
+      <p>Pomagamy przedsiębiorcom uzyskać decyzję o wsparciu PSI i zmaksymalizować korzyści podatkowe. Skontaktuj się z nami — bezpłatna wstępna konsultacja.</p>
+      <a href="index.html#contact" class="btn btn-primary">
+        Skontaktuj się z nami
+        <i data-lucide="arrow-right"></i>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <a href="index.html" class="footer-logo" aria-label="Prime Consulting – powrót na górę">
+          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="40 35 220 130" role="img" aria-label="Prime Consulting logo">
+            <g>
+              <path fill="#234165" d="m 108.1,108.5 h 42.4 v 10.8 h -42.4 z" />
+              <path fill="#234165" d="M 120.1,82.8 88.5,56.7 107.1,104.0 z" />
+              <path fill="#234165" d="m 178.8,84.7 -24.6,20.8 37.4,0 z" />
+              <path fill="#234165" d="m 184.9,48.7 8,20.2 -13.4,11.3 -9.3,-16.3 z" />
+              <path fill="#234165" d="m 148.9,39.0 -0.02,64.5 -25.0,-21.3 z" />
+              <path fill="#c29c00" d="m 150.7,108.5 h 42.4 v 10.8 h -42.4 z" />
+              <path fill="#c29c00" d="M 181.0,82.8 212.5,56.8 194.0,104.0 z" />
+              <path fill="#c29c00" d="m 122.2,84.7 24.6,20.8 -37.4,0 z" />
+              <path fill="#c29c00" d="m 116.0,48.7 -8,20.2 13.4,11.3 9.3,-16.3 z" />
+              <path fill="#c29c00" d="m 152.1,39.0 0.02,64.5 25.0,-21.3 z" />
+              <path fill="#ffffff" d="m 42.8,144.2 v -14.7 h 6.3 q 1.9,0 3.4,0.6 1.4,0.6 2.2,1.8 0.7,1.1 0.7,2.8 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.5 v 5.5 z m 3.4,-5.2 -1.5,-1.6 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.5,5.2 v -14.7 h 6.2 q 3.0,0 4.7,1.4 1.7,1.4 1.7,3.9 0,1.6 -0.7,2.8 -0.7,1.1 -2.2,1.8 -1.4,0.6 -3.4,0.6 h -4.4 l 1.5,-1.4 v 5.5 z m 9.3,0 -3.6,-5.3 h 3.6 l 3.7,5.3 z m -5.9,-5.2 -1.5,-1.5 h 4.2 q 1.5,0 2.3,-0.6 0.7,-0.6 0.7,-1.8 0,-1.2 -0.7,-1.8 -0.7,-0.6 -2.3,-0.6 h -4.2 l 1.5,-1.6 z m 11.8,5.2 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 6.2,10.3 h -1.4 l 6.1,-10.3 h 2.7 l 0.04,14.7 h -3.1 l -0.02,-9.8 h 0.5 l -4.9,8.2 h -1.5 l -5.0,-8.2 h 0.7 v 9.8 z m 19.8,0 v -14.7 h 11.1 v 2.7 h -7.7 v 9.2 h 8.0 v 2.7 z m 3.1,-6.1 v -2.6 h 7.0 v 2.6 z m 23.6,6.3 q -1.7,0 -3.1,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.6,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.9,0 3.4,0.6 1.5,0.6 2.6,1.9 l -2.1,2.0 q -0.7,-0.8 -1.6,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 1.0,0 2.0,-0.4 0.9,-0.4 1.6,-1.3 l 2.1,2.0 q -1.0,1.2 -2.6,1.9 -1.5,0.6 -3.4,0.6 z m 14.4,0 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.1,-0.5 1.7,0 3.1,0.5 1.4,0.5 2.5,1.5 1.0,1.0 1.7,2.4 0.6,1.3 0.6,3.0 0,1.6 -0.6,3.0 -0.6,1.3 -1.7,2.4 -1.0,1.0 -2.5,1.5 -1.4,0.5 -3.1,0.5 z m -0.02,-2.8 q 0.9,0 1.8,-0.3 0.8,-0.3 1.4,-0.9 0.6,-0.6 0.9,-1.4 0.3,-0.8 0.3,-1.9 0,-1.0 -0.3,-1.9 -0.3,-0.8 -0.9,-1.4 -0.6,-0.6 -1.4,-0.9 -0.8,-0.3 -1.8,-0.3 -0.9,0 -1.8,0.3 -0.8,0.3 -1.4,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.9 0.3,0.8 0.9,1.4 0.6,0.6 1.4,0.9 0.8,0.3 1.8,0.3 z m 10.4,2.6 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 21.6,0.2 q -1.7,0 -3.3,-0.4 -1.6,-0.4 -2.6,-1.2 l 1.1,-2.5 q 0.9,0.6 2.2,1.1 1.3,0.4 2.6,0.4 1.0,0 1.6,-0.1 0.6,-0.2 0.9,-0.5 0.2,-0.3 0.2,-0.8 0,-0.5 -0.4,-0.9 -0.4,-0.3 -1.2,-0.5 -0.7,-0.2 -1.6,-0.4 -0.9,-0.2 -1.8,-0.5 -0.9,-0.2 -1.6,-0.7 -0.7,-0.4 -1.2,-1.2 -0.4,-0.7 -0.4,-1.9 0,-1.2 0.6,-2.2 0.6,-1.0 2.0,-1.6 1.3,-0.6 3.4,-0.6 1.3,0 2.7,0.3 1.3,0.3 2.3,0.9 l -1.0,2.5 q -1.0,-0.5 -2.0,-0.8 -1.0,-0.2 -2.0,-0.2 -0.9,0 -1.6,0.2 -0.6,0.2 -0.9,0.6 -0.2,0.3 -0.2,0.8 0,0.5 0.4,0.9 0.4,0.3 1.2,0.5 0.7,0.2 1.6,0.4 0.9,0.2 1.8,0.4 0.9,0.2 1.6,0.7 0.7,0.4 1.2,1.2 0.4,0.7 0.4,1.9 0,1.2 -0.6,2.2 -0.6,1.0 -2.0,1.6 -1.3,0.6 -3.4,0.6 z m 14.9,0 q -3.1,0 -4.8,-1.7 -1.7,-1.7 -1.7,-4.9 v -8.2 h 3.4 v 8.1 q 0,2.1 0.8,3.0 0.8,0.9 2.4,0.9 1.5,0 2.4,-0.9 0.8,-0.9 0.8,-3.0 v -8.1 h 3.3 v 8.2 q 0,3.2 -1.7,4.9 -1.7,1.7 -4.8,1.7 z m 9.8,-0.2 v -14.7 h 3.4 v 11.9 h 7.3 v 2.7 z m 13.9,0 v -11.9 h -4.7 v -2.7 h 12.8 v 2.7 h -4.7 v 11.9 z m 9.7,0 v -14.7 h 3.4 v 14.7 z m 6.7,0 v -14.7 h 2.8 l 8.6,10.5 h -1.3 v -10.5 h 3.3 v 14.7 h -2.7 l -8.6,-10.5 h 1.3 v 10.5 z m 23.9,0.2 q -1.7,0 -3.2,-0.5 -1.4,-0.5 -2.5,-1.5 -1.0,-1.0 -1.6,-2.4 -0.5,-1.3 -0.5,-3.0 0,-1.6 0.5,-3.0 0.6,-1.3 1.7,-2.4 1.0,-1.0 2.5,-1.5 1.4,-0.5 3.2,-0.5 1.9,0 3.5,0.6 1.5,0.6 2.6,1.8 l -2.1,2.0 q -0.7,-0.8 -1.7,-1.2 -0.9,-0.4 -2.0,-0.4 -1.0,0 -1.9,0.3 -0.8,0.3 -1.5,0.9 -0.6,0.6 -0.9,1.4 -0.3,0.8 -0.3,1.9 0,1.0 0.3,1.8 0.3,0.8 0.9,1.5 0.6,0.6 1.5,0.9 0.8,0.3 1.9,0.3 1.0,0 1.9,-0.3 0.9,-0.3 1.8,-1.1 l 1.9,2.4 q -1.1,0.9 -2.7,1.3 -1.5,0.4 -3.1,0.4 z m 5.9,-1.8 -3.1,-0.4 v -5.5 h 3.1 z" />
+              <path fill="#c29c00" d="m 42.6,154.6 h 61.5 v 1.4 H 42.6 Z" />
+              <path fill="#ffffff" d="m 116.8,161.5 q -1.2,0 -2.3,-0.4 -1.0,-0.4 -1.8,-1.2 -0.8,-0.7 -1.2,-1.8 -0.4,-1.0 -0.4,-2.2 0,-1.2 0.4,-2.2 0.4,-1.0 1.2,-1.8 0.8,-0.7 1.9,-1.2 1.0,-0.4 2.4,-0.4 1.3,0 2.4,0.4 1.1,0.4 1.8,1.2 l -0.9,0.9 q -0.6,-0.6 -1.5,-0.9 -0.8,-0.3 -1.7,-0.3 -0.9,0 -1.7,0.3 -0.8,0.3 -1.4,0.8 -0.5,0.5 -0.9,1.3 -0.3,0.7 -0.3,1.7 0,0.9 0.3,1.7 0.3,0.7 0.9,1.3 0.6,0.5 1.4,0.8 0.8,0.3 1.7,0.3 0.8,0 1.7,-0.2 0.8,-0.2 1.5,-0.9 l 0.9,1.2 q -0.8,0.7 -1.9,1.0 -1.1,0.3 -2.2,0.3 z m 4.2,-1.4 -1.5,-0.2 v -4.1 h 1.5 z m 6.4,1.3 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z m 8.7,0 q -1.2,0 -1.9,-0.6 -0.7,-0.6 -0.7,-1.9 v -7.7 h 1.5 v 7.7 q 0,0.6 0.3,1.0 0.3,0.3 0.9,0.3 0.7,0 1.2,-0.4 l 0.4,1.1 q -0.3,0.3 -0.8,0.4 -0.4,0.1 -1.0,0.1 z m -4.1,-7.3 v -1.2 h 5.4 v 1.2 z m 12.0,7.2 v -11.2 h 4.3 q 1.4,0 2.5,0.4 1.0,0.4 1.6,1.3 0.5,0.8 0.5,2.0 0,1.2 -0.5,2.0 -0.5,0.8 -1.6,1.3 -1.0,0.4 -2.5,0.4 h -3.4 l 0.7,-0.7 v 4.1 z m 1.6,-3.9 -0.7,-0.8 h 3.4 q 1.5,0 2.3,-0.6 0.8,-0.6 0.8,-1.8 0,-1.2 -0.8,-1.8 -0.7,-0.6 -2.3,-0.6 h -3.4 l 0.7,-0.8 z m 9.2,3.9 v -8.4 h 1.4 v 2.3 l -0.1,-0.5 q 0.3,-0.8 1.1,-1.3 0.8,-0.4 2.0,-0.4 v 1.4 q -0.09,-0.01 -0.19,-0.01 -0.08,0 -0.16,0 -1.2,0 -1.9,0.7 -0.7,0.7 -0.7,2.1 v 4.2 z m 6.2,0 v -8.4 h 1.5 v 8.4 z m 0.7,-10.1 q -0.4,0 -0.7,-0.2 -0.2,-0.2 -0.2,-0.7 0,-0.4 0.2,-0.7 0.3,-0.2 0.7,-0.2 0.4,0 0.7,0.2 0.3,0.2 0.3,0.6 0,0.4 -0.2,0.7 -0.2,0.2 -0.7,0.2 z m 3.5,10.1 v -8.4 h 1.4 v 2.2 l -0.2,-0.5 q 0.4,-0.8 1.2,-1.2 0.8,-0.4 1.9,-0.4 1.2,0 2.0,0.6 0.8,0.5 1.1,1.8 l -0.6,-0.2 q 0.3,-0.9 1.3,-1.5 0.9,-0.5 2.2,-0.5 1.0,0 1.8,0.4 0.7,0.4 1.2,1.2 0.4,0.8 0.4,2.0 v 4.8 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 h -1.5 v -4.7 q 0,-1.2 -0.5,-1.8 -0.5,-0.6 -1.6,-0.6 -0.7,0 -1.3,0.3 -0.5,0.3 -0.8,0.9 -0.3,0.6 -0.3,1.5 v 4.3 z m 20.5,0.09 q -1.3,0 -2.4,-0.5 -1.0,-0.5 -1.6,-1.5 -0.5,-0.9 -0.5,-2.2 0,-1.2 0.5,-2.2 0.5,-0.9 1.5,-1.5 0.9,-0.5 2.1,-0.5 1.2,0 2.1,0.5 0.9,0.5 1.4,1.5 0.5,0.9 0.5,2.2 0,0.09 -0.01,0.2 0,0.1 -0.01,0.2 h -7.2 v -1.1 h 6.4 l -0.6,0.3 q 0.01,-0.8 -0.33,-1.4 -0.35,-0.6 -0.97,-0.9 -0.6,-0.3 -1.4,-0.3 -0.8,0 -1.4,0.3 -0.6,0.3 -0.9,1.0 -0.3,0.6 -0.3,1.4 v 0.2 q 0,0.8 0.3,1.5 0.4,0.6 1.1,1.0 0.7,0.3 1.6,0.3 0.7,0 1.3,-0.2 0.6,-0.2 1.0,-0.7 l 0.8,0.9 q -0.5,0.6 -1.4,1.0 -0.8,0.3 -1.9,0.3 z" />
+              <path fill="#c29c00" d="m 196.6,154.6 h 61.6 v 1.4 h -61.6 z" />
+            </g>
+          </svg>
+        </a>
+        <div class="footer-company-info">
+          Przemysław Piotrowski Prime Consulting &nbsp;|&nbsp; NIP: 9820345501 &nbsp;|&nbsp; REGON: 523008956
+        </div>
+      </div>
+      <nav class="footer-nav" aria-label="Nawigacja stopki">
+        <a href="index.html#services">Usługi</a>
+        <a href="index.html#for-whom">Dla kogo</a>
+        <a href="index.html#about">O nas</a>
+        <a href="index.html#process">Proces</a>
+        <a href="index.html#contact">Kontakt</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 Przemysław Piotrowski Prime Consulting. Wszelkie prawa zastrzeżone.</p>
+      <p class="footer-motto">Get Prime</p>
+    </div>
+    <p class="footer-disclaimer">Kalkulator ma charakter informacyjny. Dane: Obwieszczenie Prezesa GUS 2025. Wyniki należy zweryfikować z doradcą PSI.</p>
+  </div>
+</footer>
+
+<script>
+const PSI_DATA = {"powiaty":[{"n":"Bolesławiecki","r":"DOLNOŚLĄSKIE","u":3.4,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Dzierżoniowski","r":"DOLNOŚLĄSKIE","u":6.7,"i":[0.8,2.0,4.0,40.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Głogowski","r":"DOLNOŚLĄSKIE","u":6.7,"i":[0.8,2.0,4.0,40.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Górowski","r":"DOLNOŚLĄSKIE","u":14.1,"i":[0.2,0.5,1.0,10.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Jaworski","r":"DOLNOŚLĄSKIE","u":10.2,"i":[0.4,1.0,2.0,20.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Karkonoski","r":"DOLNOŚLĄSKIE","u":8.4,"i":[0.4,1.0,2.0,20.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Kamiennogórski","r":"DOLNOŚLĄSKIE","u":7.3,"i":[0.8,2.0,4.0,40.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Kłodzki","r":"DOLNOŚLĄSKIE","u":12.8,"i":[0.2,0.5,1.0,10.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Legnicki","r":"DOLNOŚLĄSKIE","u":7.3,"i":[0.8,2.0,4.0,40.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Lubański","r":"DOLNOŚLĄSKIE","u":7.0,"i":[0.8,2.0,4.0,40.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Lubiński","r":"DOLNOŚLĄSKIE","u":4.4,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Lwówecki","r":"DOLNOŚLĄSKIE","u":9.1,"i":[0.4,1.0,2.0,20.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Milicki","r":"DOLNOŚLĄSKIE","u":6.5,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Oleśnicki","r":"DOLNOŚLĄSKIE","u":6.2,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Oławski","r":"DOLNOŚLĄSKIE","u":4.6,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Polkowicki","r":"DOLNOŚLĄSKIE","u":4.0,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Strzeliński","r":"DOLNOŚLĄSKIE","u":11.0,"i":[0.3,0.75,1.5,15.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Średzki","r":"DOLNOŚLĄSKIE","u":5.3,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Świdnicki","r":"DOLNOŚLĄSKIE","u":6.6,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Trzebnicki","r":"DOLNOŚLĄSKIE","u":5.4,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Wałbrzyski","r":"DOLNOŚLĄSKIE","u":10.5,"i":[0.3,0.75,1.5,15.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Wołowski","r":"DOLNOŚLĄSKIE","u":10.2,"i":[0.4,1.0,2.0,20.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Wrocławski","r":"DOLNOŚLĄSKIE","u":1.8,"i":[2.0,5.0,10.0,100.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Ząbkowicki","r":"DOLNOŚLĄSKIE","u":10.2,"i":[0.4,1.0,2.0,20.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Zgorzelecki","r":"DOLNOŚLĄSKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Złotoryjski","r":"DOLNOŚLĄSKIE","u":13.6,"i":[0.2,0.5,1.0,10.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Jelenia Góra","r":"DOLNOŚLĄSKIE","u":4.3,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Legnica","r":"DOLNOŚLĄSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Wrocław","r":"DOLNOŚLĄSKIE","u":1.9,"i":[2.0,5.0,10.0,100.0],"p":[35.0,25.0,15.0],"k":6,"o":12},{"n":"Wałbrzych","r":"DOLNOŚLĄSKIE","u":5.3,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Aleksandrowski","r":"KUJAWSKO-POMORSKIE","u":10.0,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Brodnicki","r":"KUJAWSKO-POMORSKIE","u":6.6,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bydgoski","r":"KUJAWSKO-POMORSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Chełmiński","r":"KUJAWSKO-POMORSKIE","u":12.1,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Golubsko-Dobrzyński","r":"KUJAWSKO-POMORSKIE","u":10.3,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Grudziądzki","r":"KUJAWSKO-POMORSKIE","u":11.0,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Inowrocławski","r":"KUJAWSKO-POMORSKIE","u":10.6,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Lipnowski","r":"KUJAWSKO-POMORSKIE","u":13.1,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Mogileński","r":"KUJAWSKO-POMORSKIE","u":9.7,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Nakielski","r":"KUJAWSKO-POMORSKIE","u":9.9,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Radziejowski","r":"KUJAWSKO-POMORSKIE","u":13.9,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Rypiński","r":"KUJAWSKO-POMORSKIE","u":8.8,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Sępoleński","r":"KUJAWSKO-POMORSKIE","u":10.6,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Świecki","r":"KUJAWSKO-POMORSKIE","u":6.3,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Toruński","r":"KUJAWSKO-POMORSKIE","u":8.3,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Tucholski","r":"KUJAWSKO-POMORSKIE","u":10.5,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Wąbrzeski","r":"KUJAWSKO-POMORSKIE","u":10.7,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Włocławski","r":"KUJAWSKO-POMORSKIE","u":13.6,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Żniński","r":"KUJAWSKO-POMORSKIE","u":9.0,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bydgoszcz","r":"KUJAWSKO-POMORSKIE","u":2.7,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Grudziądz","r":"KUJAWSKO-POMORSKIE","u":9.7,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Toruń","r":"KUJAWSKO-POMORSKIE","u":3.3,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Włocławek","r":"KUJAWSKO-POMORSKIE","u":8.6,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bialski","r":"LUBELSKIE","u":9.5,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Biłgorajski","r":"LUBELSKIE","u":6.0,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Chełmski","r":"LUBELSKIE","u":11.6,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Hrubieszowski","r":"LUBELSKIE","u":14.8,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Janowski","r":"LUBELSKIE","u":11.1,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Krasnostawski","r":"LUBELSKIE","u":13.0,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Kraśnicki","r":"LUBELSKIE","u":10.6,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Lubartowski","r":"LUBELSKIE","u":11.6,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Lubelski","r":"LUBELSKIE","u":5.8,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Łęczyński","r":"LUBELSKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Łukowski","r":"LUBELSKIE","u":3.8,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Opolski","r":"LUBELSKIE","u":9.6,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Parczewski","r":"LUBELSKIE","u":8.0,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Puławski","r":"LUBELSKIE","u":5.5,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Radzyński","r":"LUBELSKIE","u":7.1,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Rycki","r":"LUBELSKIE","u":6.7,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Świdnicki","r":"LUBELSKIE","u":6.9,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Tomaszowski","r":"LUBELSKIE","u":8.3,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Włodawski","r":"LUBELSKIE","u":15.3,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Zamojski","r":"LUBELSKIE","u":10.3,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Biała Podlaska","r":"LUBELSKIE","u":7.5,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Chełm","r":"LUBELSKIE","u":8.3,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Lublin","r":"LUBELSKIE","u":4.2,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Zamość","r":"LUBELSKIE","u":7.9,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Gorzowski","r":"LUBUSKIE","u":3.7,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Krośnieński","r":"LUBUSKIE","u":6.4,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Międzyrzecki","r":"LUBUSKIE","u":7.5,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Nowosolski","r":"LUBUSKIE","u":6.6,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Słubicki","r":"LUBUSKIE","u":2.7,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Strzelecko-Drezdenecki","r":"LUBUSKIE","u":9.5,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Sulęciński","r":"LUBUSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Świebodziński","r":"LUBUSKIE","u":2.6,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Wschowski","r":"LUBUSKIE","u":7.7,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Zielonogórski","r":"LUBUSKIE","u":7.1,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Żagański","r":"LUBUSKIE","u":5.8,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Żarski","r":"LUBUSKIE","u":5.4,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Gorzów Wielkopolski","r":"LUBUSKIE","u":3.1,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Zielona Góra","r":"LUBUSKIE","u":3.3,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bełchatowski","r":"ŁÓDZKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Gminy: Bełchatów, Drużbice, Kleszczów, Kluki, Rusiec, Szczerców, Zelów\nMiasto Bełchatów","r":"ŁÓDZKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"Brzeziński","r":"ŁÓDZKIE","u":7.2,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Kutnowski","r":"ŁÓDZKIE","u":8.0,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Łaski","r":"ŁÓDZKIE","u":8.1,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Łęczycki","r":"ŁÓDZKIE","u":5.3,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Łowicki","r":"ŁÓDZKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Łódzki wschodni","r":"ŁÓDZKIE","u":5.6,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Opoczyński","r":"ŁÓDZKIE","u":8.9,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Pabianicki","r":"ŁÓDZKIE","u":6.1,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Pajęczański","r":"ŁÓDZKIE","u":8.0,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Piotrkowski","r":"ŁÓDZKIE","u":6.4,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Gminy: Wola Krzysztoporska, Rozprza, Gorzkowice, \nMiasta:  Piotrków Trybunalski","r":"ŁÓDZKIE","u":6.4,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"Poddębicki","r":"ŁÓDZKIE","u":7.3,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Radomszczański","r":"ŁÓDZKIE","u":5.3,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Gminy: Dobryszyce, Gomunice, Kamieńsk, Lgota Wielka, Ładzice, Radomsko","r":"ŁÓDZKIE","u":5.3,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"Rawski","r":"ŁÓDZKIE","u":3.0,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Sieradzki","r":"ŁÓDZKIE","u":5.2,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Skierniewicki","r":"ŁÓDZKIE","u":3.9,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Tomaszowski","r":"ŁÓDZKIE","u":8.2,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Wieluński","r":"ŁÓDZKIE","u":5.9,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Wieruszowski","r":"ŁÓDZKIE","u":4.4,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Zduńskowolski","r":"ŁÓDZKIE","u":7.3,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Zgierski","r":"ŁÓDZKIE","u":5.8,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Łódź","r":"ŁÓDZKIE","u":5.0,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Piotrków Trybunalski","r":"ŁÓDZKIE","u":5.8,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"Skierniewice","r":"ŁÓDZKIE","u":4.3,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bocheński","r":"MAŁOPOLSKIE","u":2.6,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Brzeski","r":"MAŁOPOLSKIE","u":5.0,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Chrzanowski","r":"MAŁOPOLSKIE","u":6.3,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"Dąbrowski","r":"MAŁOPOLSKIE","u":10.8,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Gorlicki","r":"MAŁOPOLSKIE","u":6.2,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Krakowski","r":"MAŁOPOLSKIE","u":4.1,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Limanowski","r":"MAŁOPOLSKIE","u":6.8,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Miechowski","r":"MAŁOPOLSKIE","u":5.4,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Myślenicki","r":"MAŁOPOLSKIE","u":3.4,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Nowosądecki","r":"MAŁOPOLSKIE","u":7.5,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Nowotarski","r":"MAŁOPOLSKIE","u":4.6,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Olkuski","r":"MAŁOPOLSKIE","u":6.5,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"Oświęcimski","r":"MAŁOPOLSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"Proszowicki","r":"MAŁOPOLSKIE","u":5.9,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Suski","r":"MAŁOPOLSKIE","u":4.2,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Tarnowski","r":"MAŁOPOLSKIE","u":6.8,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Tatrzański","r":"MAŁOPOLSKIE","u":8.5,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Wadowicki","r":"MAŁOPOLSKIE","u":5.6,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"Wielicki","r":"MAŁOPOLSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Kraków","r":"MAŁOPOLSKIE","u":2.2,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Nowy Sącz","r":"MAŁOPOLSKIE","u":3.7,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Tarnów","r":"MAŁOPOLSKIE","u":4.4,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Białobrzeski","r":"MAZOWIECKIE","u":7.5,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Ciechanowski","r":"MAZOWIECKIE","u":8.4,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Garwoliński","r":"MAZOWIECKIE","u":8.2,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Gostyniński","r":"MAZOWIECKIE","u":10.4,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Grodziski","r":"MAZOWIECKIE","u":2.8,"i":[2.0,5.0,10.0,100.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Z wyjątkiem gmin: Baranów, Grodzisk Maz., Jaktorów, Zabia Wola","r":"MAZOWIECKIE","u":2.8,"i":[2.0,5.0,10.0,100.0],"p":[45.0,35.0,25.0],"k":6,"o":null},{"n":"Grójecki","r":"MAZOWIECKIE","u":2.8,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Kozienicki","r":"MAZOWIECKIE","u":9.0,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Legionowski","r":"MAZOWIECKIE","u":5.9,"i":[1.2,3.0,6.0,60.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Z wyjątkiem gminy Serock","r":"MAZOWIECKIE","u":5.9,"i":[1.2,3.0,6.0,60.0],"p":[55.0,45.0,35.0],"k":6,"o":12},{"n":"Lipski","r":"MAZOWIECKIE","u":11.9,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Łosicki","r":"MAZOWIECKIE","u":4.9,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Makowski","r":"MAZOWIECKIE","u":15.5,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Miński","r":"MAZOWIECKIE","u":4.3,"i":[1.6,4.0,8.0,80.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Z wyjątkiem gmin: Dobre, Kałuszyn, Latowicz, Mrozy, Siennnica","r":"MAZOWIECKIE","u":4.3,"i":[1.6,4.0,8.0,80.0],"p":[55.0,45.0,35.0],"k":6,"o":12},{"n":"Mławski","r":"MAZOWIECKIE","u":6.3,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Nowodworski","r":"MAZOWIECKIE","u":5.5,"i":[1.2,3.0,6.0,60.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Z wyjątkiem gmin: Leoncin, Nasielsk, Zakroczyn","r":"MAZOWIECKIE","u":5.5,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Ostrołęcki","r":"MAZOWIECKIE","u":8.8,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Ostrowski","r":"MAZOWIECKIE","u":8.9,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Otwocki","r":"MAZOWIECKIE","u":3.5,"i":[1.6,4.0,8.0,80.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Z wyjątkiem gmin: Kołbiel, Osieck, Sobienie Jeziory","r":"MAZOWIECKIE","u":3.5,"i":[1.6,4.0,8.0,80.0],"p":[55.0,45.0,35.0],"k":6,"o":12},{"n":"Piaseczyński","r":"MAZOWIECKIE","u":3.5,"i":[1.6,4.0,8.0,80.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Z wyjątkiem gmin: Góra Kalwaria, Prażmów, Tarczyn","r":"MAZOWIECKIE","u":3.5,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Płocki","r":"MAZOWIECKIE","u":9.5,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Płoński","r":"MAZOWIECKIE","u":9.7,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Pruszkowski","r":"MAZOWIECKIE","u":2.3,"i":[2.0,5.0,10.0,100.0],"p":[0.0,0.0,0.0],"k":0,"o":0},{"n":"Przasnyski","r":"MAZOWIECKIE","u":9.1,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Przysuski","r":"MAZOWIECKIE","u":17.9,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Pułtuski","r":"MAZOWIECKIE","u":13.2,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Radomski","r":"MAZOWIECKIE","u":16.3,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Siedlecki","r":"MAZOWIECKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Sierpecki","r":"MAZOWIECKIE","u":11.4,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Sochaczewski","r":"MAZOWIECKIE","u":2.9,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Sokołowski","r":"MAZOWIECKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Szydłowiecki","r":"MAZOWIECKIE","u":21.9,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Warszawski  zachodni","r":"MAZOWIECKIE","u":1.6,"i":[2.0,5.0,10.0,100.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Z wyjątkiem gmin: Błonie, Kampinos, Leszno","r":"MAZOWIECKIE","u":1.6,"i":[2.0,5.0,10.0,100.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Węgrowski","r":"MAZOWIECKIE","u":5.2,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Wołomiński","r":"MAZOWIECKIE","u":5.6,"i":[1.2,3.0,6.0,60.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Z wyjątkiem gmin: Dąbrówka, Jadów, Strachówka, Tłuszcz","r":"MAZOWIECKIE","u":5.6,"i":[1.2,3.0,6.0,60.0],"p":[55.0,45.0,35.0],"k":6,"o":12},{"n":"Wyszkowski","r":"MAZOWIECKIE","u":3.4,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Zwoleński","r":"MAZOWIECKIE","u":11.3,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Żuromiński","r":"MAZOWIECKIE","u":13.8,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Żyrardowski","r":"MAZOWIECKIE","u":8.4,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Ostrołęka","r":"MAZOWIECKIE","u":7.1,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Płock","r":"MAZOWIECKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Radom","r":"MAZOWIECKIE","u":9.6,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Siedlce","r":"MAZOWIECKIE","u":3.8,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":14},{"n":"M.st. Warszawa","r":"MAZOWIECKIE","u":1.5,"i":[2.0,5.0,10.0,100.0],"p":[0.0,0.0,0.0],"k":6,"o":0},{"n":"Brzeski","r":"OPOLSKIE","u":8.3,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Głubczycki","r":"OPOLSKIE","u":10.4,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Kędzierzyńsko-Kozielski","r":"OPOLSKIE","u":6.4,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Kluczborski","r":"OPOLSKIE","u":6.1,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Krapkowicki","r":"OPOLSKIE","u":4.7,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Namysłowski","r":"OPOLSKIE","u":9.3,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Nyski","r":"OPOLSKIE","u":7.2,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Oleski","r":"OPOLSKIE","u":4.5,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Opolski","r":"OPOLSKIE","u":5.6,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Prudnicki","r":"OPOLSKIE","u":9.0,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Strzelecki","r":"OPOLSKIE","u":4.4,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Opole","r":"OPOLSKIE","u":3.0,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bieszczadzki","r":"PODKARPACKIE","u":14.4,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Brzozowski","r":"PODKARPACKIE","u":19.4,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Dębicki","r":"PODKARPACKIE","u":4.3,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Jarosławski","r":"PODKARPACKIE","u":10.9,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Jasielski","r":"PODKARPACKIE","u":12.4,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Kolbuszowski","r":"PODKARPACKIE","u":7.9,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Krośnieński","r":"PODKARPACKIE","u":9.0,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Leski","r":"PODKARPACKIE","u":17.5,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Leżajski","r":"PODKARPACKIE","u":13.4,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Lubaczowski","r":"PODKARPACKIE","u":9.1,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Łańcucki","r":"PODKARPACKIE","u":8.7,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Mielecki","r":"PODKARPACKIE","u":5.3,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Niżański","r":"PODKARPACKIE","u":15.7,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Przemyski","r":"PODKARPACKIE","u":15.3,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Przeworski","r":"PODKARPACKIE","u":13.1,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Ropczycko-Sędziszowski","r":"PODKARPACKIE","u":10.6,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Rzeszowski","r":"PODKARPACKIE","u":7.3,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Sanocki","r":"PODKARPACKIE","u":8.8,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Stalowowolski","r":"PODKARPACKIE","u":5.6,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Strzyżowski","r":"PODKARPACKIE","u":16.5,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Tarnobrzeski","r":"PODKARPACKIE","u":7.3,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Krosno","r":"PODKARPACKIE","u":3.3,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Przemyśl","r":"PODKARPACKIE","u":10.1,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Rzeszów","r":"PODKARPACKIE","u":4.1,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Tarnobrzeg","r":"PODKARPACKIE","u":6.9,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Augustowski","r":"PODLASKIE","u":9.5,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Białostocki","r":"PODLASKIE","u":7.4,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Bielski","r":"PODLASKIE","u":5.0,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Grajewski","r":"PODLASKIE","u":11.1,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Hajnowski","r":"PODLASKIE","u":8.5,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Kolneński","r":"PODLASKIE","u":13.2,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Łomżyński","r":"PODLASKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Moniecki","r":"PODLASKIE","u":6.9,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Sejneński","r":"PODLASKIE","u":12.0,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Siemiatycki","r":"PODLASKIE","u":6.2,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Sokólski","r":"PODLASKIE","u":10.8,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Suwalski","r":"PODLASKIE","u":5.9,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Wysokomazowiecki","r":"PODLASKIE","u":6.8,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Zambrowski","r":"PODLASKIE","u":6.3,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Białystok","r":"PODLASKIE","u":5.3,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Łomża","r":"PODLASKIE","u":7.0,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Suwałki","r":"PODLASKIE","u":5.9,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Bytowski","r":"POMORSKIE","u":9.0,"i":[0.4,1.0,2.0,20.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Chojnicki","r":"POMORSKIE","u":8.5,"i":[0.4,1.0,2.0,20.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Człuchowski","r":"POMORSKIE","u":10.1,"i":[0.4,1.0,2.0,20.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Gdański","r":"POMORSKIE","u":3.8,"i":[1.6,4.0,8.0,80.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Kartuski","r":"POMORSKIE","u":2.6,"i":[2.0,5.0,10.0,100.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Kościerski","r":"POMORSKIE","u":7.2,"i":[0.8,2.0,4.0,40.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Kwidzyński","r":"POMORSKIE","u":7.9,"i":[0.8,2.0,4.0,40.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Lęborski","r":"POMORSKIE","u":9.4,"i":[0.4,1.0,2.0,20.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Malborski","r":"POMORSKIE","u":9.1,"i":[0.4,1.0,2.0,20.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Nowodworski","r":"POMORSKIE","u":9.9,"i":[0.4,1.0,2.0,20.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Pucki","r":"POMORSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Słupski","r":"POMORSKIE","u":7.2,"i":[0.8,2.0,4.0,40.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Starogardzki","r":"POMORSKIE","u":5.8,"i":[1.2,3.0,6.0,60.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Sztumski","r":"POMORSKIE","u":4.4,"i":[1.6,4.0,8.0,80.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Tczewski","r":"POMORSKIE","u":6.0,"i":[1.2,3.0,6.0,60.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Wejherowski","r":"POMORSKIE","u":5.5,"i":[1.2,3.0,6.0,60.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Gdańsk","r":"POMORSKIE","u":2.7,"i":[2.0,5.0,10.0,100.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Gdynia","r":"POMORSKIE","u":2.5,"i":[2.0,5.0,10.0,100.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Słupsk","r":"POMORSKIE","u":4.5,"i":[1.6,4.0,8.0,80.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Sopot","r":"POMORSKIE","u":2.2,"i":[2.0,5.0,10.0,100.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Będziński","r":"ŚLĄSKIE","u":5.6,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bielski","r":"ŚLĄSKIE","u":3.4,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bieruńsko-Lędziński","r":"ŚLĄSKIE","u":1.5,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Cieszyński","r":"ŚLĄSKIE","u":4.6,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Częstochowski","r":"ŚLĄSKIE","u":6.2,"i":[1.2,3.0,6.0,60.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Gliwicki","r":"ŚLĄSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Kłobucki","r":"ŚLĄSKIE","u":7.4,"i":[0.8,2.0,4.0,40.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Lubliniecki","r":"ŚLĄSKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Mikołowski","r":"ŚLĄSKIE","u":2.9,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Myszkowski","r":"ŚLĄSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Pszczyński","r":"ŚLĄSKIE","u":3.0,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Raciborski","r":"ŚLĄSKIE","u":3.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Rybnicki","r":"ŚLĄSKIE","u":5.4,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Tarnogórski","r":"ŚLĄSKIE","u":4.6,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Wodzisławski","r":"ŚLĄSKIE","u":4.7,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Zawierciański","r":"ŚLĄSKIE","u":6.1,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Żywiecki","r":"ŚLĄSKIE","u":5.9,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bielsko-Biała","r":"ŚLĄSKIE","u":2.2,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Bytom","r":"ŚLĄSKIE","u":8.7,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Chorzów","r":"ŚLĄSKIE","u":3.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Częstochowa","r":"ŚLĄSKIE","u":3.7,"i":[1.6,4.0,8.0,80.0],"p":[50.0,40.0,30.0],"k":6,"o":14},{"n":"Dąbrowa Górnicza","r":"ŚLĄSKIE","u":4.2,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Gliwice","r":"ŚLĄSKIE","u":2.5,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Jastrzębie-Zdrój","r":"ŚLĄSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Jaworzno","r":"ŚLĄSKIE","u":3.9,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Katowice","r":"ŚLĄSKIE","u":1.2,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Mysłowice","r":"ŚLĄSKIE","u":4.4,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Piekary Śląskie","r":"ŚLĄSKIE","u":8.3,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Ruda Śląska","r":"ŚLĄSKIE","u":3.2,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Rybnik","r":"ŚLĄSKIE","u":3.1,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Siemianowice Śląskie","r":"ŚLĄSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Sosnowiec","r":"ŚLĄSKIE","u":5.9,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Świętochłowice","r":"ŚLĄSKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Tychy","r":"ŚLĄSKIE","u":1.8,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Zabrze","r":"ŚLĄSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Żory","r":"ŚLĄSKIE","u":3.7,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Buski","r":"ŚWIĘTOKRZYSKIE","u":4.2,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Jędrzejowski","r":"ŚWIĘTOKRZYSKIE","u":6.1,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Kazimierski","r":"ŚWIĘTOKRZYSKIE","u":10.3,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Kielecki","r":"ŚWIĘTOKRZYSKIE","u":6.5,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Konecki","r":"ŚWIĘTOKRZYSKIE","u":10.0,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Opatowski","r":"ŚWIĘTOKRZYSKIE","u":14.3,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Ostrowiecki","r":"ŚWIĘTOKRZYSKIE","u":10.9,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Pińczowski","r":"ŚWIĘTOKRZYSKIE","u":7.1,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Sandomierski","r":"ŚWIĘTOKRZYSKIE","u":8.0,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Skarżyski","r":"ŚWIĘTOKRZYSKIE","u":14.2,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Starachowicki","r":"ŚWIĘTOKRZYSKIE","u":9.4,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Staszowski","r":"ŚWIĘTOKRZYSKIE","u":6.2,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Włoszczowski","r":"ŚWIĘTOKRZYSKIE","u":5.8,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Kielce","r":"ŚWIĘTOKRZYSKIE","u":4.7,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Bartoszycki","r":"WARMIŃSKO-MAZURSKIE","u":16.2,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Braniewski","r":"WARMIŃSKO-MAZURSKIE","u":13.9,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Działdowski","r":"WARMIŃSKO-MAZURSKIE","u":12.5,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Elbląski","r":"WARMIŃSKO-MAZURSKIE","u":12.7,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Ełcki","r":"WARMIŃSKO-MAZURSKIE","u":10.7,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Giżycki","r":"WARMIŃSKO-MAZURSKIE","u":8.1,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Gołdapski","r":"WARMIŃSKO-MAZURSKIE","u":7.0,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Iławski","r":"WARMIŃSKO-MAZURSKIE","u":4.2,"i":[1.6,4.0,8.0,80.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Kętrzyński","r":"WARMIŃSKO-MAZURSKIE","u":15.8,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Lidzbarski","r":"WARMIŃSKO-MAZURSKIE","u":10.5,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Mrągowski","r":"WARMIŃSKO-MAZURSKIE","u":7.3,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Nidzicki","r":"WARMIŃSKO-MAZURSKIE","u":6.9,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Nowomiejski","r":"WARMIŃSKO-MAZURSKIE","u":10.6,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Olecki","r":"WARMIŃSKO-MAZURSKIE","u":12.8,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Olsztyński","r":"WARMIŃSKO-MAZURSKIE","u":5.9,"i":[1.2,3.0,6.0,60.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Ostródzki","r":"WARMIŃSKO-MAZURSKIE","u":8.8,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Piski","r":"WARMIŃSKO-MAZURSKIE","u":11.0,"i":[0.3,0.75,1.5,15.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Szczycieński","r":"WARMIŃSKO-MAZURSKIE","u":9.5,"i":[0.4,1.0,2.0,20.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Węgorzewski","r":"WARMIŃSKO-MAZURSKIE","u":10.7,"i":[0.2,0.5,1.0,10.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Elbląg","r":"WARMIŃSKO-MAZURSKIE","u":7.4,"i":[0.8,2.0,4.0,40.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Olsztyn","r":"WARMIŃSKO-MAZURSKIE","u":2.1,"i":[2.0,5.0,10.0,100.0],"p":[70.0,60.0,50.0],"k":4,"o":15},{"n":"Chodzieski","r":"WIELKOPOLSKIE","u":7.2,"i":[0.8,2.0,4.0,40.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Czarnkowsko-Trzcianecki","r":"WIELKOPOLSKIE","u":5.2,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Gnieźnieński","r":"WIELKOPOLSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Gostyński","r":"WIELKOPOLSKIE","u":4.9,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Grodziski","r":"WIELKOPOLSKIE","u":4.6,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Jarociński","r":"WIELKOPOLSKIE","u":4.8,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Kaliski","r":"WIELKOPOLSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Kępiński","r":"WIELKOPOLSKIE","u":1.6,"i":[2.0,5.0,10.0,100.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Kolski","r":"WIELKOPOLSKIE","u":3.8,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Koniński","r":"WIELKOPOLSKIE","u":8.3,"i":[0.4,1.0,2.0,20.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Kościański","r":"WIELKOPOLSKIE","u":3.2,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Krotoszyński","r":"WIELKOPOLSKIE","u":2.8,"i":[2.0,5.0,10.0,100.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Leszczyński","r":"WIELKOPOLSKIE","u":2.8,"i":[2.0,5.0,10.0,100.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Międzychodzki","r":"WIELKOPOLSKIE","u":5.1,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Nowotomyski","r":"WIELKOPOLSKIE","u":2.6,"i":[2.0,5.0,10.0,100.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Obornicki","r":"WIELKOPOLSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[35.0,25.0,15.0],"k":6,"o":12},{"n":"Ostrowski","r":"WIELKOPOLSKIE","u":3.1,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Ostrzeszowski","r":"WIELKOPOLSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Pilski","r":"WIELKOPOLSKIE","u":5.0,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Pleszewski","r":"WIELKOPOLSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Poznański","r":"WIELKOPOLSKIE","u":1.1,"i":[2.0,5.0,10.0,100.0],"p":[35.0,25.0,15.0],"k":6,"o":12},{"n":"Rawicki","r":"WIELKOPOLSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Słupecki","r":"WIELKOPOLSKIE","u":7.1,"i":[0.8,2.0,4.0,40.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Szamotulski","r":"WIELKOPOLSKIE","u":3.6,"i":[1.6,4.0,8.0,80.0],"p":[35.0,25.0,15.0],"k":6,"o":12},{"n":"Średzki","r":"WIELKOPOLSKIE","u":5.8,"i":[1.2,3.0,6.0,60.0],"p":[35.0,25.0,15.0],"k":6,"o":12},{"n":"Śremski","r":"WIELKOPOLSKIE","u":2.7,"i":[2.0,5.0,10.0,100.0],"p":[35.0,25.0,15.0],"k":6,"o":12},{"n":"Turecki","r":"WIELKOPOLSKIE","u":3.9,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Wągrowiecki","r":"WIELKOPOLSKIE","u":5.6,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Wolsztyński","r":"WIELKOPOLSKIE","u":1.7,"i":[2.0,5.0,10.0,100.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Wrzesiński","r":"WIELKOPOLSKIE","u":3.5,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Złotowski","r":"WIELKOPOLSKIE","u":4.3,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Kalisz","r":"WIELKOPOLSKIE","u":3.7,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Konin","r":"WIELKOPOLSKIE","u":6.1,"i":[1.2,3.0,6.0,60.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Leszno","r":"WIELKOPOLSKIE","u":3.4,"i":[1.6,4.0,8.0,80.0],"p":[45.0,35.0,25.0],"k":6,"o":12},{"n":"Poznań","r":"WIELKOPOLSKIE","u":1.2,"i":[2.0,5.0,10.0,100.0],"p":[35.0,25.0,15.0],"k":6,"o":12},{"n":"Białogardzki","r":"ZACHODNIOPOMORSKIE","u":16.8,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Choszczeński","r":"ZACHODNIOPOMORSKIE","u":15.4,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Drawski","r":"ZACHODNIOPOMORSKIE","u":11.4,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Goleniowski","r":"ZACHODNIOPOMORSKIE","u":4.5,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Gryficki","r":"ZACHODNIOPOMORSKIE","u":7.7,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Gryfiński","r":"ZACHODNIOPOMORSKIE","u":6.6,"i":[1.2,3.0,6.0,60.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Kamieński","r":"ZACHODNIOPOMORSKIE","u":11.7,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Kołobrzeski","r":"ZACHODNIOPOMORSKIE","u":2.3,"i":[2.0,5.0,10.0,100.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Koszaliński","r":"ZACHODNIOPOMORSKIE","u":10.9,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Łobeski","r":"ZACHODNIOPOMORSKIE","u":14.5,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Myśliborski","r":"ZACHODNIOPOMORSKIE","u":7.2,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Policki","r":"ZACHODNIOPOMORSKIE","u":3.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Pyrzycki","r":"ZACHODNIOPOMORSKIE","u":10.6,"i":[0.3,0.75,1.5,15.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Sławieński","r":"ZACHODNIOPOMORSKIE","u":14.1,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Stargardzki","r":"ZACHODNIOPOMORSKIE","u":7.5,"i":[0.8,2.0,4.0,40.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Szczecinecki","r":"ZACHODNIOPOMORSKIE","u":12.9,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Świdwiński","r":"ZACHODNIOPOMORSKIE","u":13.9,"i":[0.2,0.5,1.0,10.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Wałecki","r":"ZACHODNIOPOMORSKIE","u":9.3,"i":[0.4,1.0,2.0,20.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Koszalin","r":"ZACHODNIOPOMORSKIE","u":4.7,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Szczecin","r":"ZACHODNIOPOMORSKIE","u":3.8,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14},{"n":"Świnoujście","r":"ZACHODNIOPOMORSKIE","u":4.7,"i":[1.6,4.0,8.0,80.0],"p":[60.0,50.0,40.0],"k":5,"o":14}],"gminy":["Adamów","Aleksandrów","Alwernia","Andrzejewo","Augustów","Babiak","Babice","Bakałarzewo","Baranów Sandomierski","Barciany","Bardo","Bargłów Kościelny","Bartoszyce","Baruchowo","Barwice","Bełżec","Biała","Biała Piska","Biała Podlaska","Białaczów","Białe Błota","Białobrzegi","Białogard","Białopole","Białowieża","Biały Bór","Biecz","Bielawa","Bielsk Podlaski","Bierutów","Bierzwnik","Biesiekierz","Bircza","Biskupiec","Biszcza","Bisztynek","Biłgoraj","Bledzew","Blizanów","Bliżyn","Bobolice","Bobrowniki","Bodzechów","Bogatynia","Bogoria","Boguszów-Gorce","Bojadła","Bojanów","Bolesławiec","Borki","Borkowice","Borne Sulinowo","Borowa","Borzytuchom","Boćki","Braniewo","Brańszczyk","Brody Iłżeckie","Brojce","Brok","Brudzew","Brusy","Brzeg","Brześć Kujawski","Brzeźnica","Brzeźno","Brzostek","Brzozów","Brzuze","Brzyska","Buczek","Budzyń","Bukowiec","Bukowina Tatrzańska","Bukowsko","Busko-Zdrój","Byczyna","Bystrzyca Kłodzka","Bytom","Bytom Odrzański","Bytów","Będzin","Cewice","Chełm","Chełmno","Chlewiska","Chmielnik","Choceń","Chocz","Chodzież","Chojnice","Chojnów","Chorkówka","Chorzów","Choszczno","Chrzanów","Chłopice","Ciechanów","Ciepłowody","Cisek","Cmolas","Czaplinek","Czarna","Czarna Białostocka","Czarna Dąbrówka","Czarne","Czarnków","Czarnożyły","Czarny Bór","Czarny Dunajec","Czeladź","Czemierniki","Czermin","Czerniejewo","Czersk","Czerwin","Czorsztyn","Czyże","Czyżew","Człopa","Człuchów","Damnica","Dobra","Dobre","Dobre Miasto","Dobromierz","Dobroń","Dobryszcze","Dobrzyca","Dobrzyń nad Wisłą","Dolice","Domanice","Domaszowice","Dorohusk","Dragacz","Drawno","Drawsko Pomorskie","Drelów","Drzewica","Drzycim","Dubicze Cerkiewne","Dwikozy","Dydnia","Dziadowa Kłoda","Działdowo","Dzierzkowice","Dzierżoniów","Dzwola","Dąbie","Dąbrowa Biskupia","Dąbrowa Górnicza","Dąbrówno","Dębica","Dębica Kaszubska","Dębowiec","Długosiodło","Dźwierzuty","Elbląg","Ełk","Fabianki","Filipów","Firlej","Frampol","Fredropol","Frombork","Frysztak","Garbatka-Letnisko","Gaszowice","Gawłuszowice","Gać","Gielniów","Gierałtowice","Gietrzwałd","Giżycko","Glinojeck","Gliwice","Gniewkowo","Gniezno","Gnojno","Godów","Gogolin","Golczewo","Goleniów","Golina","Goniądz","Gorlice","Gorzków","Gorzyce","Gorzów Śląski","Gostynin","Gowarczów","Gozdowo","Gołuchów","Gołymin-Ośrodek","Grajewo","Gromadka","Gronowo Elbląskie","Grudziądz","Grunwald","Gruta","Grybów","Gryfice","Gryfów Śląski","Grzegorzew","Grzmiąca","Grębocice","Grębów","Gzy","Górowo Iławeckie","Gózd","Głogów","Głogówek","Głowaczów","Głuchołazy","Głuszyca","Główczyce","Hajnówka","Hanna","Harasiuki","Hańsk","Horodło","Hrubieszów","Huszlew","Imielno","Inowrocław","Inowłódz","Izbica","Izbicko","Iława","Iłowa","Iłowo-Osada","Iłża","Janikowo","Jankowice","Janowice Wielkie","Janów","Janów Podlaski","Jarczów","Jarocin","Jarosław","Jasień","Jastrowie","Jastrząb","Jastrzębia","Jastrzębie Zdrój","Jastrzębie-Zdrój","Jasło","Jawor","Jaworzno","Jaworzyna Śląska","Jedlicze","Jedlina-Letnisko","Jedlina-Zdrój","Jedlińsk","Jedlnia-Letnisko","Jedwabno","Jejkowice","Jelcz Laskowice","Jelenia Góra","Jemielnica","Jerzmanowa","Jeziorany","Jeżewo","Jeżowe","Jeżów Sudecki","Juchnowiec Kościelny","Jędrzejów","Kaczory","Kalinowo","Kamienica","Kamieniec Ząbkowski","Kamienna Góra","Kamień","Kamień Krajeński","Kamionka","Kamionka Wielka","Karlino","Karnice","Karniewo","Katowice","Kawęczyn","Kazimierz Biskupi","Kańczuga","Kcynia","Kijewo Królewskie","Kisielice","Kiwity","Klimontów","Kluczbork","Klwów","Kobylanka","Kobylnica","Kodrąb","Kolno","Kolonowskie","Kolsko","Konarzyny","Konin","Konstantynów","Koprzywnica","Korczyna","Korfantów","Kornowac","Korsze","Kotla","Kotlin","Kowal","Kowala","Kowale Oleckie","Kowary","Kozienice","Kozłowo","Kołaczyce","Kołaki Kościelne","Koło","Końskie","Kościelec","Kościelisko","Kożuchów","Krajenka","Kramsk","Krapkowice","Krasiczyn","Krasnobród","Krasnystaw","Kraśniczyn","Kraśnik","Krosno","Kroszyce","Krotoszyce","Krościenko Wyżne","Kruklanki","Kruszwica","Kruszyna","Krzeszów","Krzymów","Krzywcza","Krzyżanów","Krzęcin","Księżpol","Kuczbork-Osada","Kunice","Kunów","Kuryłówka","Kutno","Kuźnica","Kąkolewnica","Kędzierzyn-\nKoźle","Kędzierzyn- Koźle","Kęsowo","Kętrzyn","Kłecko","Kłodzko","Lasowice Wielkie","Laszki","Legnica","Legnickie Pole","Lelis","Lelkowo","Lesko","Leśna","Leśna Podlaska","Leśnica","Leśniowice","Libiąż","Lichnowy","Lidzbark Warm.","Lidzbark Warmiński","Lipinki","Lipinki Łużyckie","Lipka","Lipnica","Lipowiec Kościelny","Lisia Góra","Lubanie","Lubartów","Lubawa","Lubawka","Lubań","Lubień Kujawski","Lubochnia","Lubomino","Lubraniec","Lubrza","Lubsza","Lwówek Śląski","Lądek Zdrój","Lębork","Maciejowice","Magnuszew","Malanów","Malbork","Marcinowice","Marciszów","Margonin","Marianowo","Markusy","Maszewo","Małkinia Górna","Małogoszcz","Małomice","Mały Płock","Medyka","Miasteczko Krajeńskie","Miastkowo","Miejsce Piastowe","Mielec","Mieleszyn","Mieroszów","Mikołajki","Milejewo","Mircze","Mirosławiec","Mirzec","Mirów Stary","Międzyrzec Podlaski","Międzyrzecz","Miłki","Miłkowice","Miłomłyn","Miłoradz","Mochowo","Mokrsko","Moszczenica","Mrocza","Mrągowo","Mszana","Murów","Myszków","Mysłakowice","Mysłowice","Męcinka","Mściwojów","Nagłowice","Nakło n. Notecią","Nakło nad Notecią","Namysłów","Narew","Narewka","Narol","Nawojowa","Niechanowo","Niedźwiada","Niedźwiedź","Nielisz","Niemce","Niemcza","Nisko","Niwiska","Nowa Dęba","Nowa Ruda","Nowa Sól","Nowa Wieś Lęborska","Nowe","Nowe Miasteczko","Nowe Miasto Lubawskie","Nowinka","Nowogrodziec","Nowogród","Nowogród Bobrzański","Nowy Duninów","Nowy Dwór Gdański","Nowy Korczyn","Nowy Staw","Nowy Sącz","Nowy Targ","Nysa","Obrazów","Obryte","Ochotnica Dolna","Odrzywół","Ogrodzieniec","Ojrzeń","Okonek","Oksa","Olecko","Olszewo-Borki","Olsztynek","Olszyna","Opinogóra Górna","Opoczno","Orla","Orneta","Orońsko","Orzysz","Osiecznica","Osiek","Osiek Mały","Osjaków","Ostrowiec Św.","Ostrowiec Świętokrzyski","Ostrołęka","Ostróda","Ostrów","Ostrów Maz.","Ostrów Mazowiecka","Ostrówek","Otmuchów","Otyń","Ozimek","Ozorków","Pakosławice","Pakość","Parchowo","Parzęczew","Pasym","Paszowice","Pasłęk","Pawłosiów","Pawłowice","Perzów","Pełczyce","Piechowice","Piecki","Piekary Śląskie","Pielgrzymka","Pieniężno","Pieszyce","Pieńsk","Pilzno","Pionki","Pisz","Piszczac","Piątnica","Piła","Piława Górna","Piława Główna","Pińczów","Platerówka","Pleszew","Pleśna","Podegrodzie","Podgórzyn","Pokrzywnica","Polanica Zdrój","Poronin","Poręba","Postomino","Potworów","Pozezdrze","Połczyn-Zdrój","Poświętne","Prostki","Prudnik","Pruszcz","Przecław","Przemyśl","Przemyśl nad Sanem","Przeworsk","Przewóz","Przykona","Przysucha","Przytoczna","Przytyk","Prószków","Pszczew","Pułtusk","Pysznica","Pątnów","Pęcław","Płaska","Płoskinia","Płoty","Płośnica","Płużnica","Raba Wyżna","Rabka Zdrój","Rachanie","Radecznica","Radków","Radlin","Radom","Radomsko","Radomyśl Wielki","Radoszyce","Radymno","Radzionków","Radziłów","Radzyń Chełmiński","Radzyń Podlaski","Rajgród","Raków","Raszków","Recz","Regimin","Rejowiec","Rejowiec Fabryczny","Reska","Resko","Reszel","Reńska Wieś","Rodowo Małe","Rogowo","Rogóźno","Rojewo","Rokitno","Ropa","Ropczyce","Rozogi","Rościszewo","Ruciane-Nida","Ruda Maleniecka","Ruda Śląska","Ruda-Huta","Rudnik nad Sanem","Rudziniec","Rusinów","Rutki","Rybnik","Rybno","Rychlik","Rychtal","Rydułtowy","Ryn","Rypin","Rytwiany","Rzeczenica","Rzekuń","Rąbino","Sadki","Sadlinki","Samborzec","Sandomierz","Sanok","Sawin","Serniki","Sicienko","Sidra","Sieciechów","Siedlisko","Siedliszcze","Siekierczyn","Siemianowice\nŚląskie","Siemianowice Śląskie","Sieniawa","Siennica Różana","Sieradz","Sierpc","Sitno","Skaryszew","Skarżysko- Kamienna","Skarżysko-Kamienna","Skarżysko-Kościelne","Skierbieszów","Skomlin","Skołyszyn","Skrwilno","Skrzyszów","Skępe\n\n9.      Tucholski (gmina Tuchola, gmina Kęsowo)\n\n10.   Sępoleński (gmina Kamień Krajeński)","Smołdzino","Smyków","Sobków","Sokółka","Solec-Zdrój","Sorkwity","Sosnowiec","Sońsk","Spiczyn","Srokowo","Stalowa Wola","Stanin","Stara Dąbrowa","Stara Kamienica","Starachowice","Stare Bogaczowice","Stare Czarnowo","Stare Juchy","Stare Miasto","Stare Pole","Stargard","Stary Lubotyń","Stary Sącz","Stary Targ","StaryBrus","StaryZamość","Staszów","Stoczek Łukowski","Stolno","Stopnica","Stoszowice","Strzegom","Strzegowo","Strzelce Opolskie","Strzeleczki","Strzelno","Studzienice","Stąporków","Stężyca","Suchań","Suchedniów","Sulików","Sulęcin","Supraśl","Susiec","Susz","Szadek","Szaflary","Szamocin","Szastarka","Szczawin Kościelny","Szczawno-Zdrój","Szczebrzeszyn","Szczecinek","Szczuczyn","Szczutowo","Szczytna","Szczytno","Szelków","Szlichtyngowa","Szprotowa","Sztabin","Sztum","Szubin","Szudziałowo","Szumowo","Szydłowiec","Szydłowo","Szydłów","Sędziejowice","Sękowa","Sępopol","Sława","Sławków","Sławno","Sławoborze","Słupsk","Tarnawatka","Tarnobrzeg","Tarnowiec","Tarnowskie Góry","Tarnów","Tarnówka","Tereszpol","Tolkmicko","Tomaszów Lub.","Tomaszów Lubelski","Tomaszów Mazowiecki","Toszek","Tryńcza","Trzcianka","Trzciel","Trzebiatów","Trzebieszów","Trzebinia","Trzemeszno","Trzeszczany","Trzydnik Duży","TucholaKęsowo","Tuchomie","Tuchów","Tuczno","Tuczępy","Tuliszków","Turek","Turośl","Tuszów Narodowy","Tychowo","Tyrawa Wołoska","Uchanie","Ujazd","Ujście","Ulan-Majorat","Ulanów","Unisław","Urszulin","Urzędów","Ustka","Uście Gorlickie","Wadowice Górne","Walce","Walim","Warnice","Warta Bolesławiecka","Wałbrzych","Wałcz","Werbkowice","Wielbark","Wieliczki","Wielowieś","Wieluń","Wieniawa","Wierzbica","Wierzchlas","Wierzchosławice","Wierzchowo","Wilczyce","Wilczęta","Wilkołaz","Wilków","Winnica","Witkowo","Wizna","Wiązownica","Wiślica","Wiśniew","Wodzierady","Wodzisław","Wohyń","Wojaszówka","Wojcieszków","Wojkowice","Wojnicz","WolaUhruska","Wolanów","Wołczyn","Wróblew","Wydminy","Wymiarki","Wyryki-Połód","Wysoka","Wysokie Mazowieckie","Wyszki","Wąchock","Wąpielsk","Wąsewo","Wąsosz","Węgorzewo","Węgorzyno","Władysławów","Włocławek","Włodawa","Włodowice","Zabkowice Śl.","Zabrze","Zabłudów","Zagrodno","Zagórz","Zakopane","Zakrzew","Zakrzewo","Zakrzówek","Zalesie","Zaleszany","Zambrów","Zamość","Zapolice","Zarszyn","Zarzecze","Zaręby Kościelne","Zatory","Zawidz Kościelny","Zawidów","Zawiercie","Zbrosławice","Zbuczyn","Zduńska Wola","Zdzieszowice","Zebrzydowice","Zelów","Zgierz","Zgorzelec","Ziębice","Zwierzyniec","Ząbkowice Śl.","Złotniki Kujawskie","Złotoryja","Złoty Stok","Złotów","gmina Świdnica","gminy Bierawa","gminy Bojanów","gminy Chełmiec","gminy Kaczory","gminy Pawłów","gminy Pszów","gminy Skarbimierz","Łabunie","Ładzice","Łagiewniki","Łambinowice","Łapsze Niżne","Łask","Łazy","Łańcut","Łobez","Łobżenica","Łomazy","Łomża","Łoniów","Łopiennik Górny","Łubowo","Łukta","Łuków","Łużna","Łyse","Łąck","Łączna","Ślesin","Śniadowo","Świdnica","Świdwin","Świebodzice","Świebodzin","Świecice","Świecie","Świedziebnia","Świerczów","Świerklaniec","Świerzawa","Świerzno","Świeszyno","Świętajno","Świętochłowice","Żabno","Żagań","Żary","Żarów","Żory","Żukowice","Żurawica","Żyraków"]};
+
+const TERYT_DATA = {"MAŁOPOLSKIE":{"bocheński":["Bochnia (gmina wiejska)","Bochnia (miasto)","Drwinia","Lipnica Murowana","Nowy Wiśnicz","Rzezawa","Trzciana","Łapanów","Żegocina"],"krakowski":["Czernichów","Igołomia-Wawrzeńczyce","Iwanowice","Jerzmanowice-Przeginia","Kocmyrzów-Luborzyca","Krzeszowice","Liszki","Michałowice","Mogilany","Skawina","Skała","Sułoszowa","Słomniki","Wielka Wieś","Zabierzów","Zielonki","Świątniki Górne"],"miechowski":["Charsznica","Gołcza","Kozłów","Książ Wielki","Miechów","Racławice","Słaboszów"],"myślenicki":["Dobczyce","Lubień","Myślenice","Pcim","Raciechowice","Siepraw","Sułkowice","Tokarnia","Wiśniowa"],"proszowicki":["Koniusza","Koszyce","Nowe Brzesko","Pałecznica","Proszowice","Radziemice"],"wielicki":["Biskupice","Gdów","Kłaj","Niepołomice","Wieliczka"],"Kraków":["Kraków"],"gorlicki":["Biecz","Bobowa","Gorlice (gmina wiejska)","Gorlice (miasto)","Lipinki","Moszczenica","Ropa","Sękowa","Uście Gorlickie","Łużna"],"limanowski":["Dobra","Jodłownik","Kamienica","Laskowa","Limanowa (gmina wiejska)","Limanowa (miasto)","Mszana Dolna (gmina wiejska)","Mszana Dolna (miasto)","Niedźwiedź","Szczawa","Słopnice","Tymbark","Łukowica"],"nowosądecki":["Chełmiec","Grybów (gmina wiejska)","Grybów (miasto)","Gródek nad Dunajcem","Kamionka Wielka","Korzenna","Krynica-Zdrój","Miejska strefa usług publicznych (miasto)","Muszyna","Nawojowa","Piwniczna-Zdrój","Podegrodzie","Rytro","Stary Sącz","Łabowa","Łososina Dolna","Łącko"],"Nowy Sącz":["Nowy Sącz"],"chrzanowski":["Alwernia","Babice","Chrzanów","Libiąż","Trzebinia"],"olkuski":["Bolesław","Bukowno (miasto)","Klucze","Olkusz","Sławków (miasto)","Trzyciąż","Wolbrom"],"oświęcimski":["Brzeszcze","Chełmek","Kęty","Osiek","Oświęcim (gmina wiejska)","Oświęcim (miasto)","Polanka Wielka","Przeciszów","Zator"],"wadowicki":["Andrychów","Brzeźnica","Kalwaria Zebrzydowska","Lanckorona","Mucharz","Spytkowice","Stryszów","Tomice","Wadowice","Wieprz"],"brzeski":["Borzęcin","Brzesko","Czchów","Dębno","Gnojnik","Iwkowa","Szczurowa"],"dąbrowski":["Bolesław","Dąbrowa Tarnowska","Gręboszów","Mędrzechów","Olesno","Radgoszcz","Szczucin"],"tarnowski":["Ciężkowice","Gromnik","Lisia Góra","Pleśna","Radłów","Ryglice","Rzepiennik Strzyżewski","Skrzyszów","Szerzyny","Tarnów","Tuchów","Wierzchosławice","Wietrzychowice","Wojnicz","Zakliczyn","Żabno"],"Tarnów":["Tarnów"],"nowotarski":["Czarny Dunajec","Czorsztyn","Jabłonka","Krościenko nad Dunajcem","Lipnica Wielka","Nowy Targ (gmina wiejska)","Nowy Targ (miasto)","Ochotnica Dolna","Raba Wyżna","Rabka-Zdrój","Spytkowice","Szaflary","Szczawnica","Szczawnica (miasto)","Łapsze Niżne"],"suski":["Budzów","Bystra-Sidzina","Jordanów (gmina wiejska)","Jordanów (miasto)","Maków Podhalański","Stryszawa","Sucha Beskidzka (miasto)","Zawoja","Zembrzyce"],"tatrzański":["Biały Dunajec","Bukowina Tatrzańska","Kościelisko","Poronin","Zakopane (miasto)"]},"ŚLĄSKIE":{"bielski":["Bestwina","Buczkowice","Czechowice-Dziedzice","Jasienica","Jaworze","Kozy","Porąbka","Szczyrk (miasto)","Wilamowice","Wilkowice"],"cieszyński":["Brenna","Chybie","Cieszyn (miasto)","Dębowiec","Goleszów","Hażlach","Istebna","Skoczów","Strumień","Ustroń (miasto)","Wisła (miasto)","Zebrzydowice"],"żywiecki":["Czernichów","Gilowice","Jeleśnia","Koszarawa","Lipowa","Milówka","Radziechowy-Wieprz","Rajcza","Ujsoły","Węgierska Górka","Łodygowice","Łękawica","Ślemień","Świnna","Żywiec (miasto)"],"Bielsko-Biała":["Bielsko-Biała"],"lubliniecki":["Boronów","Ciasna","Herby","Kochanowice","Koszęcin","Lubliniec (miasto)","Pawonków","Woźniki"],"tarnogórski":["Kalety (miasto)","Krupski Młyn","Miasteczko Śląskie (miasto)","Ożarowice","Radzionków (miasto)","Tarnowskie Góry (miasto)","Tworóg","Zbrosławice","Świerklaniec"],"Bytom":["Bytom"],"Piekary Śląskie":["Piekary Śląskie"],"częstochowski":["Blachownia","Dąbrowa Zielona","Janów","Kamienica Polska","Koniecpol","Konopiska","Kruszyna","Kłomnice","Lelów","Mstów","Mykanów","Olsztyn","Poczesna","Przyrów","Rędziny","Starcza"],"kłobucki":["Krzepice","Kłobuck","Lipie","Miedźno","Opatów","Panki","Popów","Przystajń","Wręczyca Wielka"],"myszkowski":["Koziegłowy","Myszków (miasto)","Niegowa","Poraj","Żarki"],"Częstochowa":["Częstochowa"],"gliwicki":["Gierałtowice","Knurów (miasto)","Pilchowice","Pyskowice (miasto)","Rudziniec","Sośnicowice","Toszek","Wielowieś"],"Gliwice":["Gliwice"],"Zabrze":["Zabrze"],"Chorzów":["Chorzów"],"Katowice":["Katowice"],"Mysłowice":["Mysłowice"],"Ruda Śląska":["Ruda Śląska"],"Siemianowice Śląskie":["Siemianowice Śląskie"],"Świętochłowice":["Świętochłowice"],"raciborski":["Kornowac","Krzanowice","Krzyżanowice","Kuźnia Raciborska","Nędza","Pietrowice Wielkie","Racibórz (miasto)","Rudnik"],"rybnicki":["Czerwionka-Leszczyny","Gaszowice","Jejkowice","Lyski","Świerklany"],"wodzisławski":["Godów","Gorzyce","Lubomia","Marklowice","Mszana","Pszów (miasto)","Radlin (miasto)","Rydułtowy (miasto)","Wodzisław Śląski (miasto)"],"Jastrzębie-Zdrój":["Jastrzębie-Zdrój"],"Rybnik":["Rybnik"],"Żory":["Żory"],"będziński":["Bobrowniki","Będzin (miasto)","Czeladź (miasto)","Mierzęcice","Psary","Siewierz","Sławków (miasto)","Wojkowice (miasto)"],"zawierciański":["Irządze","Kroczyce","Ogrodzieniec","Pilica","Poręba (miasto)","Szczekociny","Włodowice","Zawiercie (miasto)","Łazy","Żarnowiec"],"Dąbrowa Górnicza":["Dąbrowa Górnicza"],"Jaworzno":["Jaworzno"],"Sosnowiec":["Sosnowiec"],"mikołowski":["Mikołów (miasto)","Ornontowice","Orzesze (miasto)","Wyry","Łaziska Górne (miasto)"],"pszczyński":["Goczałkowice-Zdrój","Kobiór","Miedźna","Pawłowice","Pszczyna","Suszec"],"bieruńsko-lędziński":["Bieruń (miasto)","Bojszowy","Chełm Śląski","Imielin (miasto)","Lędziny (miasto)"],"Tychy":["Tychy"]},"LUBUSKIE":{"gorzowski":["Bogdaniec","Deszczno","Kostrzyn nad Odrą (miasto)","Kłodawa","Lubiszyn","Santok","Witnica"],"międzyrzecki":["Bledzew","Międzyrzecz","Przytoczna","Pszczew","Skwierzyna","Trzciel"],"słubicki":["Cybinka","Górzyca","Ośno Lubuskie","Rzepin","Słubice"],"strzelecko-drezdenecki":["Dobiegniew","Drezdenko","Stare Kurowo","Strzelce Krajeńskie","Zwierzyn"],"sulęciński":["Krzeszyce","Lubniewice","Sulęcin","Słońsk","Torzym"],"Gorzów Wielkopolski":["Gorzów Wielkopolski"],"krośnieński":["Bobrowice","Bytnica","Dąbie","Gubin (gmina wiejska)","Gubin (miasto)","Krosno Odrzańskie","Maszewo"],"nowosolski":["Bytom Odrzański","Kolsko","Kożuchów","Nowa Sól (gmina wiejska)","Nowa Sól (miasto)","Nowe Miasteczko","Otyń","Siedlisko","Szlichtyngowa","Sława","Wschowa"],"świebodziński":["Lubrza","Skąpe","Szczaniec","Zbąszynek","Łagów","Świebodzin"],"zielonogórski":["Babimost","Bojadła","Czerwieńsk","Kargowa","Nowogród Bobrzański","Sulechów","Trzebiechów","Zabór","Zielona Góra","Świdnica"],"żagański":["Brzeźnica","Gozdnica (miasto)","Iłowa","Małomice","Niegosławice","Szprotawa","Wymiarki","Żagań (gmina wiejska)","Żagań (miasto)"],"żarski":["Brody","Jasień","Lipinki Łużyckie","Lubsko","Przewóz","Trzebiel","Tuplice","Łęknica (miasto)","Żary (gmina wiejska)","Żary (miasto)"],"wschowski":["Szlichtyngowa","Sława","Wschowa"],"Zielona Góra":["Zielona Góra"]},"WIELKOPOLSKIE":{"jarociński":["Jaraczewo","Jarocin","Kotlin","Żerków"],"kaliski":["Blizanów","Brzeziny","Ceków-Kolonia","Godziesze Wielkie","Koźminek","Lisków","Mycielin","Opatówek","Stawiszyn","Szczytniki","Żelazków"],"kępiński":["Baranów","Bralin","Kępno","Perzów","Rychtal","Trzcinica","Łęka Opatowska"],"krotoszyński":["Kobylin","Koźmin Wielkopolski","Krotoszyn","Rozdrażew","Sulmierzyce (miasto)","Zduny"],"ostrowski":["Nowe Skalmierzyce","Odolanów","Ostrów Wielkopolski (gmina wiejska)","Ostrów Wielkopolski (miasto)","Przygodzice","Raszków","Sieroszewice","Sośnie"],"ostrzeszowski":["Czajków","Doruchów","Grabów nad Prosną","Kobyla Góra","Kraszewice","Mikstat","Ostrzeszów"],"pleszewski":["Chocz","Czermin","Dobrzyca","Gizałki","Gołuchów","Pleszew"],"Kalisz":["Kalisz"],"gnieźnieński":["Czerniejewo","Gniezno (gmina wiejska)","Gniezno (miasto)","Kiszkowo","Kłecko","Mieleszyn","Niechanowo","Trzemeszno","Witkowo","Łubowo"],"kolski":["Babiak","Chodów","Dąbie","Grzegorzew","Koło (gmina wiejska)","Koło (miasto)","Kościelec","Kłodawa","Olszówka","Osiek Mały","Przedecz"],"koniński":["Golina","Grodziec","Kazimierz Biskupi","Kleczew","Kramsk","Krzymów","Rychwał","Rzgów","Skulsk","Sompolno","Stare Miasto","Wierzbinek","Wilczyn","Ślesin"],"słupecki":["Lądek","Orchowo","Ostrowite","Powidz","Strzałkowo","Słupca (gmina wiejska)","Słupca (miasto)","Zagórów"],"turecki":["Brudzew","Dobra","Kawęczyn","Malanów","Przykona","Tuliszków","Turek (gmina wiejska)","Turek (miasto)","Władysławów"],"wrzesiński":["Kołaczkowo","Miłosław","Nekla","Pyzdry","Września"],"Konin":["Konin"],"gostyński":["Borek Wielkopolski","Gostyń","Krobia","Piaski","Pogorzela","Poniec","Pępowo"],"grodziski":["Granowo","Grodzisk Wielkopolski","Kamieniec","Rakoniewice","Wielichowo"],"kościański":["Czempiń","Kościan (gmina wiejska)","Kościan (miasto)","Krzywiń","Śmigiel"],"leszczyński":["Krzemieniewo","Lipno","Osieczna","Rydzyna","Wijewo","Włoszakowice","Święciechowa"],"międzychodzki":["Chrzypsko Wielkie","Kwilcz","Międzychód","Sieraków"],"nowotomyski":["Kuślin","Lwówek","Miedzichowo","Nowy Tomyśl","Opalenica","Zbąszyń"],"rawicki":["Bojanowo","Jutrosin","Miejska Górka","Pakosław","Rawicz"],"wolsztyński":["Przemęt","Siedlec","Wolsztyn"],"Leszno":["Leszno"],"chodzieski":["Budzyń","Chodzież (gmina wiejska)","Chodzież (miasto)","Margonin","Szamocin"],"czarnkowsko-trzcianecki":["Czarnków (gmina wiejska)","Czarnków (miasto)","Drawsko","Krzyż Wielkopolski","Lubasz","Połajewo","Trzcianka","Wieleń"],"pilski":["Białośliwie","Kaczory","Miasteczko Krajeńskie","Piła (miasto)","Szydłowo","Ujście","Wyrzysk","Wysoka","Łobżenica"],"wągrowiecki":["Damasławek","Gołańcz","Mieścisko","Skoki","Wapno","Wągrowiec (gmina wiejska)","Wągrowiec (miasto)"],"złotowski":["Jastrowie","Krajenka","Lipka","Okonek","Tarnówka","Zakrzewo","Złotów (gmina wiejska)","Złotów (miasto)"],"obornicki":["Oborniki","Rogoźno","Ryczywół"],"poznański":["Buk","Czerwonak","Dopiewo","Kleszczewo","Komorniki","Kostrzyn","Kórnik","Luboń (miasto)","Mosina","Murowana Goślina","Pobiedziska","Puszczykowo (miasto)","Rokietnica","Stęszew","Suchy Las","Swarzędz","Tarnowo Podgórne"],"szamotulski":["Duszniki","Kaźmierz","Obrzycko (gmina wiejska)","Obrzycko (miasto)","Ostroróg","Pniewy","Szamotuły","Wronki"],"średzki":["Dominowo","Krzykosy","Nowe Miasto nad Wartą","Zaniemyśl","Środa Wielkopolska"],"śremski":["Brodnica","Dolsk","Książ Wielkopolski","Śrem"],"Poznań":["Poznań"]},"ZACHODNIOPOMORSKIE":{"białogardzki":["Białogard (gmina wiejska)","Białogard (miasto)","Karlino","Tychowo"],"kołobrzeski":["Dygowo","Gościno","Kołobrzeg (gmina wiejska)","Kołobrzeg (miasto)","Rymań","Siemyśl","Ustronie Morskie"],"koszaliński":["Biesiekierz","Bobolice","Będzino","Manowo","Mielno","Polanów","Sianów","Świeszyno"],"sławieński":["Darłowo (gmina wiejska)","Darłowo (miasto)","Malechowo","Postomino","Sławno (gmina wiejska)","Sławno (miasto)"],"Koszalin":["Koszalin"],"choszczeński":["Bierzwnik","Choszczno","Drawno","Krzęcin","Pełczyce","Recz"],"drawski":["Czaplinek","Drawsko Pomorskie","Kalisz Pomorski","Ostrowice","Wierzchowo","Złocieniec"],"myśliborski":["Barlinek","Boleszkowice","Dębno","Myślibórz","Nowogródek Pomorski"],"pyrzycki":["Bielice","Kozielice","Lipiany","Przelewice","Pyrzyce","Warnice"],"szczecinecki":["Barwice","Biały Bór","Borne Sulinowo","Grzmiąca","Szczecinek (gmina wiejska)","Szczecinek (miasto)"],"świdwiński":["Brzeżno","Połczyn-Zdrój","Rąbino","Sławoborze","Świdwin (gmina wiejska)","Świdwin (miasto)"],"wałecki":["Człopa","Mirosławiec","Tuczno","Wałcz (gmina wiejska)","Wałcz (miasto)"],"łobeski":["Dobra","Radowo Małe","Resko","Węgorzyno","Łobez"],"Szczecin":["Szczecin"],"goleniowski":["Dobra","Goleniów","Maszewo","Nowogard","Osina","Przybiernów","Stepnica"],"gryficki":["Brojce","Gryfice","Karnice","Płoty","Radowo Małe","Resko","Rewal","Trzebiatów"],"gryfiński":["Banie","Cedynia","Chojna","Gryfino","Mieszkowice","Moryń","Stare Czarnowo","Trzcińsko-Zdrój","Widuchowa"],"kamieński":["Dziwnów","Golczewo","Kamień Pomorski","Międzyzdroje","Wolin","Świerzno"],"policki":["Dobra (Szczecińska)","Kołbaskowo","Nowe Warpno","Police"],"stargardzki":["Chociwel","Dobrzany","Dolice","Ińsko","Kobylanka","Marianowo","Stara Dąbrowa","Stargard (gmina wiejska)","Stargard (miasto)","Suchań","Węgorzyno","Łobez"],"Świnoujście":["Świnoujście"]},"DOLNOŚLĄSKIE":{"bolesławiecki":["Bolesławiec (gmina wiejska)","Bolesławiec (miasto)","Gromadka","Nowogrodziec","Osiecznica","Warta Bolesławiecka"],"jaworski":["Bolków","Jawor (miasto)","Męcinka","Mściwojów","Paszowice","Wądroże Wielkie"],"karkonoski":["Janowice Wielkie","Jeżów Sudecki","Karpacz (miasto)","Kowary (miasto)","Mysłakowice","Piechowice (miasto)","Podgórzyn","Stara Kamienica","Szklarska Poręba (miasto)"],"kamiennogórski":["Kamienna Góra (gmina wiejska)","Kamienna Góra (miasto)","Lubawka","Marciszów"],"lubański":["Leśna","Lubań (gmina wiejska)","Lubań (miasto)","Olszyna","Platerówka","Siekierczyn","Świeradów-Zdrój (miasto)"],"lwówecki":["Gryfów Śląski","Lubomierz","Lwówek Śląski","Mirsk","Wleń"],"zgorzelecki":["Bogatynia","Pieńsk","Sulików","Węgliniec","Zawidów (miasto)","Zgorzelec (gmina wiejska)","Zgorzelec (miasto)"],"złotoryjski":["Pielgrzymka","Wojcieszów (miasto)","Zagrodno","Złotoryja (gmina wiejska)","Złotoryja (miasto)","Świerzawa"],"Jelenia Góra":["Jelenia Góra"],"głogowski":["Głogów (gmina wiejska)","Głogów (miasto)","Jerzmanowa","Kotla","Pęcław","Żukowice"],"górowski":["Góra","Jemielno","Niechlów","Wąsosz"],"legnicki":["Chojnów (gmina wiejska)","Chojnów (miasto)","Krotoszyce","Kunice","Legnickie Pole","Miłkowice","Prochowice","Ruja"],"lubiński":["Lubin (gmina wiejska)","Lubin (miasto)","Rudna","Ścinawa"],"polkowicki":["Chocianów","Gaworzyce","Grębocice","Miejska strefa usług publicznych (miasto)","Polkowice","Przemków","Radwanice"],"Legnica":["Legnica"],"dzierżoniowski":["Bielawa (miasto)","Dzierżoniów (gmina wiejska)","Dzierżoniów (miasto)","Niemcza","Pieszyce","Pieszyce (miasto)","Piława Górna (miasto)","Łagiewniki"],"kłodzki":["Bystrzyca Kłodzka","Duszniki-Zdrój (miasto)","Kudowa-Zdrój (miasto)","Kłodzko (gmina wiejska)","Kłodzko (miasto)","Lewin Kłodzki","Lądek-Zdrój","Międzylesie","Nowa Ruda (gmina wiejska)","Nowa Ruda (miasto)","Polanica-Zdrój (miasto)","Radków","Stronie Śląskie","Szczytna"],"świdnicki":["Dobromierz","Jaworzyna Śląska","Marcinowice","Strzegom","Świdnica (gmina wiejska)","Świdnica (miasto)","Świebodzice (miasto)","Żarów"],"wałbrzyski":["Boguszów-Gorce (miasto)","Czarny Bór","Głuszyca","Jedlina-Zdrój (miasto)","Mieroszów","Stare Bogaczowice","Szczawno-Zdrój (miasto)","Walim","Wałbrzych od 2003 do 2012 (miasto)"],"ząbkowicki":["Bardo","Ciepłowody","Kamieniec Ząbkowicki","Stoszowice","Ziębice","Ząbkowice Śląskie","Złoty Stok"],"Wałbrzych do 2002":["Wałbrzych do 2002"],"Wałbrzych od 2013":["Wałbrzych od 2013"],"milicki":["Cieszków","Krośnice","Milicz"],"oleśnicki":["Bierutów","Dobroszyce","Dziadowa Kłoda","Międzybórz","Oleśnica (gmina wiejska)","Oleśnica (miasto)","Syców","Twardogóra"],"oławski":["Domaniów","Jelcz-Laskowice","Oława (gmina wiejska)","Oława (miasto)"],"strzeliński":["Borów","Kondratowice","Przeworno","Strzelin","Wiązów"],"średzki":["Kostomłoty","Malczyce","Miękinia","Udanin","Środa Śląska"],"trzebnicki":["Oborniki Śląskie","Prusice","Trzebnica","Wisznia Mała","Zawonia","Żmigród"],"wołowski":["Brzeg Dolny","Wińsko","Wołów"],"wrocławski":["Czernica","Długołęka","Jordanów Śląski","Kobierzyce","Kąty Wrocławskie","Mietków","Siechnice","Sobótka","Święta Katarzyna","Żórawina"],"Wrocław":["Wrocław"]},"OPOLSKIE":{"brzeski":["Brzeg (miasto)","Grodków","Lewin Brzeski","Lubsza","Olszanka","Skarbimierz"],"głubczycki":["Baborów","Branice","Głubczyce","Kietrz"],"namysłowski":["Domaszowice","Namysłów","Pokój","Wilków","Świerczów"],"nyski":["Głuchołazy","Kamiennik","Korfantów","Nysa","Otmuchów","Paczków","Pakosławice","Skoroszyce","Łambinowice"],"prudnicki":["Biała","Głogówek","Lubrza","Prudnik"],"kędzierzyńsko-kozielski":["Bierawa","Cisek","Kędzierzyn-Koźle (miasto)","Pawłowiczki","Polska Cerekiew","Reńska Wieś"],"kluczborski":["Byczyna","Kluczbork","Lasowice Wielkie","Wołczyn"],"krapkowicki":["Gogolin","Krapkowice","Strzeleczki","Walce","Zdzieszowice"],"oleski":["Dobrodzień","Gorzów Śląski","Olesno","Praszka","Radłów","Rudniki","Zębowice"],"opolski":["Chrząstowice","Dobrzeń Wielki","Dąbrowa","Komprachcice","Murów","Niemodlin","Ozimek","Popielów","Prószków","Tarnów Opolski","Turawa","Tułowice","Łubniany"],"strzelecki":["Izbicko","Jemielnica","Kolonowskie","Leśnica","Strzelce Opolskie","Ujazd","Zawadzkie"],"Opole":["Opole"]},"KUJAWSKO-POMORSKIE":{"bydgoski":["Białe Błota","Dobrcz","Dąbrowa Chełmińska","Koronowo","Nowa Wieś Wielka","Osielsko","Sicienko","Solec Kujawski"],"toruński":["Chełmża (gmina wiejska)","Chełmża (miasto)","Czernikowo","Lubicz","Obrowo","Wielka Nieszawka","Zławieś Wielka","Łubianka","Łysomice"],"Bydgoszcz":["Bydgoszcz"],"Toruń":["Toruń"],"brodnicki":["Bartniczka","Bobrowo","Brodnica (gmina wiejska)","Brodnica (miasto)","Brzozie","Górzno","Jabłonowo Pomorskie","Osiek","Zbiczno","Świedziebnia"],"chełmiński":["Chełmno (gmina wiejska)","Chełmno (miasto)","Kijewo Królewskie","Lisewo","Papowo Biskupie","Stolno","Unisław"],"golubsko-dobrzyński":["Ciechocin","Golub-Dobrzyń (gmina wiejska)","Golub-Dobrzyń (miasto)","Kowalewo Pomorskie","Radomin","Zbójno"],"grudziądzki":["Grudziądz","Gruta","Radzyń Chełmiński","Rogóźno","Łasin","Świecie nad Osą"],"rypiński":["Brzuze","Rogowo","Rypin (gmina wiejska)","Rypin (miasto)","Skrwilno","Wąpielsk"],"wąbrzeski":["Dębowa Łąka","Książki","Płużnica","Ryńsk","Wąbrzeźno (miasto)"],"Grudziądz":["Grudziądz"],"aleksandrowski":["Aleksandrów Kujawski (gmina wiejska)","Aleksandrów Kujawski (miasto)","Bądkowo","Ciechocinek (miasto)","Koneck","Nieszawa (miasto)","Raciążek","Waganiec","Zakrzewo"],"lipnowski":["Bobrowniki","Chrostkowo","Dobrzyń nad Wisłą","Kikół","Lipno (gmina wiejska)","Lipno (miasto)","Skępe","Tłuchowo","Wielgie"],"radziejowski":["Bytoń","Dobre","Osięciny","Piotrków Kujawski","Radziejów (gmina wiejska)","Radziejów (miasto)","Topólka"],"włocławski":["Baruchowo","Boniewo","Brześć Kujawski","Choceń","Chodecz","Fabianki","Izbica Kujawska","Kowal (gmina wiejska)","Kowal (miasto)","Lubanie","Lubień Kujawski","Lubraniec","Włocławek"],"Włocławek":["Włocławek"],"inowrocławski":["Dąbrowa Biskupia","Gniewkowo","Inowrocław (gmina wiejska)","Inowrocław (miasto)","Janikowo","Kruszwica","Pakość","Rojewo","Złotniki Kujawskie"],"mogileński":["Dąbrowa","Jeziora Wielkie","Mogilno","Strzelno"],"nakielski":["Kcynia","Miejska strefa usług publicznych (miasto)","Mrocza","Nakło nad Notecią","Sadki","Szubin"],"żniński":["Barcin","Gąsawa","Janowiec Wielkopolski","Rogowo","Łabiszyn","Żnin"],"sępoleński":["Kamień Krajeński","Sośno","Sępólno Krajeńskie","Więcbork"],"świecki":["Bukowiec","Dragacz","Drzycim","Jeżewo","Lniano","Nowe","Osie","Pruszcz","Warlubie","Świecie","Świekatowo"],"tucholski":["Cekcyn","Gostycyn","Kęsowo","Lubiewo","Tuchola","Śliwice"]},"POMORSKIE":{"gdański":["Cedry Wielkie","Kolbudy","Pruszcz Gdański (gmina wiejska)","Pruszcz Gdański (miasto)","Przywidz","Pszczółki","Suchy Dąb","Trąbki Wielkie"],"kartuski":["Chmielno","Kartuzy","Przodkowo","Sierakowice","Somonino","Stężyca","Sulęczyno","Żukowo"],"nowodworski":["Krynica Morska (miasto)","Nowy Dwór Gdański","Ostaszewo","Stegna","Sztutowo"],"pucki":["Hel (miasto)","Jastarnia","Jastarnia (miasto)","Kosakowo","Krokowa","Puck (gmina wiejska)","Puck (miasto)","Władysławowo","Władysławowo (miasto)"],"wejherowski":["Choczewo","Gniewino","Linia","Luzino","Reda (miasto)","Rumia (miasto)","Szemud","Wejherowo (gmina wiejska)","Wejherowo (miasto)","Łęczyce"],"bytowski":["Borzytuchom","Bytów","Czarna Dąbrówka","Kołczygłowy","Lipnica","Miastko","Parchowo","Studzienice","Trzebielino","Tuchomie"],"lęborski":["Cewice","Lębork (miasto)","Nowa Wieś Lęborska","Wicko","Łeba (miasto)"],"słupski":["Damnica","Dębnica Kaszubska","Główczyce","Kobylnica","Kępice","Potęgowo","Redzikowo","Smołdzino","Ustka (gmina wiejska)","Ustka (miasto)"],"Słupsk":["Słupsk"],"kwidzyński":["Gardeja","Kwidzyn (gmina wiejska)","Kwidzyn (miasto)","Prabuty","Ryjewo","Sadlinki"],"malborski":["Dzierzgoń","Lichnowy","Malbork (gmina wiejska)","Malbork (miasto)","Mikołajki Pomorskie","Miłoradz","Nowy Staw","Stare Pole","Stary Dzierzgoń","Stary Targ","Sztum"],"starogardzki":["Bobowo","Czarna Woda","Czarna Woda (miasto)","Kaliska","Lubichowo","Osieczna","Osiek","Skarszewy","Skórcz (gmina wiejska)","Skórcz (miasto)","Smętowo Graniczne","Starogard Gdański (gmina wiejska)","Starogard Gdański (miasto)","Zblewo"],"tczewski":["Gniew","Morzeszczyn","Pelplin","Subkowy","Tczew (gmina wiejska)","Tczew (miasto)"],"sztumski":["Dzierzgoń","Mikołajki Pomorskie","Stary Dzierzgoń","Stary Targ","Sztum"],"Gdańsk":["Gdańsk"],"Gdynia":["Gdynia"],"Sopot":["Sopot"],"chojnicki":["Brusy","Chojnice (gmina wiejska)","Chojnice (miasto)","Czersk","Konarzyny"],"człuchowski":["Czarne","Człuchów (gmina wiejska)","Człuchów (miasto)","Debrzno","Koczała","Przechlewo","Rzeczenica"],"kościerski":["Dziemiany","Karsin","Kościerzyna (gmina wiejska)","Kościerzyna (miasto)","Liniewo","Lipusz","Nowa Karczma","Stara Kiszewa"]},"WARMIŃSKO-MAZURSKIE":{"braniewski":["Braniewo (gmina wiejska)","Braniewo (miasto)","Frombork","Lelkowo","Pieniężno","Płoskinia","Wilczęta"],"działdowski":["Działdowo (gmina wiejska)","Działdowo (miasto)","Iłowo-Osada","Lidzbark","Płośnica","Rybno"],"elbląski":["Elbląg","Godkowo","Gronowo Elbląskie","Markusy","Milejewo","Młynary","Pasłęk","Rychliki","Tolkmicko"],"iławski":["Iława (gmina wiejska)","Iława (miasto)","Kisielice","Lubawa (gmina wiejska)","Lubawa (miasto)","Susz","Zalewo"],"nowomiejski":["Biskupiec","Bratian","Grodziczno","Kurzętnik","Nowe Miasto Lubawskie (miasto)"],"ostródzki":["Dąbrówno","Grunwald","Małdyty","Miłakowo","Miłomłyn","Morąg","Ostróda (gmina wiejska)","Ostróda (miasto)","Łukta"],"Elbląg":["Elbląg"],"ełcki":["Ełk (gmina wiejska)","Ełk (miasto)","Kalinowo","Prostki","Stare Juchy"],"giżycki":["Banie Mazurskie","Budry","Giżycko (gmina wiejska)","Giżycko (miasto)","Kruklanki","Miłki","Pozezdrze","Ryn","Wydminy","Węgorzewo"],"olecki":["Dubeninki","Gołdap","Kowale Oleckie","Olecko","Wieliczki","Świętajno"],"piski":["Biała Piska","Orzysz","Pisz","Ruciane-Nida"],"gołdapski":["Banie Mazurskie","Dubeninki","Gołdap"],"węgorzewski":["Budry","Pozezdrze","Węgorzewo"],"bartoszycki":["Bartoszyce (gmina wiejska)","Bartoszyce (miasto)","Bisztynek","Górowo Iławeckie (gmina wiejska)","Górowo Iławeckie (miasto)","Sępopol"],"kętrzyński":["Barciany","Korsze","Kętrzyn (gmina wiejska)","Kętrzyn (miasto)","Reszel","Srokowo"],"lidzbarski":["Kiwity","Lidzbark Warmiński (gmina wiejska)","Lidzbark Warmiński (miasto)","Lubomino","Orneta"],"mrągowski":["Mikołajki","Mrągowo (gmina wiejska)","Mrągowo (miasto)","Piecki","Sorkwity"],"nidzicki":["Janowiec Kościelny","Janowo","Kozłowo","Nidzica"],"olsztyński":["Barczewo","Biskupiec","Dobre Miasto","Dywity","Gietrzwałd","Jeziorany","Jonkowo","Kolno","Olsztynek","Purda","Stawiguda","Świątki"],"szczycieński":["Dźwierzuty","Jedwabno","Pasym","Rozogi","Szczytno (gmina wiejska)","Szczytno (miasto)","Wielbark","Świętajno"],"Olsztyn":["Olsztyn"]},"ŁÓDZKIE":{"łódzki wschodni":["Andrespol","Brzeziny (gmina wiejska)","Brzeziny (miasto)","Brójce","Dmosin","Jeżów","Koluszki","Nowosolna","Rogów","Rzgów","Tuszyn"],"pabianicki":["Dobroń","Dłutów","Konstantynów Łódzki (miasto)","Ksawerów","Lutomiersk","Pabianice (gmina wiejska)","Pabianice (miasto)"],"zgierski":["Aleksandrów Łódzki","Głowno (gmina wiejska)","Głowno (miasto)","Ozorków (gmina wiejska)","Ozorków (miasto)","Parzęczew","Stryków","Zgierz (gmina wiejska)","Zgierz (miasto)"],"brzeziński":["Brzeziny (gmina wiejska)","Brzeziny (miasto)","Dmosin","Jeżów","Rogów"],"Łódź":["Łódź"],"bełchatowski":["Bełchatów (gmina wiejska)","Bełchatów (miasto)","Drużbice","Kleszczów","Kluki","Rusiec","Szczerców","Zelów"],"opoczyński":["Białaczów","Drzewica","Mniszków","Opoczno","Paradyż","Poświętne","Sławno","Żarnów"],"piotrkowski":["Aleksandrów","Czarnocin","Gorzkowice","Grabica","Moszczenica","Rozprza","Ręczno","Sulejów","Wola Krzysztoporska","Wolbórz","Łęki Szlacheckie"],"radomszczański":["Dobryszyce","Gidle","Gomunice","Kamieńsk","Kobiele Wielkie","Kodrąb","Lgota Wielka","Masłowice","Przedbórz","Radomsko (gmina wiejska)","Radomsko (miasto)","Wielgomłyny","Ładzice","Żytno"],"tomaszowski":["Budziszewice","Będków","Czerniewice","Inowłódz","Lubochnia","Rokiciny","Rzeczyca","Tomaszów Mazowiecki (gmina wiejska)","Tomaszów Mazowiecki (miasto)","Ujazd","Żelechlinek"],"Piotrków Trybunalski":["Piotrków Trybunalski"],"łaski":["Buczek","Sędziejowice","Widawa","Wodzierady","Łask"],"pajęczański":["Działoszyn","Kiełczygłów","Nowa Brzeźnica","Pajęczno","Rząśnia","Siemkowice","Strzelce Wielkie","Sulmierzyce"],"poddębicki":["Dalików","Poddębice","Pęczniew","Uniejów","Wartkowice","Zadzim"],"sieradzki":["Brzeźnio","Brąszewice","Burzenin","Błaszki","Goszczanów","Klonowa","Sieradz (gmina wiejska)","Sieradz (miasto)","Warta","Wróblew","Złoczew"],"wieluński":["Biała","Czarnożyły","Konopnica","Mokrsko","Osjaków","Ostrówek","Pątnów","Skomlin","Wieluń","Wierzchlas"],"wieruszowski":["Bolesławiec","Czastary","Galewice","Lututów","Sokolniki","Wieruszów","Łubnice"],"zduńskowolski":["Szadek","Zapolice","Zduńska Wola (gmina wiejska)","Zduńska Wola (miasto)"],"kutnowski":["Bedlno","Dąbrowice","Krośniewice","Krzyżanów","Kutno (gmina wiejska)","Kutno (miasto)","Nowe Ostrowy","Oporów","Strzelce","Łanięta","Żychlin"],"łęczycki":["Daszyna","Grabów","Góra Świętej Małgorzaty","Piątek","Witonia","Łęczyca (gmina wiejska)","Łęczyca (miasto)","Świnice Warckie"],"łowicki":["Bielawy","Chąśno","Domaniewice","Kiernozia","Kocierzew Południowy","Nieborów","Zduny","Łowicz (gmina wiejska)","Łowicz (miasto)","Łyszkowice"],"rawski":["Biała Rawska","Cielądz","Rawa Mazowiecka (gmina wiejska)","Rawa Mazowiecka (miasto)","Regnów","Sadkowice"],"skierniewicki":["Bolimów","Godzianów","Głuchów","Kowiesy","Lipce Reymontowskie","Maków","Nowy Kawęczyn","Skierniewice","Słupia"],"Skierniewice":["Skierniewice"]},"ŚWIĘTOKRZYSKIE":{"kielecki":["Bieliny","Bodzentyn","Chmielnik","Chęciny","Daleszyce","Górno","Masłów","Miedziana Góra","Mniów","Morawica","Nowa Słupia","Nowiny","Piekoszów","Pierzchnica","Raków","Strawczyn","Zagnańsk","Łagów","Łopuszno"],"konecki":["Fałków","Gowarczów","Końskie","Radoszyce","Ruda Maleniecka","Smyków","Stąporków","Słupia Konecka"],"ostrowiecki":["Bałtów","Bodzechów","Kunów","Ostrowiec Świętokrzyski (miasto)","Waśniów","Ćmielów"],"skarżyski":["Bliżyn","Skarżysko Kościelne","Skarżysko-Kamienna (miasto)","Suchedniów","Łączna"],"starachowicki":["Brody","Mirzec","Pawłów","Starachowice (miasto)","Wąchock"],"Kielce":["Kielce"],"buski":["Busko-Zdrój","Gnojno","Nowy Korczyn","Pacanów","Solec-Zdrój","Stopnica","Tuczępy","Wiślica"],"jędrzejowski":["Imielno","Jędrzejów","Małogoszcz","Nagłowice","Oksa","Sobków","Sędziszów","Słupia","Wodzisław"],"kazimierski":["Bejsce","Czarnocin","Kazimierza Wielka","Opatowiec","Skalbmierz"],"opatowski":["Baćkowice","Iwaniska","Lipnik","Opatów","Ożarów","Sadowie","Tarłów","Wojciechowice"],"pińczowski":["Działoszyce","Kije","Michałów","Pińczów","Złota"],"sandomierski":["Dwikozy","Klimontów","Koprzywnica","Obrazów","Samborzec","Sandomierz (miasto)","Wilczyce","Zawichost","Łoniów"],"staszowski":["Bogoria","Oleśnica","Osiek","Połaniec","Rytwiany","Staszów","Szydłów","Łubnice"],"włoszczowski":["Kluczewsko","Krasocin","Moskorzew","Radków","Secemin","Włoszczowa"]},"LUBELSKIE":{"bialski":["Biała Podlaska","Drelów","Janów Podlaski","Kodeń","Konstantynów","Leśna Podlaska","Międzyrzec Podlaski (gmina wiejska)","Międzyrzec Podlaski (miasto)","Piszczac","Rokitno","Rossosz","Sosnówka","Sławatycze","Terespol (gmina wiejska)","Terespol (miasto)","Tuczna","Wisznice","Zalesie","Łomazy"],"parczewski":["Dębowa Kłoda","Jabłoń","Milanów","Parczew","Podedwórze","Siemień","Sosnowica"],"radzyński":["Borki","Czemierniki","Komarówka Podlaska","Kąkolewnica","Radzyń Podlaski (gmina wiejska)","Radzyń Podlaski (miasto)","Ulan-Majorat","Wohyń"],"włodawski":["Hanna","Hańsk","Stary Brus","Urszulin","Wola Uhruska","Wyryki","Włodawa (gmina wiejska)","Włodawa (miasto)"],"Biała Podlaska":["Biała Podlaska"],"biłgorajski":["Aleksandrów","Biszcza","Biłgoraj (gmina wiejska)","Biłgoraj (miasto)","Frampol","Goraj","Józefów","Księżpol","Obsza","Potok Górny","Tarnogród","Tereszpol","Turobin","Łukowa"],"chełmski":["Białopole","Chełm","Dorohusk","Dubienka","Kamień","Leśniowice","Rejowiec","Rejowiec Fabryczny (gmina wiejska)","Rejowiec Fabryczny (miasto)","Ruda-Huta","Sawin","Siedliszcze","Wierzbica","Wojsławice","Żmudź"],"hrubieszowski":["Dołhobyczów","Horodło","Hrubieszów (gmina wiejska)","Hrubieszów (miasto)","Mircze","Trzeszczany","Uchanie","Werbkowice"],"krasnostawski":["Fajsławice","Gorzków","Izbica","Krasnystaw (gmina wiejska)","Krasnystaw (miasto)","Kraśniczyn","Rejowiec","Rudnik","Siennica Różana","Łopiennik Górny","Żółkiewka"],"tomaszowski":["Bełżec","Jarczów","Krynice","Lubycza Królewska","Rachanie","Susiec","Tarnawatka","Telatyn","Tomaszów Lubelski (gmina wiejska)","Tomaszów Lubelski (miasto)","Tyszowce","Ulhówek","Łaszczów"],"zamojski":["Adamów","Grabowiec","Komarów-Osada","Krasnobród","Miączyn","Nielisz","Radecznica","Sitno","Skierbieszów","Stary Zamość","Sułów","Szczebrzeszyn","Zamość","Zwierzyniec","Łabunie"],"Chełm":["Chełm"],"Zamość":["Zamość"],"lubartowski":["Abramów","Firlej","Jeziorzany","Kamionka","Kock","Lubartów (gmina wiejska)","Lubartów (miasto)","Michów","Niedźwiada","Ostrów Lubelski","Ostrówek","Serniki","Uścimów"],"lubelski":["Bełżyce","Borzechów","Bychawa","Garbów","Głusk","Jabłonna","Jastków","Konopnica","Krzczonów","Niedrzwica Duża","Niemce","Strzyżewice","Wojciechów","Wysokie","Wólka","Zakrzew"],"łęczyński":["Cyców","Ludwin","Milejów","Puchaczów","Spiczyn","Łęczna"],"świdnicki":["Mełgiew","Piaski","Rybczewice","Trawniki","Świdnik (miasto)"],"Lublin":["Lublin"],"janowski":["Batorz","Chrzanów","Dzwola","Godziszów","Janów Lubelski","Modliborzyce","Potok Wielki"],"kraśnicki":["Annopol","Dzierzkowice","Gościeradów","Kraśnik (gmina wiejska)","Kraśnik (miasto)","Szastarka","Trzydnik Duży","Urzędów","Wilkołaz","Zakrzówek"],"łukowski":["Adamów","Krzywda","Serokomla","Stanin","Stoczek Łukowski","Stoczek Łukowski (gmina wiejska)","Stoczek Łukowski (miasto)","Trzebieszów","Wojcieszków","Wola Mysłowska","Łuków (gmina wiejska)","Łuków (miasto)"],"opolski":["Chodel","Józefów nad Wisłą","Karczmiska","Opole Lubelskie","Poniatowa","Wilków","Łaziska"],"puławski":["Baranów","Janowiec","Kazimierz Dolny","Końskowola","Kurów","Markuszów","Nałęczów","Puławy (gmina wiejska)","Puławy (miasto)","Wąwolnica","Żyrzyn"],"rycki":["Dęblin (miasto)","Kłoczew","Nowodwór","Ryki","Stężyca","Ułęż"]},"PODKARPACKIE":{"bieszczadzki":["Baligród","Cisna","Czarna","Lesko","Lutowiska","Olszanica","Solina","Ustrzyki Dolne"],"brzozowski":["Brzozów","Domaradz","Dydnia","Haczów","Jasienica Rosielna","Nozdrzec"],"jasielski":["Brzyska","Dębowiec","Jasło (gmina wiejska)","Jasło (miasto)","Kołaczyce","Krempna","Nowy Żmigród","Osiek Jasielski","Skołyszyn","Szerzyny","Tarnowiec"],"krośnieński":["Chorkówka","Dukla","Iwonicz-Zdrój","Jaśliska","Jedlicze","Korczyna","Krościenko Wyżne","Miejsce Piastowe","Rymanów","Wojaszówka"],"sanocki":["Besko","Bukowsko","Komańcza","Sanok (gmina wiejska)","Sanok (miasto)","Tyrawa Wołoska","Zagórz","Zarszyn"],"leski":["Baligród","Cisna","Lesko","Olszanica","Solina"],"Krosno":["Krosno"],"jarosławski":["Chłopice","Jarosław (gmina wiejska)","Jarosław (miasto)","Laszki","Pawłosiów","Pruchnik","Radymno (gmina wiejska)","Radymno (miasto)","Rokietnica","Roźwienica","Wiązownica"],"lubaczowski":["Cieszanów","Horyniec-Zdrój","Lubaczów (gmina wiejska)","Lubaczów (miasto)","Narol","Oleszyce","Stary Dzików","Wielkie Oczy"],"przemyski":["Bircza","Dubiecko","Fredropol","Krasiczyn","Krzywcza","Medyka","Orły","Przemyśl","Stubno","Żurawica"],"przeworski":["Adamówka","Gać","Jawornik Polski","Kańczuga","Przeworsk (gmina wiejska)","Przeworsk (miasto)","Sieniawa","Tryńcza","Zarzecze"],"Przemyśl":["Przemyśl"],"kolbuszowski":["Cmolas","Dzikowiec","Kolbuszowa","Majdan Królewski","Niwiska","Raniżów"],"łańcucki":["Białobrzegi","Czarna","Markowa","Rakszawa","Łańcut (gmina wiejska)","Łańcut (miasto)","Żołynia"],"ropczycko-sędziszowski":["Iwierzyce","Ostrów","Ropczyce","Sędziszów Małopolski","Wielopole Skrzyńskie"],"rzeszowski":["Boguchwała","Błażowa","Chmielnik","Dynów (gmina wiejska)","Dynów (miasto)","Głogów Małopolski","Hyżne","Kamień","Krasne","Lubenia","Sokołów Małopolski","Trzebownisko","Tyczyn","Świlcza"],"strzyżowski":["Czudec","Frysztak","Niebylec","Strzyżów","Wiśniowa"],"Rzeszów":["Rzeszów"],"dębicki":["Brzostek","Czarna","Dębica (gmina wiejska)","Dębica (miasto)","Jodłowa","Pilzno","Żyraków"],"leżajski":["Grodzisko Dolne","Kuryłówka","Leżajsk (gmina wiejska)","Leżajsk (miasto)","Nowa Sarzyna"],"mielecki":["Borowa","Czermin","Gawłuszowice","Mielec (gmina wiejska)","Mielec (miasto)","Padew Narodowa","Przecław","Radomyśl Wielki","Tuszów Narodowy","Wadowice Górne"],"niżański":["Harasiuki","Jarocin","Jeżowe","Krzeszów","Nisko","Rudnik nad Sanem","Ulanów"],"stalowowolski":["Bojanów","Pysznica","Radomyśl nad Sanem","Stalowa Wola (miasto)","Zaklików","Zaleszany"],"tarnobrzeski":["Baranów Sandomierski","Gorzyce","Grębów","Nowa Dęba"],"Tarnobrzeg":["Tarnobrzeg"]},"PODLASKIE":{"białostocki":["Choroszcz","Czarna Białostocka","Dobrzyniewo Duże","Grabówka","Gródek","Juchnowiec Kościelny","Michałowo","Poświętne","Supraśl","Suraż","Turośń Kościelna","Tykocin","Wasilków","Zabłudów","Zawady","Łapy"],"sokólski":["Dąbrowa Białostocka","Janów","Korycin","Krynki","Kuźnica","Nowy Dwór","Sidra","Sokółka","Suchowola","Szudziałowo"],"Białystok":["Białystok"],"bielski":["Bielsk Podlaski (gmina wiejska)","Bielsk Podlaski (miasto)","Boćki","Brańsk (gmina wiejska)","Brańsk (miasto)","Orla","Rudka","Wyszki"],"hajnowski":["Białowieża","Czeremcha","Czyże","Dubicze Cerkiewne","Hajnówka (gmina wiejska)","Hajnówka (miasto)","Kleszczele","Narew","Narewka"],"kolneński":["Grabowo","Kolno (gmina wiejska)","Kolno (miasto)","Mały Płock","Stawiski","Turośl"],"łomżyński":["Jedwabne","Miastkowo","Nowogród","Piątnica","Przytuły","Wizna","Zbójna","Łomża","Śniadowo"],"siemiatycki":["Drohiczyn","Dziadkowice","Grodzisk","Mielnik","Milejczyce","Nurzec-Stacja","Perlejewo","Siemiatycze (gmina wiejska)","Siemiatycze (miasto)"],"wysokomazowiecki":["Ciechanowiec","Czyżew","Czyżew-Osada","Klukowo","Kobylin-Borzymy","Kulesze Kościelne","Nowe Piekuty","Sokoły","Szepietowo","Wysokie Mazowieckie (gmina wiejska)","Wysokie Mazowieckie (miasto)"],"zambrowski":["Kołaki Kościelne","Rutki","Szumowo","Zambrów (gmina wiejska)","Zambrów (miasto)"],"Łomża":["Łomża"],"augustowski":["Augustów (gmina wiejska)","Augustów (miasto)","Bargłów Kościelny","Lipsk","Nowinka","Płaska","Sztabin"],"grajewski":["Grajewo (gmina wiejska)","Grajewo (miasto)","Radziłów","Rajgród","Szczuczyn","Wąsosz"],"moniecki":["Goniądz","Jasionówka","Jaświły","Knyszyn","Krypno","Mońki","Trzcianne"],"sejneński":["Giby","Krasnopol","Puńsk","Sejny (gmina wiejska)","Sejny (miasto)"],"suwalski":["Bakałarzewo","Filipów","Jeleniewo","Przerośl","Raczki","Rutka-Tartak","Suwałki","Szypliszki","Wiżajny"],"Suwałki":["Suwałki"]},"MAZOWIECKIE":{"warszawski":["M.st.Warszawa do 2001 (miasto)"],"st. Warszawa":["st. Warszawa"],"legionowski":["Jabłonna","Legionowo (miasto)","Nieporęt","Serock","Wieliszew"],"miński":["Cegłów","Dobre","Dębe Wielkie","Halinów","Jakubów","Kałuszyn","Latowicz","Mińsk Mazowiecki (gmina wiejska)","Mińsk Mazowiecki (miasto)","Mrozy","Siennica","Stanisławów","Sulejówek (miasto)","Wesoła (miasto)"],"otwocki":["Celestynów","Józefów (miasto)","Karczew","Kołbiel","Osieck","Otwock (miasto)","Sobienie-Jeziory","Wiązowna"],"wołomiński":["Dąbrówka","Jadów","Klembów","Kobyłka (miasto)","Marki (miasto)","Poświętne","Radzymin","Strachówka","Tłuszcz","Wołomin","Zielonka (miasto)","Ząbki (miasto)"],"grodziski":["Baranów","Grodzisk Mazowiecki","Jaktorów","Milanówek (miasto)","Podkowa Leśna (miasto)","Żabia Wola"],"nowodworski":["Czosnów","Leoncin","Nasielsk","Nowy Dwór Mazowiecki (miasto)","Pomiechówek","Zakroczym"],"piaseczyński":["Góra Kalwaria","Konstancin-Jeziorna","Lesznowola","Piaseczno","Prażmów","Tarczyn"],"pruszkowski":["Brwinów","Michałowice","Nadarzyn","Piastów (miasto)","Pruszków (miasto)","Raszyn"],"warszawski zachodni":["Błonie","Izabelin","Kampinos","Leszno","Ożarów Mazowiecki","Stare Babice","Łomianki"],"ciechanowski":["Ciechanów (gmina wiejska)","Ciechanów (miasto)","Glinojeck","Gołymin-Ośrodek","Grudusk","Ojrzeń","Opinogóra Górna","Regimin","Sońsk"],"mławski":["Dzierzgowo","Lipowiec Kościelny","Mława (miasto)","Radzanów","Strzegowo","Stupsk","Szreńsk","Szydłowo","Wieczfnia Kościelna","Wiśniewo"],"płoński":["Baboszewo","Czerwińsk nad Wisłą","Dzierzążnia","Joniec","Naruszewo","Nowe Miasto","Płońsk (gmina wiejska)","Płońsk (miasto)","Raciąż (gmina wiejska)","Raciąż (miasto)","Sochocin","Załuski"],"pułtuski":["Gzy","Obryte","Pokrzywnica","Pułtusk","Winnica","Zatory","Świercze"],"żuromiński":["Bieżuń","Kuczbork-Osada","Lubowidz","Lutocin","Siemiątkowo","Żuromin"],"makowski":["Czerwonka","Karniewo","Krasnosielc","Maków Mazowiecki (miasto)","Młynarze","Płoniawy-Bramura","Rzewnie","Różan","Sypniewo","Szelków"],"ostrołęcki":["Baranowo","Czarnia","Czerwin","Goworowo","Kadzidło","Lelis","Myszyniec","Olszewo-Borki","Rzekuń","Troszyn","Łyse"],"ostrowski":["Andrzejewo","Boguty-Pianki","Brok","Małkinia Górna","Nur","Ostrów Mazowiecka (gmina wiejska)","Ostrów Mazowiecka (miasto)","Stary Lubotyń","Szulborze Wielkie","Wąsewo","Zaręby Kościelne"],"przasnyski":["Chorzele","Czernice Borowe","Jednorożec","Krasne","Krzynowłoga Mała","Przasnysz (gmina wiejska)","Przasnysz (miasto)"],"wyszkowski":["Brańszczyk","Długosiodło","Rząśnik","Somianka","Wyszków","Zabrodzie"],"Ostrołęka":["Ostrołęka"],"białobrzeski":["Białobrzegi","Promna","Radzanów","Stara Błotnica","Stromiec","Wyśmierzyce"],"kozienicki":["Garbatka-Letnisko","Gniewoszów","Grabów nad Pilicą","Głowaczów","Kozienice","Magnuszew","Sieciechów"],"lipski":["Chotcza","Ciepielów","Lipsko","Rzeczniów","Sienno","Solec nad Wisłą"],"przysuski":["Borkowice","Gielniów","Klwów","Odrzywół","Potworów","Przysucha","Rusinów","Wieniawa"],"radomski":["Gózd","Iłża","Jastrzębia","Jedlińsk","Jedlnia-Letnisko","Kowala","Pionki (gmina wiejska)","Pionki (miasto)","Przytyk","Skaryszew","Wierzbica","Wolanów","Zakrzew"],"szydłowiecki":["Chlewiska","Jastrząb","Mirów","Orońsko","Szydłowiec"],"zwoleński":["Kazanów","Policzna","Przyłęk","Tczów","Zwoleń"],"Radom":["Radom"],"gostyniński":["Gostynin (gmina wiejska)","Gostynin (miasto)","Pacyna","Sanniki","Szczawin Kościelny"],"płocki":["Bielsk","Bodzanów","Brudzeń Duży","Bulkowo","Drobin","Gąbin","Mała Wieś","Nowy Duninów","Radzanowo","Stara Biała","Staroźreby","Słubice","Słupno","Wyszogród","Łąck"],"sierpecki":["Gozdowo","Mochowo","Rościszewo","Sierpc (gmina wiejska)","Sierpc (miasto)","Szczutowo","Zawidz"],"Płock":["Płock"],"garwoliński":["Borowie","Garwolin (gmina wiejska)","Garwolin (miasto)","Górzno","Maciejowice","Miastków Kościelny","Parysów","Pilawa","Sobolew","Trojanów","Wilga","Łaskarzew (gmina wiejska)","Łaskarzew (miasto)","Żelechów"],"łosicki":["Huszlew","Olszanka","Platerów","Sarnaki","Stara Kornica","Łosice"],"siedlecki":["Domanice","Korczew","Kotuń","Mokobody","Mordy","Paprotnia","Przesmyki","Siedlce","Skórzec","Suchożebry","Wiśniew","Wodynie","Zbuczyn"],"sokołowski":["Bielany","Ceranów","Jabłonna Lacka","Kosów Lacki","Repki","Sabnie","Sokołów Podlaski (gmina wiejska)","Sokołów Podlaski (miasto)","Sterdyń"],"węgrowski":["Grębków","Korytnica","Liw","Miedzna","Sadowne","Stoczek","Wierzbno","Węgrów (miasto)","Łochów"],"Siedlce":["Siedlce"],"grójecki":["Belsk Duży","Błędów","Chynów","Goszczyn","Grójec","Jasieniec","Mogielnica","Nowe Miasto nad Pilicą","Pniewy","Tarczyn","Warka"],"sochaczewski":["Brochów","Iłów","Młodzieszyn","Nowa Sucha","Rybno","Sochaczew (gmina wiejska)","Sochaczew (miasto)","Teresin"],"żyrardowski":["Mszczonów","Puszcza Mariańska","Radziejowice","Wiskitki","Żyrardów (miasto)"]}};
+
+// ------------------------- Konfiguracja logiki -------------------------
+const EXCLUDED_MAZ_POWIATS = [
+  "Grodziski","Legionowski","Miński","Nowodworski","Otwocki",
+  "Piaseczyński","Pruszkowski","Warszawski zachodni","Wołomiński","M.st. Warszawa"
+];
+const GROUP_A = ["Baranów","Błonie","Góra Kalwaria","Grodzisk Mazowiecki","Jaktorów","Kampinos","Leoncin","Leszno","Nasielsk","Prażmów","Tarczyn","Zakroczym","Żabia Wola"];
+const GROUP_B = ["Dąbrówka","Dobre","Jadów","Kałuszyn","Kołbiel","Latowicz","Mrozy","Osieck","Serock","Siennica","Sobienie-Jeziory","Strachówka","Tłuszcz"];
+
+const SIZE_LABELS = ["Mikro","Małe","Średnie","Duże"];
+
+function norm(s){return (s||"").toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
+function stripGminaType(s){return (s||"").replace(/\s*\((?:miasto|gmina wiejska|gmina miejska|gmina miejsko-wiejska)\)\s*$/i,'').trim();}
+function gnorm(s){return norm(stripGminaType(s));}
+
+const PSI_GMINY_SET = new Set((PSI_DATA.gminy||[]).map(norm));
+
+// Filter out footnote entries from PSI_DATA.powiaty for dropdown
+function isRealPowiat(p){
+  const n = p.n || "";
+  if (/^Z wyjątkiem/i.test(n)) return false;
+  if (/^Gmin/i.test(n)) return false;
+  if (/:/.test(n)) return false;
+  return true;
+}
+
+function findPowiatData(woj, powiatName){
+  const nw = woj, np = norm(powiatName);
+  return PSI_DATA.powiaty.find(p => p.r === nw && norm(p.n) === np);
+}
+
+// ------------------------- Populate dropdowns -------------------------
+const wojSel = document.getElementById('wojewodztwo');
+const powSel = document.getElementById('powiat');
+const gmnSel = document.getElementById('gmina');
+
+const wojewodztwa = Object.keys(TERYT_DATA).sort((a,b)=>a.localeCompare(b,'pl'));
+for(const w of wojewodztwa){
+  const o = document.createElement('option');
+  o.value = w; o.textContent = w;
+  wojSel.appendChild(o);
+}
+
+wojSel.addEventListener('change', () => {
+  const w = wojSel.value;
+  powSel.innerHTML = '<option value="">— wybierz —</option>';
+  gmnSel.innerHTML = '<option value="">— najpierw wybierz powiat —</option>';
+  gmnSel.disabled = true;
+  if(!w){ powSel.disabled = true; return; }
+  // Use PSI_DATA as source of truth for powiats (filter footnotes), fallback to TERYT keys
+  const psiNames = PSI_DATA.powiaty.filter(p=>p.r===w && isRealPowiat(p)).map(p=>p.n);
+  const terytKeys = Object.keys(TERYT_DATA[w]||{});
+  // Union, prefer psi order
+  const seen = new Set();
+  const list = [];
+  for(const n of psiNames){ if(!seen.has(norm(n))){ seen.add(norm(n)); list.push(n);} }
+  for(const n of terytKeys){ if(!seen.has(norm(n))){ seen.add(norm(n)); list.push(n);} }
+  list.sort((a,b)=>a.localeCompare(b,'pl'));
+  for(const p of list){
+    const o = document.createElement('option');
+    o.value = p; o.textContent = p;
+    powSel.appendChild(o);
+  }
+  powSel.disabled = false;
+});
+
+function findTerytGminy(w, p){
+  const wobj = TERYT_DATA[w];
+  if(!wobj) return [];
+  if(wobj[p]) return wobj[p];
+  const np = norm(p);
+  for(const k of Object.keys(wobj)){
+    if(norm(k) === np) return wobj[k];
+  }
+  return [];
+}
+
+powSel.addEventListener('change', () => {
+  const w = wojSel.value, p = powSel.value;
+  gmnSel.innerHTML = '<option value="">— wybierz —</option>';
+  if(!p){ gmnSel.disabled = true; return; }
+  let gminy = findTerytGminy(w, p);
+  if(!gminy.length) gminy = [p];
+  gminy = gminy.slice().sort((a,b)=>a.localeCompare(b,'pl'));
+  for(const g of gminy){
+    const o = document.createElement('option');
+    o.value = g;
+    o.textContent = PSI_GMINY_SET.has(gnorm(g)) ? ('⭐ ' + g) : g;
+    if(PSI_GMINY_SET.has(gnorm(g))) o.title = 'Gmina objęta preferencyjnymi warunkami PSI';
+    gmnSel.appendChild(o);
+  }
+  gmnSel.disabled = false;
+});
+
+// ------------------------- Kwota formatting -------------------------
+const kwotaInput = document.getElementById('kwota');
+const kwotaHint = document.getElementById('kwotaHint');
+function parseKwota(v){ return parseInt(String(v).replace(/\D/g,''),10) || 0; }
+function fmtPLN(n){ return n.toLocaleString('pl-PL').replace(/,/g,' '); }
+kwotaInput.addEventListener('input', () => {
+  const n = parseKwota(kwotaInput.value);
+  kwotaInput.value = n ? fmtPLN(n) : '';
+  kwotaHint.textContent = n ? (fmtPLN(n) + ' PLN') : '';
+});
+
+// ------------------------- Calculation -------------------------
+const form = document.getElementById('psiForm');
+const resultsCard = document.getElementById('resultsCard');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const woj = wojSel.value;
+  const powiat = powSel.value;
+  const gmina = gmnSel.value;
+  const sizeIdx = parseInt(document.getElementById('wielkosc').value, 10);
+  const rodzaj = document.getElementById('rodzaj').value;
+  const inwestycja = parseKwota(kwotaInput.value);
+
+  if(!woj || !powiat || !gmina || isNaN(sizeIdx) || !rodzaj || !inwestycja){
+    resultsCard.hidden = false;
+    resultsCard.innerHTML = '<h3>Uzupełnij wszystkie pola</h3><p>Wszystkie pola formularza są wymagane aby wykonać obliczenia.</p>';
+    return;
+  }
+
+  const powiatData = findPowiatData(woj, powiat);
+  if(!powiatData){
+    resultsCard.hidden = false;
+    resultsCard.innerHTML = '<h3>Brak danych dla wybranego powiatu</h3><p>W bazie PSI nie znaleziono wpisu dla powiatu <strong>' + powiat + '</strong>. Skontaktuj się z nami, aby zweryfikować parametry dla tej lokalizacji.</p>';
+    return;
+  }
+
+  const isReinwestycja = rodzaj.startsWith('rein_');
+  const gminaInPSIList = PSI_GMINY_SET.has(gnorm(gmina));
+
+  // Progi
+  let thresholds = powiatData.i.slice();
+  let thresholdType = 'standardowe';
+  if(gminaInPSIList){
+    thresholds = [0.2, 0.5, 1.0, 10.0];
+    thresholdType = 'preferencyjne (gmina na liście PSI)';
+  }
+  if(isReinwestycja){
+    thresholds = thresholds.map(x => x/2);
+    thresholdType += (thresholdType === 'standardowe' ? '' : ', ') + (thresholdType === 'standardowe' ? 'reinwestycja (×50%)' : ' + reinwestycja (×50%)');
+    if(thresholdType.startsWith(', ')) thresholdType = thresholdType.slice(2);
+  }
+  const threshold = thresholds[sizeIdx];
+  const thresholdPLN = threshold * 1_000_000;
+
+  // Intensywność
+  let intensityArr = powiatData.p.slice();
+  let warnings = [];
+  let info = [];
+
+  // Wyjątek 2a: gmina z przywróconą pomocą w wykluczonych powiatach MAZ
+  const powiatExcluded = EXCLUDED_MAZ_POWIATS.map(norm).includes(norm(powiat));
+  const inGroupA = GROUP_A.map(norm).includes(gnorm(gmina));
+  const inGroupB = GROUP_B.map(norm).includes(gnorm(gmina));
+  if(powiatExcluded && inGroupA){
+    intensityArr = [45, 45, 35, 25];
+    info.push('Wybrana gmina jest objęta pomocą publiczną PSI mimo wykluczenia powiatu — zastosowano intensywność właściwą dla tej gminy (Grupa A).');
+  } else if(powiatExcluded && inGroupB){
+    intensityArr = [55, 55, 45, 35];
+    info.push('Wybrana gmina jest objęta pomocą publiczną PSI mimo wykluczenia powiatu — zastosowano intensywność właściwą dla tej gminy (Grupa B).');
+  } else {
+    // Standardowo: [mikro/małe%, średnie%, duże%] → mapowanie per sizeIdx
+    intensityArr = [powiatData.p[0], powiatData.p[0], powiatData.p[1], powiatData.p[2]];
+    if(powiatExcluded){
+      warnings.push('Uwaga: wybrany powiat jest wyłączony z regionalnej pomocy publicznej w ramach PSI, chyba że inwestycja zlokalizowana jest w jednej z gmin uprzywilejowanych.');
+    }
+  }
+
+  let intensity = intensityArr[sizeIdx];
+
+  // Wyjątek 1: Wielkopolskie/Śląskie + Duże + reinwestycja
+  if((woj === 'WIELKOPOLSKIE' || woj === 'ŚLĄSKIE') && sizeIdx === 3 && isReinwestycja){
+    intensity = 0;
+    warnings.push('Uwaga: w województwie ' + woj + ' duży przedsiębiorca może uzyskać zwolnienie z podatku dochodowego wyłącznie w przypadku budowy nowego zakładu. Dla reinwestycji intensywność pomocy publicznej wynosi 0%.');
+  }
+
+  const aid = Math.round(inwestycja * intensity / 100);
+  const thresholdMet = inwestycja >= thresholdPLN;
+  const diff = inwestycja - thresholdPLN;
+
+  // Render
+  const k = (powiatData.k == null) ? 'brak danych' : ('minimum ' + powiatData.k + ' kryteriów');
+  const o = (powiatData.o == null) ? 'brak danych' : (powiatData.o + ' lat');
+
+  const thresholdLabel = threshold.toLocaleString('pl-PL',{maximumFractionDigits:2}) + ' mln PLN';
+
+  let html = '<h3>Wyniki kalkulacji PSI</h3>';
+  html += '<div class="result-row"><span class="result-label">Spełnienie wymaganego progu nakładów inwestycyjnych</span><span class="result-value">';
+  if(thresholdMet){
+    html += '<span class="badge-success">✓ Spełniony</span><br><span style="font-size:0.85rem;color:var(--gray-600);font-weight:400">Nadwyżka: ' + fmtPLN(diff) + ' PLN</span>';
+  } else {
+    html += '<span class="badge-error">✗ Niespełniony</span><br><span style="font-size:0.85rem;color:var(--gray-600);font-weight:400">Brakuje: ' + fmtPLN(-diff) + ' PLN</span>';
+  }
+  html += '</span></div>';
+  html += '<div class="result-row"><span class="result-label">Minimalna wysokość nakładów inwestycyjnych</span><span class="result-value">' + thresholdLabel + '</span></div>';
+  html += '<div class="result-row"><span class="result-label">Intensywność pomocy</span><span class="result-value">' + intensity + '%</span></div>';
+  html += '<div class="result-row"><span class="result-label">Kwota zwolnienia z podatku dochodowego</span><span class="result-value highlight">' + fmtPLN(aid) + ' PLN</span></div>';
+  html += '<div class="result-row"><span class="result-label">Kryteria jakościowe</span><span class="result-value">' + k + '</span></div>';
+  html += '<div class="result-row"><span class="result-label">Wymagany wzrost zatrudnienia</span><span class="result-value">minimum 1 nowe miejsce pracy na umowę o pracę</span></div>';
+  html += '<div class="result-row"><span class="result-label">Okres decyzji o wsparciu</span><span class="result-value">' + o + '</span></div>';
+
+  for(const w of warnings){
+    html += '<div class="warning-box">' + w + '</div>';
+  }
+  for(const i of info){
+    html += '<div class="info-box">' + i + '</div>';
+  }
+
+  resultsCard.innerHTML = html;
+  resultsCard.hidden = false;
+  resultsCard.scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+// ------------------------- Header / Mobile menu -------------------------
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+function toggleMenu(){ document.getElementById('mobileNav').classList.toggle('open'); }
+function closeMenu(){ document.getElementById('mobileNav').classList.remove('open'); }
+document.addEventListener('click', (e) => {
+  const nav = document.getElementById('mobileNav');
+  const btn = document.querySelector('.hamburger');
+  if (nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) closeMenu();
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" onload="lucide.createIcons()"></script>
+</body>
+</html>
