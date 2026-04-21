@@ -666,12 +666,18 @@ form.addEventListener('submit', (e) => {
   const powiatExcluded = EXCLUDED_MAZ_POWIATS.map(norm).includes(norm(powiat));
   const inGroupA = GROUP_A.map(norm).includes(gnorm(gmina));
   const inGroupB = GROUP_B.map(norm).includes(gnorm(gmina));
+  let overrideO = null;
+  let overrideK = null;
   if(powiatExcluded && inGroupA){
     intensityArr = [45, 45, 35, 25];
-    info.push('Wybrana gmina jest objęta pomocą publiczną PSI mimo wykluczenia powiatu — zastosowano intensywność właściwą dla tej gminy (Grupa A).');
+    overrideO = 12;
+    overrideK = 6;
+    info.push('Wybrana gmina jest wyjątkowo objęta pomocą publiczną PSI mimo wykluczenia powiatu.');
   } else if(powiatExcluded && inGroupB){
     intensityArr = [55, 55, 45, 35];
-    info.push('Wybrana gmina jest objęta pomocą publiczną PSI mimo wykluczenia powiatu — zastosowano intensywność właściwą dla tej gminy (Grupa B).');
+    overrideO = 12;
+    overrideK = 6;
+    info.push('Wybrana gmina jest wyjątkowo objęta pomocą publiczną PSI mimo wykluczenia powiatu.');
   } else {
     // Standardowo: [mikro/małe%, średnie%, duże%] → mapowanie per sizeIdx
     intensityArr = [powiatData.p[0], powiatData.p[0], powiatData.p[1], powiatData.p[2]];
@@ -693,8 +699,10 @@ form.addEventListener('submit', (e) => {
   const diff = inwestycja - thresholdPLN;
 
   // Render
-  const k = (powiatData.k == null) ? 'brak danych' : ('minimum ' + powiatData.k + ' kryteriów');
-  const o = (powiatData.o == null) ? 'brak danych' : (powiatData.o + ' lat');
+  const kRaw = (overrideK != null) ? overrideK : powiatData.k;
+  const oRaw = (overrideO != null) ? overrideO : powiatData.o;
+  const k = (kRaw == null) ? 'brak danych' : ('minimum ' + kRaw + ' kryteriów');
+  const o = (oRaw == null) ? 'brak danych' : (oRaw + ' lat');
 
   const thresholdLabel = threshold.toLocaleString('pl-PL',{maximumFractionDigits:2}) + ' mln PLN';
 
@@ -711,7 +719,7 @@ form.addEventListener('submit', (e) => {
   html += '<div class="result-row"><span class="result-label">Kwota zwolnienia z podatku dochodowego</span><span class="result-value highlight">' + fmtPLN(aid) + ' PLN</span></div>';
   html += '<div class="result-row"><span class="result-label">Kryteria jakościowe</span><span class="result-value">' + k + '</span></div>';
   html += '<div class="result-row"><span class="result-label">Wymagany wzrost zatrudnienia</span><span class="result-value">minimum 1 nowe miejsce pracy na umowę o pracę</span></div>';
-  html += '<div class="result-row"><span class="result-label">Okres decyzji o wsparciu</span><span class="result-value">' + o + '</span></div>';
+  html += '<div class="result-row"><span class="result-label">Okres ważności decyzji o wsparciu</span><span class="result-value">' + o + '</span></div>';
 
   for(const w of warnings){
     html += '<div class="warning-box">' + w + '</div>';
