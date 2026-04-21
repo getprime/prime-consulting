@@ -248,13 +248,14 @@
       box-shadow: var(--shadow-md);
     }
     .mobile-nav.open { display: flex; }
-    .mobile-nav a {
+    .mobile-nav a:not(.btn) {
       font-size: 1rem;
       font-weight: 500;
       color: var(--navy);
       padding: 8px 0;
       border-bottom: 1px solid var(--gray-200);
     }
+    .mobile-nav a.btn { margin-top: 8px; }
 
     /* =============================================
        HERO
